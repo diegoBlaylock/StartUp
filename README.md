@@ -24,7 +24,6 @@ This is the most complicated part of the app. This represents the viewer screen,
 - Actual statistic for a room displayed/updated
 - Ability for players to play notes on a piano
 - Playing piano audio for all users in a room
-- Ability for admin to create and delete questions
 
 ## Technologies
 
