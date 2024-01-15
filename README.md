@@ -1,5 +1,5 @@
 # Cristofori's Café
-This application plans to allow piano players to share their talent and for communities to come together to listen. The player creates a public room to which people may come and go with the ability for both parties to chat. 
+This application plans to allow piano players to share their talent and for communities to come together to listen. The player creates a public room to which people may come and go. Users coming to listen can look through popular room or search for one to their liking. In these rooms, players can play the piano using a graphical interface and notes played will be played to listeners realtime. While listening to the music, users can chat with one another, commenting on the music, or simply talking about any topics.
 
 ## Design
 
