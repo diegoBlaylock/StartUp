@@ -39,3 +39,34 @@ HTTPS is Secure Hypertext Transport Protocol. A certificate with a public/privat
 - thead, tbody, tfoot for more structure  
 
 block dirupts flow with a distinct element, inline follows it
+
+***Input***
+- Form action=<url> method=<post/get/..>: Submits inputs from within to a url. Essential before Javascript to call api's
+  - EX: 
+  ```html
+  <form action="submission.html" method="post">
+    <label for="ta">TextArea: </label>
+    <textarea id="ta" name="ta-id">
+        Some text
+    </textarea>
+    <button type="submit">Submit</button>
+  </form>
+  ```
+- Input elements \<input type= name= value= :
+  - text
+  - password
+  - email
+  - tel - telephone
+  - url
+  - number
+  - checkbox
+  - radio
+  - range
+  - date
+  - datetime-local
+  - month
+  - week
+  - color
+  - file
+  - submit - triggers from action
+- You can use the require or pattern attributes for more matching
