@@ -72,4 +72,10 @@ block dirupts flow with a distinct element, inline follows it
 - You can use the require or pattern attributes for more matching
 
 ### Media
-- 
+- Types of Media
+  - img src=[url] alt=[alternative text]
+  - audio src=[url] controls autoplay loop
+  - video src=[url] controls autoplay ; Note: set cross origin to anonymouse
+  - svg ; allows you to render your own graphics
+  - canvas ; Works only with java script
+- Urls can be served as external (i.e. http://...) or relative (local)
