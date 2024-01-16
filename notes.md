@@ -6,6 +6,21 @@ What I learned is how git works and how to work with github, I learned how to pu
 
 Create an EC2 instance that runs with a public ip. Register a domain name using route 53 and create a record that maps it to the ec2 public ip. One needs to be included for the root domain and one for all the subdomains
 
+**HTTPS/TLS**
+HTTPS is Secure Hypertext Transport Protocol. A certificate with a public/private key is given by a certificate issuer who verifies the owner's authenticity. This also allows the client to verify the certifate's signing by the issuer, verify the server identity throught the public key, and finally share a symmetric key with which to continue communication. Mozilla's `Let's Encrypt` allows free certificates for domain names and caddy uses this to generate certificates
+
+**DNS**
+- tld are com, net, click
+- root domains are the next level
+- use `dig` to view dns records
+- use `whois` to get registrant info
+- DNS servers refer to authoritative name servers to resolve an address
+- records:
+  - A is address, simply maps name to address
+  - CNAME is canonical name and is alias for another domain
+- Names are ussually cached by browsers or intermediate parties
+- A TTL (time to live) setting exists to invalidate caches after a specified period of time
+
 **HTML**
 
 ***Basics***
