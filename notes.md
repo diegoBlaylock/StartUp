@@ -1,15 +1,15 @@
-*NOTES*
+# NOTES
 
 What I learned is how git works and how to work with github, I learned how to push and pull from a remote repo and how to fix conflicts.
 
-**AWS**
+## AWS
 
 Create an EC2 instance that runs with a public ip. Register a domain name using route 53 and create a record that maps it to the ec2 public ip. One needs to be included for the root domain and one for all the subdomains
 
-**HTTPS/TLS**
+## HTTPS/TLS
 HTTPS is Secure Hypertext Transport Protocol. A certificate with a public/private key is given by a certificate issuer who verifies the owner's authenticity. This also allows the client to verify the certifate's signing by the issuer, verify the server identity throught the public key, and finally share a symmetric key with which to continue communication. Mozilla's `Let's Encrypt` allows free certificates for domain names and caddy uses this to generate certificates
 
-**DNS**
+## DNS
 - tld are com, net, click
 - root domains are the next level
 - use `dig` to view dns records
@@ -21,9 +21,9 @@ HTTPS is Secure Hypertext Transport Protocol. A certificate with a public/privat
 - Names are ussually cached by browsers or intermediate parties
 - A TTL (time to live) setting exists to invalidate caches after a specified period of time
 
-**HTML**
+## HTML
 
-***Basics***
+### Basics
 - body tag composed of header, main, footer
 - h1/2/3/4.. headers
 - p paragraph
@@ -40,7 +40,7 @@ HTTPS is Secure Hypertext Transport Protocol. A certificate with a public/privat
 
 block dirupts flow with a distinct element, inline follows it
 
-***Input***
+### Input
 - Form action=<url> method=<post/get/..>: Submits inputs from within to a url. Essential before Javascript to call api's
   - EX: 
   ```html
@@ -70,3 +70,6 @@ block dirupts flow with a distinct element, inline follows it
   - file
   - submit - triggers from action
 - You can use the require or pattern attributes for more matching
+
+### Media
+- 
