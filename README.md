@@ -58,3 +58,14 @@ I am going to use the required technologies in the following ways.
   2. Piano notes are relayed from the piano player to all listeners.
 
 - **React** - Application ported to use the React web framework.
+
+## HTML deliverable
+
+For this deliverable I built out the structure of my application using HTML.
+
+- **HTML pages** - Seven HTML page that represent the ability to login, create a user, create a room, search for a room, and watch a room as a listener and a piano player.
+- **Links** - The login page automatically links to the create_user page and discover page. Every page after login contains a link to the login page as well as the view_profile page. The discovery page contains links to the player_room page and listener_room page.
+- **Text** - Text is represented on almost every level. Text is on the player profile as bio. Text is also present in descriptions of the rooms shown as tooltips on the discover page. Also in the Chat function in the rooms page
+- **Images** - I added images simply as the favicon.ico and at the top of most pages. The piano for the room pages will be rendered using css
+- **DB/Login** - Input box and submit button for login. All rooms will be stored on the database
+- **WebSocket** - The chat function will send messages using web sockets and also the playing of the piano will send the midi data through web sockets
