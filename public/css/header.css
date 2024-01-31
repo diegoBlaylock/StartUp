@@ -38,11 +38,3 @@ header {
     width: 300px;
     align-self: center;
 }
-
-#header_create_user {
-    position: absolute;
-    display: flex;
-    justify-content: right;
-    width: 100%;
-
-}
