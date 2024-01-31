@@ -1,0 +1,17 @@
+* {
+    font-family: sans-serif;
+    margin: 0px;
+    padding: 0px;
+    border: 1 solid black;
+    /* background-color: #000000; */
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+main {
+    height: 100%;
+}

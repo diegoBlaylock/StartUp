@@ -1,0 +1,48 @@
+
+header {
+    height: 150px;
+    max-height: 100px;
+    position: static;
+    top: 0;
+    background-color: #202020;
+    align-items: center;
+    padding:10px;
+}
+
+.flex-container {
+    display: flex;
+    flex-direction: row;  
+    background-color: #202020;
+  
+}
+
+#header_title * {
+    font-family:serif;
+    font-size: 50px;
+    position: absolute;
+    color: white;
+}
+
+#header_logo {
+    display: flex;
+    position: static;
+    align-items: center;
+    text-align: center;
+    align-self: center;
+    width: 100%;
+    justify-content: center;
+}
+
+#header_logo  * {
+    display: flex;
+    width: 300px;
+    align-self: center;
+}
+
+#header_create_user {
+    position: absolute;
+    display: flex;
+    justify-content: right;
+    width: 100%;
+
+}
