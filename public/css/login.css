@@ -1,7 +1,43 @@
 #header_create_user {
-    position: absolute;
     display: flex;
     justify-content: right;
-    width: 100%;
+}
 
+#header_create_user > * {
+    color: wheat;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    font-size: 4em;
+    font-weight: 100;
+}
+
+form {
+    border-top: 5px double black;
+    display: flex;
+    flex-direction: column;
+    padding: 1% 1%;
+}
+
+form label {
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-bottom: 1%;
+}
+
+form input {
+    
+    font-size: 1.4em;
+    font-weight: lighter;
+    padding: 2px;
+    padding-left: 5px;
+    width: 300px;
+    margin-bottom: 5%;
 }
