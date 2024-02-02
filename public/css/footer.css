@@ -3,17 +3,50 @@ footer {
     flex-direction: row;
     flex: 0;
     bottom: 0%;
-    height: 50px;
-    background-color: rgb(255, 240, 218);
-}
-
-footer > div {
-    display: flex;
+    height: 30px;
+    background-color: rgb(255, 234, 202);
     padding: 10px;
     align-items: center;
+    width: auto;
 }
 
-footer img {
-    width: 1.5em;
-    height: 1.5em;
+#author {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+#linkedin_div {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+#linkedin_div a {
+    color: black;
+    text-decoration: none;
+    
+}
+
+#linkedin_div img{
+    filter:
+        contrast(0%)
+        brightness(30%);
+    height: 1em;
+}
+
+#github_div {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+#github_div a {
+    color: black;
+    text-decoration: none;
+    
+}
+
+#github_div img {
+    height:1em;
 }
