@@ -3,9 +3,18 @@
     justify-content: right;
 }
 
-#header_create_user > * {
+/* #header_create_user a {
     color: wheat;
+    font-size: 20px;
+    text-decoration: none;
+    /* background-color: black;
+    text-align: center;
+    vertical-align: middle; 
 }
+
+#header_create_user a:hover {
+    background-color: white;
+} */
 
 main {
     display: flex;
@@ -14,13 +23,17 @@ main {
     align-items: center;
 }
 
-h1 {
-    font-size: 4em;
+main h1 {
+    font-size: 3.6em;
     font-weight: 100;
+    margin-bottom: 0.5%;
+    width: 300px;
+    text-align: start;
 }
 
 form {
-    border-top: 5px double black;
+    /* border-top: 3px solid black;
+    border-bottom: 3px solid black; */
     display: flex;
     flex-direction: column;
     padding: 1% 1%;

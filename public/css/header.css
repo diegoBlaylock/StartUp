@@ -40,4 +40,5 @@ header {
 #header_logo  * {
     display: flex;
     width: 5%px;
+    user-select: none;
 }
