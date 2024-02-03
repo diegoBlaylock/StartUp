@@ -5,18 +5,24 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Cristofori's Café</title>
         <link rel="icon" href="../favicon.ico">
+        <link rel="stylesheet" href="../css/header.css"/>
+        <link rel="stylesheet" href="../css/style.css"/>
+        <link rel="stylesheet" href="../css/footer.css"/>
+        <link rel="stylesheet" href="../css/profile.css"/>
+        <link rel="stylesheet" href="../css/view_user.css"/>
+
     </head>
     <body>
         <header>
-            <div>
-                <div>
+            <div class="flex-container">
+                <div id="header_title">
                     <h1 id="app_name_label">Cristofori's Café</h1>
                 </div>
-                <div>
-                    <img src="../resources/piano_logo.png" alt="logo" width="300px" />
+                <div id="header_logo">
+                    <img src="../resources/piano_logo.png" alt="logo" draggable="false"/>
                 </div>
-                <div>
-                    <img src="../resources/default_profile.png" width="64px"/>
+                <div id="header_profile">
+                    <img class="profile-pic my-profile" src="../resources/default_profile.png"/>
                     <div class="dropdown-menu">
                         <label>caterpillarUser256</label>
                         <a href="view_user.html">View/Edit Profile</a>
@@ -26,13 +32,12 @@
                 </div>
             </div>
             
-                <nav>
-                    <menu>
-                        <li><a href="javascript:history.back()">❮ Back</a></li>
-                    </menu>
-                </nav>
         </header>
-        <hr>
+        <nav>
+            <menu>
+                <li><a href="javascript:history.back()">❮ Back</a></li>
+            </menu>
+        </nav>
         <main>
             <div>
                 <span>
@@ -47,13 +52,19 @@
                 <button>Edit</button>
             </div>
         </main>
-        <hr>
         <footer>
-            <div>
-                <div>Author: Diego Blaylock</div>
-                <div>
-                    <a href="https://github.com/diegoBlaylock/startup/" target="_blank" rel="noopener">GitHub</a>
-                </div>    
+            <div id="author">Author: Diego Blaylock</div>
+            <div id="github_div">
+                <a href="https://github.com/diegoBlaylock/startup/" target="_blank" rel="noopener">
+                    <img src="../resources/logos/github-mark.png" alt="github" />
+                    GitHub
+                </a>
+            </div>
+            <div id="linkedin_div">
+                <a href="https://www.linkedin.com/in/diego-blaylock/" target="_blank" rel="noopener">
+                    <img src="../resources/logos/LI-In-Bug.png" alt="linkedin" />
+                    LinkedIn
+                </a>
             </div>
         </footer>
     </body>

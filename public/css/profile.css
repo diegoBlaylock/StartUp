@@ -1,0 +1,47 @@
+.profile-pic {
+    background-color: #FFFFFF20;
+    outline: 2px solid white;
+    width: 86px;
+    border-radius: 50%;
+}
+
+#header_profile {
+    display: inline-block;
+    position: relative;
+    align-items: center ;
+    
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    width: auto;
+    overflow: auto;
+    flex-direction: column;
+    background-color: #f0f0f0;
+    right: 0;
+}
+
+.dropdown-menu label {
+    background-color: #202020;
+    color: wheat;
+    padding: 10px;
+    padding-top: 20px;
+    font-size: 20px
+    
+}
+.dropdown-menu a {
+    padding: 10px;
+
+    color: black;
+    text-decoration: none;
+    
+}
+
+.dropdown-menu a:hover {
+    background-color: rgb(242, 233, 216);
+}
+
+#header_profile:hover .dropdown-menu {
+    display: flex;
+}

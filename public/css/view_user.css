@@ -1,0 +1,19 @@
+nav {
+    display: flex;
+    align-content: center;
+    background-color: rgb(197, 197, 197);
+    margin: 0;
+    height: 24px;
+    padding: 10px 20px;
+}
+
+nav menu a {
+    text-decoration: none;
+    color: #202020;
+    font-size: 20px;
+
+}
+
+nav li {
+    list-style: none;
+}
