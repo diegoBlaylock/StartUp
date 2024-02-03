@@ -32,7 +32,7 @@ footer {
     filter:
         contrast(0%)
         brightness(30%);
-    height: 1em;
+    height: 1.1em;
 }
 
 #github_div {
@@ -48,5 +48,5 @@ footer {
 }
 
 #github_div img {
-    height:1em;
+    height:1.1em;
 }

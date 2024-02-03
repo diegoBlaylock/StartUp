@@ -3,18 +3,19 @@
     justify-content: right;
 }
 
-/* #header_create_user a {
+#header_create_user a {
     color: wheat;
     font-size: 20px;
     text-decoration: none;
-    /* background-color: black;
-    text-align: center;
-    vertical-align: middle; 
+    padding: 15px 20px;
+    border-radius: 2px;
+    background-color: black;
+     
 }
 
 #header_create_user a:hover {
     background-color: white;
-} */
+}
 
 main {
     display: flex;
@@ -29,6 +30,7 @@ main h1 {
     margin-bottom: 0.5%;
     width: 300px;
     text-align: start;
+    user-select:none;
 }
 
 form {
@@ -43,6 +45,7 @@ form label {
     font-size: 1.4em;
     font-weight: bold;
     margin-bottom: 1%;
+    user-select: none;
 }
 
 form input {
@@ -52,4 +55,30 @@ form input {
     padding-left: 5px;
     width: 300px;
     margin-bottom: 5%;
+}
+
+form input[type=submit] {
+    margin-top: 20px;
+    color: wheat;
+    background-color: #202020;
+    border: none;
+    width: 100%;
+    border-radius: 2px;
+    padding: 16px 0px;
+    cursor: pointer;
+}
+
+form input[type=submit]:hover {
+    background-color: rgb(46, 46, 46);
+    
+}
+
+form input[type=submit]:focus {
+    outline: 1.5px solid white;
+    outline-offset: -2px;
+}
+
+form input[type=submit]:active {
+    background-color: rgb(40, 40, 40);
+    outline-style: dotted;
 }

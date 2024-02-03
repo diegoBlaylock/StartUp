@@ -5,7 +5,7 @@ header {
     height: 80px;
     background-color: #202020;
     align-items: center;
-    padding:1%;
+    padding:20px;
 }
 
 .flex-container {
@@ -44,6 +44,6 @@ header {
 
 #header_logo  * {
     display: flex;
-    height: 12vh;
+    height: 90px;
     user-select: none;
 }
