@@ -17,3 +17,34 @@ nav menu a {
 nav li {
     list-style: none;
 }
+
+main {
+    display: flex;
+    flex-direction: column;
+    height: 200px;
+    width: 60%;
+    align-self: center;
+    justify-self: center;
+    padding: 10% 0px;
+}
+
+#profile_title {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+}
+
+#your_profile {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+main .profile-pic + span {
+    cursor: pointer;
+}
+
+#bio {
+    margin: 0% 10%;
+}
