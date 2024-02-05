@@ -8,6 +8,7 @@ footer {
     padding: 10px;
     align-items: center;
     width: auto;
+    user-select: none;
 }
 
 #author {

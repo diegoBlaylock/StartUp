@@ -5,18 +5,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Cristofori's Café</title>
         <link rel="icon" href="../favicon.ico">
+        <link rel="stylesheet" href="../css/header.css"/>
+        <link rel="stylesheet" href="../css/style.css"/>
+        <link rel="stylesheet" href="../css/footer.css"/>
+        <link rel="stylesheet" href="../css/profile.css"/>
+        <link rel="stylesheet" href="../css/discovery.css"/>
     </head>
     <body>
         <header>
-            <div>
-                <div>
+            <div class="flex-container">
+                <div id="header_title">
                     <h1 id="app_name_label">Cristofori's Café</h1>
                 </div>
-                <div>
-                    <img src="../resources/piano_logo.png" alt="logo" width="300px" />
+                <div id="header_logo">
+                    <img src="../resources/piano_logo.png" alt="logo" draggable="false"/>
                 </div>
-                <div>
-                    <img src="../resources/default_profile.png" width="64px"/>
+                <div id="header_profile">
+                    <img class="profile-pic my-profile" src="../resources/default_profile.png"/>
                     <div class="dropdown-menu">
                         <label>caterpillarUser256</label>
                         <a href="view_user.html">View/Edit Profile</a>
@@ -27,14 +32,13 @@
                 </div>
             </div>
             
-                <nav>
-                    <menu>
-                        <li><a href="discovery.html" class="selected">Discover Rooms</a></li>
-                        <li><a href="create_room.html">Create a Room</a></li>
-                    </menu>
-                </nav>
         </header>
-        <hr>
+        <nav>
+            <menu>
+                <li><a href="discovery.html" class="selected">Discover Rooms</a></li>
+                <li><a href="create_room.html">Create a Room</a></li>
+            </menu>
+        </nav>
         <main>
             <div class="roomspage">
                 <div class="room-desc" data-id="room uuid1">
@@ -63,30 +67,36 @@
                 <a href="javascript:;">❯</a>
             </div>
         </main>
-        <hr>
+        <div id="search_bar">
+            <div>
+                <span>Search by:</span>
+                <select>
+                    <option>user</option>
+                    <option>room</option>
+                </select>
+                <input type="text" placeholder="Type and press Enter">
+            </div>    
+            <div>
+                <span>Filter by:</span>
+                <select>
+                    <option selected>Popularity</option>
+                    <option>Time Playing</option>
+                </select>
+            </div>    
+        </div>
         <footer>
-            <div>
-                <div>
-                    <span>Search by:</span>
-                    <select>
-                        <option>user</option>
-                        <option>room</option>
-                    </select>
-                    <input type="text" placeholder="Type and press Enter">
-                </div>    
-                <div>
-                    <span>Filter by:</span>
-                    <select>
-                        <option selected>Popularity</option>
-                        <option>Time Playing</option>
-                    </select>
-                </div>    
+            <div id="author">Author: Diego Blaylock</div>
+            <div id="github_div">
+                <a href="https://github.com/diegoBlaylock/startup/" target="_blank" rel="noopener">
+                    <img src="../resources/logos/github-mark.png" alt="github" />
+                    GitHub
+                </a>
             </div>
-            <div>
-                <div>Author: Diego Blaylock</div>
-                <div>
-                    <a href="https://github.com/diegoBlaylock/startup/" target="_blank" rel="noopener">GitHub</a>
-                </div>    
+            <div id="linkedin_div">
+                <a href="https://www.linkedin.com/in/diego-blaylock/" target="_blank" rel="noopener">
+                    <img src="../resources/logos/LI-In-Bug.png" alt="linkedin" />
+                    LinkedIn
+                </a>
             </div>
         </footer>
     </body>
