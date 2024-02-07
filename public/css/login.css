@@ -1,6 +1,7 @@
 #header_create_user {
     display: flex;
     justify-content: right;
+    z-index: 1;
 }
 
 #header_create_user a {
