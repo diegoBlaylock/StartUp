@@ -55,6 +55,8 @@ main {
     min-height: 20px;
 }
 
+
+
 #roomspage {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -122,4 +124,44 @@ main {
 
 #search_bar > div {
     flex: 1;
+}
+
+@media (width < 800px) {
+    main {
+        min-width: 100vw;
+    }
+}
+
+@media (width < 500px) {
+    #roomspage {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        grid-auto-rows: 100px;
+        grid-gap: 0.1em;
+        margin: 40px 0px;
+    }
+    
+    .room-desc {
+        border-radius: 2px;
+    }
+    
+    .room-desc * {
+        margin-bottom: 5px;
+    }
+    
+    .room-desc h2 {
+        font-size: 0.8em;
+    }
+    
+    .room-desc label {
+        font-size: 0.5em;
+    }
+    
+    .room-desc .username {
+        font-size: 1.1em;
+        font-weight: normal;
+    }
+    
+    .room-desc .profile-pic{
+        width: 2.5em;
+    }    
 }
