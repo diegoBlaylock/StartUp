@@ -52,6 +52,7 @@ main {
     align-items: center;
     justify-content: center;
     padding: 0% 0px;
+    min-height: 20px;
 }
 
 #roomspage {
@@ -59,7 +60,7 @@ main {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     grid-auto-rows: 200px;
     grid-gap: 0.2em;
-    overflow-y: auto;
+    overflow-y: scroll;
     width:100%;
     flex: 1;
     margin: 40px 0px;
@@ -86,6 +87,16 @@ main {
 
 .room-desc h2 {
     font-size: large;
+}
+
+.room-desc label {
+    font-size: small;
+}
+
+.room-desc .username {
+    font-size: medium;
+    color: #202020;
+    font-weight: bold;
 }
 
 .room-desc .profile-pic{
