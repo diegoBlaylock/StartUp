@@ -52,11 +52,10 @@ footer {
     height:1.1em;
 }
 
-@media (width < 600px) {
+@media (width < 600px), (height < 400px) {
 
     footer{
         height: 30px;
-        padding: 0.1em;
     }
     
     #author {

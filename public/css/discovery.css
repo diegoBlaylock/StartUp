@@ -200,10 +200,26 @@ main {
     user-select: text;
 }
 
-@media (width < 800px) {
+@media (width < 600px), (height < 400px) {
+    nav .selected::before {
+        content: none;
+    }
+
+    nav {
+        height: 36px;
+    }
+
+    nav menu a {
+        font-size: 1.2em;
+    }
+}
+
+@media (width < 800px), (height < 600px) {
     main {
         min-width: 100vw;
     }
+
+    
 
     #search_bar > div > * {
         margin-right: 2px;
@@ -226,7 +242,7 @@ main {
     }
 }
 
-@media (width < 500px) {
+@media (width < 500px), (height < 500px) {
     #roomspage {
         grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
         grid-auto-rows: 100px;
