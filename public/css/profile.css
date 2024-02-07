@@ -3,13 +3,13 @@
     outline: 2px solid white;
     width: 86px;
     border-radius: 50%;
+    box-sizing: border-box;
 }
 
 #header_profile {
     display: inline-block;
     position: relative;
     align-items: center ;
-    
 }
 
 .dropdown-menu {
@@ -20,6 +20,7 @@
     flex-direction: column;
     background-color: #f0f0f0;
     right: 0;
+    border-radius: 2px;
 }
 
 .dropdown-menu label {
@@ -27,8 +28,7 @@
     color: wheat;
     padding: 10px;
     padding-top: 20px;
-    font-size: 20px
-    
+    font-size: 20px 
 }
 .dropdown-menu a {
     padding: 10px;
@@ -44,4 +44,24 @@
 
 #header_profile:hover .dropdown-menu {
     display: flex;
+}
+
+@media (height < 600px) {
+    #header_profile .my-profile{
+        outline: 1px solid white;
+        width: 50px;
+    }
+
+    .dropdown-menu label {
+        background-color: #202020;
+        color: wheat;
+        padding: 6px;
+        padding-top: 10px;
+        font-size: 1em; 
+    }
+
+    .dropdown-menu a {
+        padding: 4px; 
+        font-size: 1em;
+    }
 }

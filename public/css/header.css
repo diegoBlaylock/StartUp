@@ -68,3 +68,10 @@ header {
         color: white;
     }
 }
+
+@media (height < 600px) {
+    header {
+        height: 40px;
+        padding: 10px;
+    }
+}
