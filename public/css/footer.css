@@ -51,3 +51,40 @@ footer {
 #github_div img {
     height:1.1em;
 }
+
+@media (width < 600px) {
+
+    footer{
+        height: 30px;
+        padding: 0.1em;
+    }
+    
+    #author {
+        font-size: 0.8em;
+        flex: 3;
+    }
+
+    #linkedin_div {
+        flex: 1;
+    }
+
+    #github_div {
+        flex: 1;
+    }
+
+    #linkedin_div a {
+        font-size: 0px;
+    }
+
+    #linkedin_div img{
+        height: 20px;
+    }
+    
+    #github_div a {
+        font-size: 0px;
+    }
+
+    #github_div img {
+        height:20px;
+    }
+}
