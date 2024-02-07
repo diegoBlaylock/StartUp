@@ -46,9 +46,11 @@ nav li {
 main {
     display: flex;
     flex-direction: column;
-    width: 60%;
+    min-width: 60vw;
     align-self: center;
     justify-self: center;
+    align-items: center;
+    justify-content: center;
     padding: 0% 0px;
 }
 
@@ -57,18 +59,45 @@ main {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     grid-auto-rows: 200px;
     grid-gap: 0.2em;
-    overflow-y: scroll;
+    overflow-y: auto;
+    width:100%;
     flex: 1;
+    margin: 40px 0px;
 }
 
 .room-desc {
-    background-color: #202020;
+    text-decoration: none;
+    border-radius: 5px;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.room-desc:hover {
+    background-color: #f0f0f0;
+}
+
+.room-desc * {
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.room-desc h2 {
+    font-size: large;
+}
+
+.room-desc .profile-pic{
+    width: 5em;
+    outline-color: black;
 }
 
 .pagebar {
     flex: 0;
     height: 20px;
-    justify-self: end;
+    display: flex;
+    justify-content: start;
 }
 
 #search_bar {

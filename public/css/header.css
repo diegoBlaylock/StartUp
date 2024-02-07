@@ -24,11 +24,12 @@ header {
     justify-items: center;
 }
 
-#header_title * {
+
+
+#header_title h1 {
     font-family:serif;
     font-size: 2.5em;
     color: white;
-    
 }
 
 #header_logo {
@@ -40,9 +41,30 @@ header {
     margin: 0 auto;
     top:10px;
     justify-content: center;
+
+    transition: opacity 0.1s ease;
 }
 
 #header_logo  * {
     display: flex;
     height: 90px;
+}
+
+@media (width < 70em){
+    #header_logo {
+        opacity: 0;
+    }
+}
+
+@media (width < 30em) {
+    #header_title h1{
+        display: none;
+    }
+
+    #header_title::after{
+        content: "CC";
+        font-family:serif;
+        font-size: 2.5em;
+        color: white;
+    }
 }
