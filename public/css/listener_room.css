@@ -34,20 +34,78 @@ main {
 
 #main_content {
     flex: 4;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
+#main_content h3{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-family: joanRegular;
+    font-size: 2em;
+    letter-spacing: 0.085em;
+    user-select: none;
+}
+
+#room_info {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    justify-content: start;
+    font-size: 0.95em;
+    user-select: none;
 }
 
 #chat_content {
     flex: 1;
-    padding: 10px;
+    background-color: #f0f0f0;
+    font-size: 1em;
+    display: flex;
+    flex-direction: column;
 }
 
-/*  */
+#chat_messages{
+    flex: 1;
+}
+
+#chat_content textarea{
+    resize: none;
+}
+
+#player_profile {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.15em;
+    font-weight: bold;
+    user-select: text;
+    flex: 1;
+}
+
+#room_info p {
+    flex: 1;
+    text-align: end;
+}
+
+#player_profile .profile-pic {
+    width: 4em;
+    margin-right: 20px;
+    user-select: none;
+}
 
 :root {
-    --white-key-width: 60px;
-    --white-key-height: calc(var(--white-key-width) * 9 / 2);
+    --white-key-width: 4em;
+    --white-key-height: calc(var(--white-key-width) * 8 / 2);
     --black-key-width: calc(var(--white-key-width) * 7 / 12);
-    --black-key-height: calc(var(--white-key-width) * 2.8);
+    --black-key-height: calc(var(--white-key-width) * 2.47);
     --padding-diff: calc(var(--white-key-width)/24);
     --first-padding: calc(var(--black-key-width) + var(--padding-diff));
     --last-padding: calc(var(--black-key-width) - var(--padding-diff));
@@ -56,6 +114,7 @@ main {
 .keyboard {
     display: flex;
     flex-direction: column;
+    user-select: none;
 }
 
 .keys-half {
@@ -91,7 +150,7 @@ main {
     color: #202020;
     display: flex;
     width: var(--white-key-width);
-    outline: 1px solid black;
+    outline: 1px solid #202020;
     display: flex;
     justify-content: center;
     align-items: end;
@@ -100,12 +159,12 @@ main {
 }
 
 .keyboard div[class*="scale-"] div[data-note*="s"]:hover {
-    background-color: #404040;
+    background-color: rgb(104, 104, 103);
 }
 
 .keyboard div[class*="scale-"] div:not([data-note*="s"]):hover {
     background-color: #c0c0c0;
-    outline: 1px solid black;
+    outline: 1px solid #202020;
 }
 
 .keyboard div[class*="scale-"] div[data-note*="cs"] {

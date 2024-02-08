@@ -1,3 +1,8 @@
+@font-face {
+    font-family: joanRegular;
+    src: url(../resources/fonts/Joan-Regular.ttf);
+}
+
 * {
     font-family: sans-serif;
     margin: 0px;
