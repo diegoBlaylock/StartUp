@@ -3,8 +3,14 @@ nav {
     align-content: center;
     background-color: rgb(197, 197, 197);
     margin: 0;
-    height: 24px;
-    padding: 10px 20px;
+    height: 2.5em;
+}
+
+nav menu {
+    display: flex;
+    justify-self: center;
+    width: 100%;
+    height: 100%;
 }
 
 nav menu a {
@@ -16,6 +22,9 @@ nav menu a {
 
 nav li {
     list-style: none;
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
 }
 
 main {
@@ -47,4 +56,16 @@ main .profile-pic + span {
 
 #bio {
     margin: 0% 10%;
+}
+
+@media (width < 600px) {
+    nav li {
+        margin-left: 10px;
+    }
+}
+
+@media (height < 600px) {
+    nav menu a {
+        font-size: 1em;
+    }
 }
