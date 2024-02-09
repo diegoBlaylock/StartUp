@@ -1,9 +1,13 @@
+:root {
+    --nav-height: 2.5em;
+}
+
 nav {
     display: flex;
     align-content: center;
     background-color: rgb(197, 197, 197);
     margin: 0;
-    height: 2.5em;
+    height: var(--nav-height);
 }
 
 nav menu {
@@ -28,23 +32,27 @@ nav li {
 }
 
 main {
+    /* Set up variables set height to be calc of 100 - these heights */
     display: flex;
     flex-direction: row;
+    width: 100%;
+    height: calc(100% - var(--header-height) - var(--nav-height));
 }
 
 #main_content {
-    flex: 4;
     display: flex;
-    justify-content: center;
     flex-direction: column;
-    align-items: center;
-    height: 100%;
+    width: 80%;
+    height:100%;
+    justify-content: center safe;
+    align-items: center safe;
 }
 
 #main_content h3{
     flex: 1;
     display: flex;
     align-items: center;
+    justify-content: center;
     font-weight: bold;
     font-family: joanRegular;
     font-size: 2em;
@@ -64,17 +72,19 @@ main {
 }
 
 #chat_content {
-    flex: 1;
     background-color: #e8e8e8;
     font-size: 1em;
+    max-height: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
+    width: 20%
 }
 
 #chat_messages{
-    flex: 1;
     padding: 10px;
     overflow-y: auto;
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -188,11 +198,18 @@ main {
     display: flex;
     flex-direction: column;
     user-select: none;
+    justify-content: center;
+    align-content: center;
+    -webkit-tap-highlight-color: transparent;
+    overflow-x: auto;
+
 }
 
 .keys-half {
     display: flex;
     flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
 
 .keyboard div[class*="scale-"] {
@@ -260,14 +277,118 @@ main {
     right: calc(var(--last-padding)); 
 }
 
-@media (width < 600px) {
+@media (width < 800px) {
     nav li {
         margin-left: 10px;
     }
+
+    .message {
+        font-size: 0.5em;
+    }
+
+    /* .message-content {
+        font-size: 0.5em;
+    } */
+
+    .message > .profile-pic {
+        display: none;
+    }
 }
 
-@media (height < 600px) {
-    nav menu a {
+@media (width < 600px) {
+    #player_profile .profile-pic {
+        width: 1.5em;
+        margin-right: 20px;
+        user-select: none;
+    }
+
+    #room_info {
+        flex-direction: column;
+        margin-top: 10px;
+    }
+    
+    main {
+        flex-direction: column;
+    }
+
+    #main_content {
+        width: 100%;
+    }
+
+    #chat_content {
+        margin-top: 20px;
+        width: 100%;
+        height: 200px;
+    }
+}
+
+@media (height < 720px) {
+    :root {
+        --header-height: 60px;
+        --white-key-width: 12vmin;
+    }
+
+    header {
+        padding: 10px;
+    }
+
+    
+    #header_logo {
+        opacity: 0;
+    }
+
+    #header_profile .my-profile{
+        outline: 1px solid white;
+        width: 50px;
+    }
+
+    .dropdown-menu label {
+        background-color: #202020;
+        color: wheat;
+        padding: 6px;
+        padding-top: 10px;
+        font-size: 1em; 
+    }
+
+    .dropdown-menu a {
+        padding: 4px; 
         font-size: 1em;
+    }
+
+    nav {
+        font-size: 0.5em;
+    }
+    nav menu a {
+        font-size: 1.5em;
+    }
+
+    .keyboard {
+        flex-direction: row;
+        overflow-x: auto;
+        flex: 4;
+    }
+
+    #main_content {
+        font-size: 0.8em;
+        height: 100%;
+    }
+
+    #main_content h3 {
+        visibility: hidden;
+        flex: 0;
+    }
+
+    #room_info {
+        flex: 1;
+    }
+
+    #messenger {
+        font-size: 0.65em;
+    }
+
+    .message > .profile-pic {
+        height: 20px;
+        width: 20px;
+        outline-width: 0.5px;
     }
 }

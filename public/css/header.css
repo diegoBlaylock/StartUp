@@ -1,11 +1,15 @@
+:root {
+    --header-height: 110px;
+}
+
 
 header {
     position: static;
     top: 0;
-    height: 110px;
+    height: var(--header-height);
     background-color: #202020;
     align-items: center;
-    padding:20px;
+    padding: 20px;
     user-select: none;
 }
 
@@ -70,8 +74,14 @@ header {
 }
 
 @media (height < 600px) {
+    :root {
+        --header-height: 60px;
+    }
+
     header {
-        height: 60px;
         padding: 10px;
+    }
+    #header_logo {
+        opacity: 0;
     }
 }
