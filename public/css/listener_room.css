@@ -65,7 +65,7 @@ main {
 
 #chat_content {
     flex: 1;
-    background-color: #f0f0f0;
+    background-color: #e0e0e0;
     font-size: 1em;
     display: flex;
     flex-direction: column;
@@ -73,10 +73,53 @@ main {
 
 #chat_messages{
     flex: 1;
+    padding: 2vmin;
+    overflow-y: auto;
 }
 
-#chat_content textarea{
+#messenger {
+    width: 100%;
+    display: flex;
+    height: 2em;    
+    border: 1px solid #606060;
+}
+
+#messenger button {
+    width: 2.5em;
+    height: 2.5em;
+    background-color: #202020;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    user-select: none;
+}
+
+#messenger button:hover {
+    background-color: rgb(62, 62, 62);
+    cursor: pointer;
+}
+
+#messenger button:active {
+    background-color: black;
+    /* outline: 1px solid wheat;
+    outline-offset: -2px; */
+}
+
+#messenger button img{
+    width: 60%;
+    height: 60%;
+}
+
+#messenger textarea{
     resize: none;
+    border-radius: 0%;
+    border: none;
+    outline: none;
+    flex: 1;
+    font-size: 0.9em;
+    height: 100%;
+    padding: 5px;
 }
 
 #player_profile {
@@ -96,13 +139,13 @@ main {
 }
 
 #player_profile .profile-pic {
-    width: 4em;
+    width: 3em;
     margin-right: 20px;
     user-select: none;
 }
 
 :root {
-    --white-key-width: 4em;
+    --white-key-width: 7vmin;
     --white-key-height: calc(var(--white-key-width) * 8 / 2);
     --black-key-width: calc(var(--white-key-width) * 7 / 12);
     --black-key-height: calc(var(--white-key-width) * 2.47);
