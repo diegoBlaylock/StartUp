@@ -173,6 +173,15 @@ main {
     flex: 1;
 }
 
+#player_option {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+}
+
 #room_info p {
     flex: 1;
     text-align: end;
@@ -233,6 +242,7 @@ main {
     justify-content: center;
     align-items: end;
     padding-bottom: 0.25em;
+    cursor: pointer;
 }
 
 .keyboard div[class*="scale-"] div:not([data-note*="s"]) {
@@ -244,6 +254,16 @@ main {
     justify-content: center;
     align-items: end;
     padding-bottom: 0.25em;
+    cursor: pointer;
+}
+
+.keyboard div[class*="scale-"] div[data-note*="s"]:hover {
+    background-color: rgb(104, 104, 103);
+}
+
+.keyboard div[class*="scale-"] div:not([data-note*="s"]):hover {
+    background-color: #c0c0c0;
+    outline: 1px solid #202020;
 }
 
 .keyboard div[class*="scale-"] div[data-note*="cs"] {
