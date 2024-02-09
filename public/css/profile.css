@@ -4,6 +4,7 @@
     width: 86px;
     border-radius: 50%;
     box-sizing: border-box;
+    user-select: none;
 }
 
 .profile-inv {

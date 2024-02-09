@@ -65,7 +65,7 @@ main {
 
 #chat_content {
     flex: 1;
-    background-color: #e0e0e0;
+    background-color: #e8e8e8;
     font-size: 1em;
     display: flex;
     flex-direction: column;
@@ -73,10 +73,41 @@ main {
 
 #chat_messages{
     flex: 1;
-    padding: 2vmin;
+    padding: 10px;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
+.message {
+    display: flex;
+    flex-direction: row;
+    font-size: 0.75em;
+}
+
+.message > .profile-pic {
+    height: 32px;
+    width: 32px;
+    outline-width: 1px;
+}
+
+.message > .message-content {
+    margin-top: 2px;
+    margin-left: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px
+}
+
+.message-content > label {
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+.message-content > p {
+    margin-left: 4px;
+}
 #messenger {
     width: 100%;
     display: flex;
@@ -85,8 +116,8 @@ main {
 }
 
 #messenger button {
-    width: 2.5em;
-    height: 2.5em;
+    height: 100%;
+    aspect-ratio: 1;
     background-color: #202020;
     display: flex;
     align-items: center;
@@ -119,7 +150,6 @@ main {
     flex: 1;
     font-size: 0.9em;
     height: 100%;
-    padding: 5px;
 }
 
 #player_profile {
