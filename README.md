@@ -69,3 +69,12 @@ For this deliverable I built out the structure of my application using HTML.
 - **Images** - I added images simply as the favicon.ico and at the top of most pages. The piano for the room pages will be rendered using css
 - **DB/Login** - Input box and submit button for login. All rooms will be stored on the database
 - **WebSocket** - The chat function will send messages using web sockets and also the playing of the piano will send the midi data through web sockets
+
+## CSS deliverable
+
+- **Header, footer, and main content body** - On most pages I stylized these except for the rooms for aesthetic and spacing purposes.
+- **Navigation elements** - The navigation elements in the discovery page, create_page, create_user, and piano rooms all are shown on a navbar and don't have any underlining or blue color. The profile icon will show a menu when hovered over (only after login)
+- **Responsive to window resizing** - I spent so much time and lines of code trying to make it look pretty. Don't overdo it because it will break, but most formatting will change to match the screen size down to an IPhone SE both landscape and portrait. The header will shrink and hide elements as both width or height goes down, footer is the same deal. Piano and chat will change formatting to better fit a scrolling approach (piano is one row, chat appears after content).
+- **Application elements** - Used okay contrast and whitespace for most elements. A TON of flex to center everything (because I'm lazy). Buttons! Pure CSS buttons that change based on hovering. Piano that is built from div elements galour (seriously went ham with the amount divs) and is formatted with css to be a piano. Make sure to checkout the player piano room.
+- **Application text content** - Appropriate Sizing of fonts to show emphasis and draw attention. Prevented selection of most navigational and informational text.  
+- **Application images** - The only images present are the profile pictures and the footer icons. I worked to prevent their selection and dragging (which for some stupid reason can't be done in css, but has to be specified in the html). For the profile picture, I did a rounded image with a border. Actually I lied, an arrow image is present with the chat bar.
