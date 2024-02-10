@@ -30,6 +30,7 @@
     background-color: #f0f0f0;
     right: 0;
     border-radius: 2px;
+    z-index: 2;
 }
 
 .dropdown-menu label {

@@ -202,7 +202,8 @@ main {
     align-content: center;
     -webkit-tap-highlight-color: transparent;
     overflow-x: auto;
-
+    padding: 1px;
+    min-height: calc( var(--white-key-height) + 2px);
 }
 
 .keys-half {

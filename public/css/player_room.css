@@ -180,6 +180,7 @@ main {
     align-items: center;
     padding: 10px;
     gap: 10px;
+    user-select: none;
 }
 
 #room_info p {
@@ -207,18 +208,19 @@ main {
     display: flex;
     flex-direction: column;
     user-select: none;
-    justify-content: center;
-    align-content: center;
+    justify-content: safe center;
+    align-content: safe center;
     -webkit-tap-highlight-color: transparent;
     overflow-x: auto;
-
+    padding: 1px;
+    min-height: calc( var(--white-key-height) + 2px);
 }
 
 .keys-half {
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: center;
+    justify-content: safe center;
+    align-items: safe center;
 }
 
 .keyboard div[class*="scale-"] {
