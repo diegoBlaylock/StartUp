@@ -4,7 +4,7 @@ import {LoginRequest} from "../endpoints/request.js"
 
 const home_page = "/html/discover.html";
 
-async function tryLogin() {
+function tryLogin() {
     const username = document.getElementById("username_input").value;
     const password = document.getElementById("password_input").value;
 
@@ -25,9 +25,12 @@ function onLoad() {
         try {
             validate_token(token);
             window.location.replace(home_page);
-        } catch {}
+        } catch {
+            console.log("Token Invalid");
+        }
     }
 }
 
 
 window.onload = onLoad;
+window.tryLogin = tryLogin;

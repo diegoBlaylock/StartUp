@@ -3,7 +3,7 @@ import {Store, save} from "../local-store.js"
 import { AuthToken } from "../models/user.js";
 
 export function login(credentials) {
-    cred_table = getTable(Table.CREDENTIALS);
+    const cred_table = getTable(Table.CREDENTIALS);
     const db_credentials = findByColumn(cred_table, "username", credentials.username);
     if(db_credentials === null) {
         throw "Username does not exist!";
@@ -11,13 +11,13 @@ export function login(credentials) {
         throw "Password not Right!";
     }
 
-    token = new AuthToken(db_credentials.user_id, crypto.randomUUID());
-    token_table = getTable(Table.TOKEN);
+    const token = new AuthToken(db_credentials.user_id, crypto.randomUUID());
+    let token_table = getTable(Table.TOKEN);
     token_table.push(token);
     safeTable(Table.TOKEN, token_table);
     save(Store.TOKEN, token);
 
-    user_table = getTable(Table.USER);
+    const user_table = getTable(Table.USER);
     user = findByColumn(user_table, "user_id", token.user_id);
     save(Store.USER, user);
 
@@ -25,7 +25,7 @@ export function login(credentials) {
 }
 
 export function validate_token(token) {
-    token_table = getTable(Table.TOKEN);
+    const token_table = getTable(Table.TOKEN);
     const db_token = findByColumn(token_table, "token", token);
     if(index === null) {
         localStorage.removeItem(Store.TOKEN);
@@ -33,8 +33,8 @@ export function validate_token(token) {
     }
     save(Store.TOKEN, db_token);
 
-    user_table = getTable(Table.USER);
-    user = findByColumn(cred_table, "user_id", token.user_id);
+    const user_table = getTable(Table.USER);
+    const user = findByColumn(cred_table, "user_id", token.user_id);
     save(Store.USER, user);
 
     return user;

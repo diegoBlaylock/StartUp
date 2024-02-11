@@ -9,7 +9,8 @@
         <link rel="stylesheet" href="css/style.css"/>
         <link rel="stylesheet" href="css/login.css"/>
         <link rel="stylesheet" href="css/footer.css"/>
-        <script type="module" src="js/pages/login.js"></script>
+
+        <script src="./js/pages/login.js" type="module" defer></script>
     </head>
     <body>
         <header>
@@ -27,7 +28,7 @@
         </header>
         <main>
             <h1>Log In</h1>
-            <form action="html/discovery.html" method="get">
+            <form action="javascript:tryLogin();" method="get">
                     <label for="username_input">Enter username:</label>
                     <input type="text" id="username_input" name="username" placeholder="username" required/>
                     <label for="password_input">Enter password:</label>
