@@ -1,6 +1,6 @@
-import {get, Store} from "../local-store"
-import {login, validate_token} from "../endpoints/api"
-import {LoginRequest} from "../endpoints/request"
+import {get, Store} from "../local-store.js"
+import {login, validate_token} from "../endpoints/api.js"
+import {LoginRequest} from "../endpoints/request.js"
 
 const home_page = "/html/discover.html";
 
@@ -15,7 +15,7 @@ async function tryLogin() {
 
         window.location.replace(home_page);
     } catch(e) {
-        console.log("Pysch")
+        console.log(e);
     }
 }
 

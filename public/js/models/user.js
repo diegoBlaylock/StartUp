@@ -6,8 +6,10 @@ export class User {
 }
 
 export class AuthToken {
-    user_id;
-    token;
+    constructor(user_id, token) {
+        this.user_id = user_id;
+        this.token = token;
+    }
 }
 
 

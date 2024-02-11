@@ -3,10 +3,10 @@ export const Store = Object.freeze({
     USER: "user"
 });
 
-function get(name) {
+export function get(name) {
     localStorage.getItem(name);
 }
 
-function save(name, obj) {
+export function save(name, obj) {
     localStorage.setItem(name, obj);
 }
