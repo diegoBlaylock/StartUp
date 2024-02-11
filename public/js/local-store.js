@@ -4,9 +4,9 @@ export const Store = Object.freeze({
 });
 
 export function get(name) {
-    localStorage.getItem(name);
+    return JSON.parse(localStorage.getItem(name));
 }
 
 export function save(name, obj) {
-    localStorage.setItem(name, obj);
+    localStorage.setItem(name, JSON.stringify(obj));
 }

@@ -2,9 +2,10 @@ import {get, Store} from "../local-store.js"
 import {login, validate_token} from "../endpoints/api.js"
 import {LoginRequest} from "../endpoints/request.js"
 
-const home_page = "/html/discover.html";
+const home_page = "/html/discovery.html";
 
-function tryLogin() {
+function tryLogin(event) {
+    event.preventDefault();
     const username = document.getElementById("username_input").value;
     const password = document.getElementById("password_input").value;
 
@@ -34,4 +35,4 @@ function onLoad() {
 
 window.onload = onLoad;
 
-document.querySelector("form").action = 'javascript:tryLogin()';
+document.querySelector("form").addEventListener("submit", (event) => tryLogin(event));

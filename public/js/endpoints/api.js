@@ -19,7 +19,7 @@ export function login(credentials) {
     save(Store.TOKEN, token);
 
     const user_table = getTable(Table.USER);
-    user = findByColumn(user_table, "user_id", token.user_id);
+    const user = findByColumn(user_table, "user_id", token.user_id);
     save(Store.USER, user);
 }
 
@@ -33,14 +33,14 @@ export function validate_token(token) {
     save(Store.TOKEN, db_token);
 
     const user_table = getTable(Table.USER);
-    const user = findByColumn(cred_table, "user_id", token.user_id);
+    const user = findByColumn(user_table, "user_id", token.user_id);
     save(Store.USER, user);
 }
 
 export function create_user(user_details) {
     
     let user_table = getTable(Table.USER);
-    user = findByColumn(user_table, "username", user_details.username);
+    const user = findByColumn(user_table, "username", user_details.username);
     if(user !== null) {
         throw "Username taken!"
     }
@@ -60,7 +60,6 @@ export function create_user(user_details) {
     token_table.push(token);
     safeTable(Table.TOKEN, token_table);
     save(Store.TOKEN, token);
-
 }
 
 export function sign_out() {

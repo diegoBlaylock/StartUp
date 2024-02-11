@@ -1,24 +1,29 @@
-import {get, Store} from "../local-store.js"
-import {login, validate_token} from "../endpoints/api.js"
-import {LoginRequest} from "../endpoints/request.js"
+import {create_user} from "../endpoints/api.js"
+import {CreateUserRequest} from "../endpoints/request.js"
 
-const home_page = "/html/discover.html";
+const home_page = "/html/discovery.html";
 
-function tryCreateUser() {
+function tryCreateUser(event) {
+    event.preventDefault();
     const username = document.getElementById("username_input").value;
+    const email = document.getElementById("email_input").value;
     const password = document.getElementById("password_input").value;
+    const confirm_password = document.getElementById("confirm_password_input").value;
+
+    if(password !== confirm_password) {
+        alert("Passwords don't match!");
+        return;
+    }
 
     try {
-        login(
-            new LoginRequest(username, password)
+        create_user(
+            new CreateUserRequest(username, email, password)
         );
-
         window.location.replace(home_page);
     } catch(e) {
         console.log(e);
     }
+
 }
 
-window.onload = onLoad;
-
-document.querySelector("form").action = 'javascript:tryCreateUser()';
+document.querySelector("form").addEventListener("submit", (event) => tryCreateUser(event));

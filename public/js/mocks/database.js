@@ -23,7 +23,7 @@ export function safeTable(name, table) {
 }
 
 export function findByColumn(table, attribute, value) {
-    for(obj of table) {
+    for(const obj of table) {
         if(obj[attribute] === value) {
             return obj;
         }
