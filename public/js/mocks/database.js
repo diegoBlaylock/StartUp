@@ -8,9 +8,14 @@ export const Table = Object.freeze({
 });
 
 export function getTable(name) {
+    
     const table = JSON.parse(localStorage.getItem(name));
     if (table === null) return [];
     return table;
+}
+
+export function release(name) {
+
 }
 
 export function safeTable(name, table) {

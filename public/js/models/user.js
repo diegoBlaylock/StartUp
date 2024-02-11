@@ -1,8 +1,10 @@
 export class User {
-    username;
-    user_id;
-    profile;
-    description;
+    constructor(username, user_id, profile, description) {
+        this.username = username;
+        this.user_id = user_id;
+        this.profile = profile;
+        this.description = description;
+    }
 }
 
 export class AuthToken {
