@@ -10,7 +10,7 @@
         <link rel="stylesheet" href="/css/footer.css"/>
         <link rel="stylesheet" href="/css/profile.css"/>
         <link rel="stylesheet" href="/css/view_user.css"/>
-
+        <script src="/js/pages/shared/profile.js" type="module" defer></script>
     </head>
     <body>
         <header>
@@ -28,7 +28,7 @@
                         <a href="view_user.html">View/Edit Profile</a>
                         <a href="discovery.html">Discover Rooms</a>
                         <a href="create_room.html">Create Room</a>
-                        <a href="/index.html">Sign Out</a>
+                        <a id="sign_out" href="/index.html">Sign Out</a>
                     </div>
                 </div>
             </div>
@@ -42,7 +42,7 @@
         <main>
             <div id="profile_title">
                 <div id="your_profile">
-                    <img class="profile-pic" src="/resources/default_profile.png" width="60em">
+                    <img class="profile-pic profile-inv" src="/resources/default_profile.png" width="60em">
                     <span>Change</span>
                 </div>
                 <label>caterpillarUser256</label>

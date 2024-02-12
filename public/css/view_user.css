@@ -20,6 +20,13 @@ nav menu a {
 
 }
 
+nav menu a:hover {
+    text-decoration: none;
+    color: #404040;
+    font-size: 20px;
+
+}
+
 nav li {
     list-style: none;
     display: flex;
