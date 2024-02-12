@@ -214,13 +214,14 @@ main {
     }
 }
 
-@media (width < 800px), (height < 600px) {
+@media (width < 1100px) {
     main {
         min-width: 100vw;
     }
+}
 
+@media (width < 800px), (height < 600px) {
     
-
     #search_bar > div > * {
         margin-right: 2px;
         font-size: 0.75em;

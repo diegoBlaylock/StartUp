@@ -1,11 +1,10 @@
 import {sign_out} from "/js/endpoints/api.js"
-import {CreateUserRequest} from "/js/endpoints/request.js"
-
+import {get, Store} from "/js/local-store.js"
 const home_page = "/";
 
 function trySignOut(event) {
     event.preventDefault();
-
+    if (window.getComputedStyle(event.target).display === "none") return;
     try {
         sign_out();
         window.location.replace(home_page);
@@ -16,6 +15,13 @@ function trySignOut(event) {
 
 }
 
-document.querySelector("#sign_out").href = addEventListener("click", (event) => trySignOut(event));
+function onLoad() {
 
-document.querySelector(".my-profile")
+    const user = get(Store.USER);
+
+    document.getElementById("sign_out").addEventListener("click", (event) => trySignOut(event));
+    document.querySelector(".my-profile").src = user.profile;
+    document.querySelector(".dropdown-menu label").innerText = user.username;
+}
+
+onLoad();
