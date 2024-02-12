@@ -1,7 +1,7 @@
-import {getTable, Table, findByColumn, safeTable} from "../mocks/database.js"
-import {Credentials} from "../mocks/server-models.js"
-import {Store, save} from "../local-store.js"
-import { AuthToken, User } from "../models/user.js";
+import {getTable, Table, findByColumn, safeTable} from "/js/mocks/database.js"
+import {Credentials} from "/js/mocks/server-models.js"
+import {Store, save, get} from "/js/local-store.js"
+import { AuthToken, User } from "/js/models/user.js";
 
 export function login(credentials) {
     const cred_table = getTable(Table.CREDENTIALS);
@@ -43,6 +43,11 @@ export function create_user(user_details) {
     const user = findByColumn(user_table, "username", user_details.username);
     if(user !== null) {
         throw "Username taken!"
+    }
+
+    const email_user = findByColumn(user_table, "email", user_details.email);
+    if(email_user !== null) {
+        throw "Email taken!"
     }
 
     const new_user = new User(user_details.username, crypto.randomUUID(), "/resources/default_profile.png", "");

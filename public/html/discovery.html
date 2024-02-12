@@ -4,12 +4,13 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Cristofori's Café</title>
-        <link rel="icon" href="../favicon.ico">
-        <link rel="stylesheet" href="../css/header.css"/>
-        <link rel="stylesheet" href="../css/style.css"/>
-        <link rel="stylesheet" href="../css/footer.css"/>
-        <link rel="stylesheet" href="../css/profile.css"/>
-        <link rel="stylesheet" href="../css/discovery.css"/>
+        <link rel="icon" href="/favicon.ico">
+        <link rel="stylesheet" href="/css/header.css"/>
+        <link rel="stylesheet" href="/css/style.css"/>
+        <link rel="stylesheet" href="/css/footer.css"/>
+        <link rel="stylesheet" href="/css/profile.css"/>
+        <link rel="stylesheet" href="/css/discovery.css"/>
+        <script src="/js/pages/shared/profile.js" type="module" defer></script>
     </head>
     <body>
         <header>
@@ -18,16 +19,16 @@
                     <h1 id="app_name_label">Cristofori's Café</h1>
                 </div>
                 <div id="header_logo">
-                    <img src="../resources/piano_logo.png" alt="logo" draggable="false"/>
+                    <img src="/resources/piano_logo.png" alt="logo" draggable="false"/>
                 </div>
                 <div id="header_profile">
-                    <img class="profile-pic my-profile" src="../resources/default_profile.png" draggable="false"/>
+                    <img class="profile-pic my-profile" src="/resources/default_profile.png" draggable="false"/>
                     <div class="dropdown-menu">
                         <label>caterpillarUser256</label>
                         <a href="view_user.html">View/Edit Profile</a>
                         <a href="discovery.html">Discover Rooms</a>
                         <a href="create_room.html">Create Room</a>
-                        <a href="../index.html">Sign Out</a>
+                        <a id="sign_out">Sign Out</a>
                     </div>
                 </div>
             </div>
@@ -43,73 +44,73 @@
             <div id="roomspage">
                 <a href="view_player_room.html" class="room-desc" data-id="room uuid1">
                     <h2>My Jazzy Club (Player)</h2>
-                    <img class="profile-pic" src="../resources/default_profile.png" draggable="false"/>
+                    <img class="profile-pic" src="/resources/default_profile.png" draggable="false"/>
                     <label title="A profesional player for 3 years in a row. I enjoy practicing and thought, hey why not share with others?">by <span class="username">caterpillarUser256</span></label>
                 </a>
 
                 <a href="view_listener_room.html" class="room-desc" data-id="room uuid2">
                     <h2>Bach Absolution (Listener)</h2>
-                    <img class="profile-pic" src="../resources/default_profile.png" draggable="false"/>
+                    <img class="profile-pic" src="/resources/default_profile.png" draggable="false"/>
                     <label title="I like turtles, no jokes, I actually just like turtles">by <span class="username">fingerClicker4</span></label>
                 </a>
 
                 <a href="view_listener_room.html" class="room-desc" data-id="room uuid3">
                     <h2>Peaceful Prelude</h2>
-                    <img class="profile-pic" src="../resources/default_profile.png" draggable="false"/>
+                    <img class="profile-pic" src="/resources/default_profile.png" draggable="false"/>
                     <label title="My Interests are bach, chopin, and instrumental jazz. I am a fond observer of aviary creatures.">by <span class="username">egomaniac20</span></label>
                 </a>
 
                 <a href="view_player_room.html" class="room-desc" data-id="room uuid1">
                     <h2>My Jazzy Club</h2>
-                    <img class="profile-pic" src="../resources/default_profile.png" draggable="false"/>
+                    <img class="profile-pic" src="/resources/default_profile.png" draggable="false"/>
                     <label title="A profesional player for 3 years in a row. I enjoy practicing and thought, hey why not share with others?">by <span class="username">caterpillarUser256</span></label>
                 </a>
 
                 <a href="view_listener_room.html" class="room-desc" data-id="room uuid2">
                     <h2>Bach Absolution</h2>
-                    <img class="profile-pic" src="../resources/default_profile.png" draggable="false"/>
+                    <img class="profile-pic" src="/resources/default_profile.png" draggable="false"/>
                     <label title="I like turtles, no jokes, I actually just like turtles">by <span class="username">fingerClicker4</span></label>
                 </a>
 
                 <a href="view_listener_room.html" class="room-desc" data-id="room uuid3">
                     <h2>Peaceful Prelude</h2>
-                    <img class="profile-pic" src="../resources/default_profile.png" draggable="false"/>
+                    <img class="profile-pic" src="/resources/default_profile.png" draggable="false"/>
                     <label title="My Interests are bach, chopin, and instrumental jazz. I am a fond observer of aviary creatures.">by <span class="username">egomaniac20</span></label>
                 </a>
 
                 <a href="view_player_room.html" class="room-desc" data-id="room uuid1">
                     <h2>My Jazzy Club</h2>
-                    <img class="profile-pic" src="../resources/default_profile.png" draggable="false"/>
+                    <img class="profile-pic" src="/resources/default_profile.png" draggable="false"/>
                     <label title="A profesional player for 3 years in a row. I enjoy practicing and thought, hey why not share with others?">by <span class="username">caterpillarUser256</span></label>
                 </a>
 
                 <a href="view_listener_room.html" class="room-desc" data-id="room uuid2">
                     <h2>Bach Absolution</h2>
-                    <img class="profile-pic" src="../resources/default_profile.png" draggable="false"/>
+                    <img class="profile-pic" src="/resources/default_profile.png" draggable="false"/>
                     <label title="I like turtles, no jokes, I actually just like turtles">by <span class="username">fingerClicker4</span></label>
                 </a>
 
                 <a href="view_listener_room.html" class="room-desc" data-id="room uuid3">
                     <h2>Peaceful Prelude</h2>
-                    <img class="profile-pic" src="../resources/default_profile.png" draggable="false"/>
+                    <img class="profile-pic" src="/resources/default_profile.png" draggable="false"/>
                     <label title="My Interests are bach, chopin, and instrumental jazz. I am a fond observer of aviary creatures.">by <span class="username">egomaniac20</span></label>
                 </a>
 
                 <a href="view_player_room.html" class="room-desc" data-id="room uuid1">
                     <h2>My Jazzy Club</h2>
-                    <img class="profile-pic" src="../resources/default_profile.png" draggable="false"/>
+                    <img class="profile-pic" src="/resources/default_profile.png" draggable="false"/>
                     <label title="A profesional player for 3 years in a row. I enjoy practicing and thought, hey why not share with others?">by <span class="username">caterpillarUser256</span></label>
                 </a>
 
                 <a href="view_listener_room.html" class="room-desc" data-id="room uuid2">
                     <h2>Bach Absolution</h2>
-                    <img class="profile-pic" src="../resources/default_profile.png" draggable="false"/>
+                    <img class="profile-pic" src="/resources/default_profile.png" draggable="false"/>
                     <label title="I like turtles, no jokes, I actually just like turtles">by <span class="username">fingerClicker4</span></label>
                 </a>
 
                 <a href="view_listener_room.html" class="room-desc" data-id="room uuid3">
                     <h2>Peaceful Prelude</h2>
-                    <img class="profile-pic" src="../resources/default_profile.png" draggable="false"/>
+                    <img class="profile-pic" src="/resources/default_profile.png" draggable="false"/>
                     <label title="My Interests are bach, chopin, and instrumental jazz. I am a fond observer of aviary creatures.">by <span class="username">egomaniac20</span></label>
                 </a>
                 
@@ -143,13 +144,13 @@
             <div id="author">Author: Diego Blaylock</div>
             <div id="github_div">
                 <a href="https://github.com/diegoBlaylock/startup/" target="_blank" rel="noopener">
-                    <img src="../resources/logos/github-mark.png" alt="github" />
+                    <img src="/resources/logos/github-mark.png" alt="github" />
                     GitHub
                 </a>
             </div>
             <div id="linkedin_div">
                 <a href="https://www.linkedin.com/in/diego-blaylock/" target="_blank" rel="noopener">
-                    <img src="../resources/logos/LI-In-Bug.png" alt="linkedin" />
+                    <img src="/resources/logos/LI-In-Bug.png" alt="linkedin" />
                     LinkedIn
                 </a>
             </div>

@@ -1,6 +1,6 @@
-import {get, Store} from "../local-store.js"
-import {login, validate_token} from "../endpoints/api.js"
-import {LoginRequest} from "../endpoints/request.js"
+import {get, Store} from "/js/local-store.js"
+import {login, validate_token} from "/js/endpoints/api.js"
+import {LoginRequest} from "/js/endpoints/request.js"
 
 const home_page = "/html/discovery.html";
 
@@ -16,7 +16,7 @@ function tryLogin(event) {
 
         window.location.replace(home_page);
     } catch(e) {
-        console.log(e);
+        alert(e);
     }
 }
 

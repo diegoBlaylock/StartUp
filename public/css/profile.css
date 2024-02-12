@@ -42,7 +42,7 @@
 }
 .dropdown-menu a {
     padding: 10px;
-
+    cursor: pointer;
     color: black;
     text-decoration: none;
     

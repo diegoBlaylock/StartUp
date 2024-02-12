@@ -1,5 +1,5 @@
-import {create_user} from "../endpoints/api.js"
-import {CreateUserRequest} from "../endpoints/request.js"
+import {create_user} from "/js/endpoints/api.js"
+import {CreateUserRequest} from "/js/endpoints/request.js"
 
 const home_page = "/html/discovery.html";
 
@@ -21,7 +21,7 @@ function tryCreateUser(event) {
         );
         window.location.replace(home_page);
     } catch(e) {
-        console.log(e);
+        alert(e);
     }
 
 }
