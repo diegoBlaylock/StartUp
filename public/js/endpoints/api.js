@@ -85,8 +85,14 @@ export function edit_user_picture(user_id, file) {
 
 }
 
-export function edit_user_bio(user_id, bio) {
-
+export function edit_user_bio(bio) {
+    const user_id = get(Store.TOKEN).user_id;
+    const user_table = getTable(Table.USER);
+    const index = user_table.map((t)=>t.user_id).indexOf(user_id);
+    user_table[index].description = bio;
+    safeTable(Table.USER, user_table);
+    const user = user_table[index];
+    save(Store.USER, user);
 }
 
 export function get_room_stats(room_id) {
