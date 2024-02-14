@@ -45,7 +45,6 @@
                 <div id="profile_title">
                     <div id="your_profile">
                         <img class="profile-pic profile-inv" draggable="false">
-                        <input type="file" id="file_picker" accept="image/*" style="display: none;" />
                         <span>Change</span>
                     </div>
                     <label>caterpillarUser256</label>
@@ -56,6 +55,18 @@
                     <button id="bio_change" type="button">Edit</button>
                 </div>
     
+            </div>
+
+            <div id="popup_content">
+                <label for="image_url">Enter Image URL:</label>
+                <input type="text" id="image_url"/>
+                <div>
+                    <button type="button" id="cancel_button">Cancel</button>
+                    <button type="submit" id="save_url_button">Save</button>
+                </div>
+                <div id="preview_url">
+                    <img class="profile-pic profile-inv" src="/resources/default_profile.png" alt="Preview" draggable="false"/>
+                </div>
             </div>
         </main>
         <footer>

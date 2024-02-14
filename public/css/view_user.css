@@ -108,6 +108,30 @@
         cursor: pointer;
     }
 
+    #popup_content {
+        display: none;
+        z-index: 2;
+        height: 40%;
+        width: 60%;
+        position: absolute;
+        flex-direction: column;
+        padding: 20px;
+        border: 2px solid #202020;
+        background-color: rgb(232, 232, 232);
+    }
+
+    #preview_url {
+        width: 100%;
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #preview_url img {
+        width: 20%;
+    }
+ 
     @media (width < 800px) {
         #main_content {
             width: 80%;

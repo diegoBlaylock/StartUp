@@ -2,15 +2,12 @@ import {get, Store} from "/js/local-store.js"
 import {edit_user_bio, edit_user_picture} from "/js/endpoints/api.js"
 
 function changeProfile(event) {
-    const files = event.target.files;
-    if(files.length == 0) return;
-    const file = files[0];
-
-    try {
-        edit_user_picture()
-    } catch(e) {
-        alert(e);
-    }
+    document.getElementById("popup_content").style.display = "flex";
+    // try {
+    //     edit_user_picture()
+    // } catch(e) {
+    //     alert(e);
+    // }
 }
 
 function changeBio() {
@@ -64,8 +61,7 @@ function onLoad() {
     }
     
     document.getElementById("bio_change").addEventListener("click", ()=>change_fn());
-    document.querySelector("#your_profile span").addEventListener("click", ()=>document.getElementById("file_picker").click());
-    document.getElementById("file_picker").addEventListener("change", changeProfile);
+    document.querySelector("#your_profile span").addEventListener("click", changeProfile);
 }
 
 onLoad();
