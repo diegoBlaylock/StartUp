@@ -39,6 +39,9 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        height: 100%;
+        width: 100%;
+        position: relative;
     }
 
     #main_content {
@@ -108,6 +111,17 @@
         cursor: pointer;
     }
 
+    #popup_backdrop {
+        display: none;
+        z-index: 1;
+        flex: 1;
+        position: absolute;
+        background-color: #202020;
+        opacity: 0.5;
+        height: 100%;
+        width: 100%;
+    }
+
     #popup_content {
         display: none;
         z-index: 2;
@@ -121,15 +135,15 @@
     }
 
     #preview_url {
-        width: 100%;
-        flex: 1;
         display: flex;
         justify-content: center;
         align-items: center;
     }
 
     #preview_url img {
-        width: 20%;
+        height: 40%;
+        width: auto;
+        aspect-ratio: 1;
     }
  
     @media (width < 800px) {

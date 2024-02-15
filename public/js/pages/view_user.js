@@ -3,6 +3,7 @@ import {edit_user_bio, edit_user_picture} from "/js/endpoints/api.js"
 
 function changeProfile(event) {
     document.getElementById("popup_content").style.display = "flex";
+    document.getElementById("popup_backdrop").style.display = "flex";
     // try {
     //     edit_user_picture()
     // } catch(e) {
