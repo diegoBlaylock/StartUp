@@ -3,6 +3,7 @@ export class Room {
     room_id;
     title;
     description;
+    
     time_stamp;
 
     message_thread_id;
