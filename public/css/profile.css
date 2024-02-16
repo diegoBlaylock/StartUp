@@ -6,6 +6,8 @@
     border-radius: 50%;
     box-sizing: border-box;
     user-select: none;
+    object-fit:cover;
+    image-rendering: auto;
 }
 
 .profile-inv {

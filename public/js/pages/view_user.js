@@ -4,11 +4,6 @@ import {edit_user_bio, edit_user_picture} from "/js/endpoints/api.js"
 function changeProfile(event) {
     document.getElementById("popup_content").style.display = "flex";
     document.getElementById("popup_backdrop").style.display = "flex";
-    // try {
-    //     edit_user_picture()
-    // } catch(e) {
-    //     alert(e);
-    // }
 }
 
 function changeBio() {
@@ -48,11 +43,46 @@ function saveBio() {
     change_fn = changeBio;
 }
 
+function cancel_url() {
+    document.getElementById("image_url").value = ""
+    document.getElementById("popup_content").style.display = "none";
+    document.getElementById("popup_backdrop").style.display = "none";
+}
+
+async function isImgUrl(url) {
+    // TODO: Cors prevents me from doing this here, but a serverside request could work
+    return true;
+}
+
+function onUrlChange() {
+    const url = document.getElementById("image_url").value;
+    isImgUrl(url)
+    .then((bool)=>{
+        const preview = document.querySelector("#preview_url img");
+        if(bool) {
+            preview.src = url;
+        } else if(preview.src !== current_url) {
+            preview.src = current_url;
+        }
+    })
+    .catch(()=>{});
+}
+
+function onUrlSave() {
+    const url = document.getElementById("image_url").value;
+    edit_user_picture(url);
+    document.querySelector("#your_profile img").src = url;
+    document.querySelector('.my-profile').src = url;
+    cancel_url();
+}
+
 let change_fn = changeBio;
+let current_url = null;
 
 function onLoad() {
     const user = get(Store.USER);
 
+    current_url = user.profile;
     document.querySelector("#your_profile img").src = user.profile;
     document.querySelector("#profile_title label").innerText = user.username;
     if(user.description === null || user.description === undefined || user.description === '') {
@@ -63,6 +93,9 @@ function onLoad() {
     
     document.getElementById("bio_change").addEventListener("click", ()=>change_fn());
     document.querySelector("#your_profile span").addEventListener("click", changeProfile);
+    document.getElementById("cancel_button").addEventListener("click", cancel_url);
+    document.getElementById('save_url_button').addEventListener("click", onUrlSave);
+    document.getElementById("preview_url_button").addEventListener("click", onUrlChange);
 }
 
 onLoad();

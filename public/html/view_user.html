@@ -10,10 +10,11 @@
         <link rel="stylesheet" href="/css/footer.css"/>
         <link rel="stylesheet" href="/css/profile.css"/>
         <link rel="stylesheet" href="/css/view_user.css"/>
-        <script src="/js/pages/shared/profile.js" type="module" defer></script>
-        <script src="/js/pages/view_user.js" type="module" defer></script>
+        
     </head>
     <body>
+        <script src="/js/pages/shared/profile.js" type="module" async></script>
+        <script src="/js/pages/view_user.js" type="module" async></script>
         <header>
             <div class="flex-container">
                 <div id="header_title">
@@ -59,9 +60,10 @@
             <div id="popup_backdrop"></div>
             <div id="popup_content">
                 <label for="image_url">Enter Image URL:</label>
-                <input type="text" id="image_url"/>
+                <input type="url" id="image_url" autocomplete="off" placeholder="https://domain.com/image"/>
                 <div>
                     <button type="button" id="cancel_button">Cancel</button>
+                    <button type="button" id="preview_url_button">Preview</button>
                     <button type="submit" id="save_url_button">Save</button>
                 </div>
                 <div id="preview_url">

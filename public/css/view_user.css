@@ -126,10 +126,11 @@
         display: none;
         z-index: 2;
         height: 40%;
+        min-height: 200px;
         width: 60%;
         position: absolute;
         flex-direction: column;
-        padding: 20px;
+        padding: 20px;  
         border: 2px solid #202020;
         background-color: rgb(232, 232, 232);
     }
@@ -138,10 +139,11 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        height: 60%;
     }
 
     #preview_url img {
-        height: 40%;
+        height: 100%;
         width: auto;
         aspect-ratio: 1;
     }
