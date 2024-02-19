@@ -40,7 +40,7 @@ export function validate_token(token) {
 
 export function create_user(user_details) {
     
-    let user_table = getTable(Table.USER);
+    const user_table = getTable(Table.USER);
     const user = findByColumn(user_table, "username", user_details.username);
     if(user !== null) {
         throw "Username taken!"
@@ -100,6 +100,11 @@ export function edit_user_bio(bio) {
     safeTable(Table.USER, user_table);
     const user = user_table[index];
     save(Store.USER, user);
+}
+
+export function get_room_stats(room_id) {
+    const room_table = getTable(Table.ROOM);
+    return findByColumn(room_table, "room_id", room_id);
 }
 
 function shuffle(array) {
