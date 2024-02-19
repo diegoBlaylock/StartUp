@@ -10,7 +10,9 @@
         <link rel="stylesheet" href="/css/footer.css"/>
         <link rel="stylesheet" href="/css/profile.css"/>
         <link rel="stylesheet" href="/css/discovery.css"/>
-        <script src="/js/pages/shared/profile.js" type="module" defer></script>
+        <script src="/js/pages/shared/profile.js" type="module" async></script>
+        <script src="/js/pages/discovery.js" type="module" async></script>
+
     </head>
     <body>
         <header>
@@ -42,101 +44,24 @@
         </nav>
         <main>
             <div id="roomspage">
-                <a href="view_player_room.html" class="room-desc" data-id="room uuid1">
-                    <h2>My Jazzy Club (Player)</h2>
-                    <img class="profile-pic" src="/resources/default_profile.png" draggable="false"/>
-                    <label title="A profesional player for 3 years in a row. I enjoy practicing and thought, hey why not share with others?">by <span class="username">caterpillarUser256</span></label>
-                </a>
-
-                <a href="view_listener_room.html" class="room-desc" data-id="room uuid2">
-                    <h2>Bach Absolution (Listener)</h2>
-                    <img class="profile-pic" src="/resources/default_profile.png" draggable="false"/>
-                    <label title="I like turtles, no jokes, I actually just like turtles">by <span class="username">fingerClicker4</span></label>
-                </a>
-
-                <a href="view_listener_room.html" class="room-desc" data-id="room uuid3">
-                    <h2>Peaceful Prelude</h2>
-                    <img class="profile-pic" src="/resources/default_profile.png" draggable="false"/>
-                    <label title="My Interests are bach, chopin, and instrumental jazz. I am a fond observer of aviary creatures.">by <span class="username">egomaniac20</span></label>
-                </a>
-
-                <a href="view_player_room.html" class="room-desc" data-id="room uuid1">
-                    <h2>My Jazzy Club</h2>
-                    <img class="profile-pic" src="/resources/default_profile.png" draggable="false"/>
-                    <label title="A profesional player for 3 years in a row. I enjoy practicing and thought, hey why not share with others?">by <span class="username">caterpillarUser256</span></label>
-                </a>
-
-                <a href="view_listener_room.html" class="room-desc" data-id="room uuid2">
-                    <h2>Bach Absolution</h2>
-                    <img class="profile-pic" src="/resources/default_profile.png" draggable="false"/>
-                    <label title="I like turtles, no jokes, I actually just like turtles">by <span class="username">fingerClicker4</span></label>
-                </a>
-
-                <a href="view_listener_room.html" class="room-desc" data-id="room uuid3">
-                    <h2>Peaceful Prelude</h2>
-                    <img class="profile-pic" src="/resources/default_profile.png" draggable="false"/>
-                    <label title="My Interests are bach, chopin, and instrumental jazz. I am a fond observer of aviary creatures.">by <span class="username">egomaniac20</span></label>
-                </a>
-
-                <a href="view_player_room.html" class="room-desc" data-id="room uuid1">
-                    <h2>My Jazzy Club</h2>
-                    <img class="profile-pic" src="/resources/default_profile.png" draggable="false"/>
-                    <label title="A profesional player for 3 years in a row. I enjoy practicing and thought, hey why not share with others?">by <span class="username">caterpillarUser256</span></label>
-                </a>
-
-                <a href="view_listener_room.html" class="room-desc" data-id="room uuid2">
-                    <h2>Bach Absolution</h2>
-                    <img class="profile-pic" src="/resources/default_profile.png" draggable="false"/>
-                    <label title="I like turtles, no jokes, I actually just like turtles">by <span class="username">fingerClicker4</span></label>
-                </a>
-
-                <a href="view_listener_room.html" class="room-desc" data-id="room uuid3">
-                    <h2>Peaceful Prelude</h2>
-                    <img class="profile-pic" src="/resources/default_profile.png" draggable="false"/>
-                    <label title="My Interests are bach, chopin, and instrumental jazz. I am a fond observer of aviary creatures.">by <span class="username">egomaniac20</span></label>
-                </a>
-
-                <a href="view_player_room.html" class="room-desc" data-id="room uuid1">
-                    <h2>My Jazzy Club</h2>
-                    <img class="profile-pic" src="/resources/default_profile.png" draggable="false"/>
-                    <label title="A profesional player for 3 years in a row. I enjoy practicing and thought, hey why not share with others?">by <span class="username">caterpillarUser256</span></label>
-                </a>
-
-                <a href="view_listener_room.html" class="room-desc" data-id="room uuid2">
-                    <h2>Bach Absolution</h2>
-                    <img class="profile-pic" src="/resources/default_profile.png" draggable="false"/>
-                    <label title="I like turtles, no jokes, I actually just like turtles">by <span class="username">fingerClicker4</span></label>
-                </a>
-
-                <a href="view_listener_room.html" class="room-desc" data-id="room uuid3">
-                    <h2>Peaceful Prelude</h2>
-                    <img class="profile-pic" src="/resources/default_profile.png" draggable="false"/>
-                    <label title="My Interests are bach, chopin, and instrumental jazz. I am a fond observer of aviary creatures.">by <span class="username">egomaniac20</span></label>
-                </a>
-                
             </div>
             <div class="pagebar">
-                <a href="javascript:;" data-page="left">❮</a>
-                <a href="javascript:;" class="selected-page" data-page="1">1</a>
-                <a href="javascript:;" data-page="2">2</a>
-                <a href="javascript:;" data-page="3">3</a>
-                <a href="javascript:;" data-page="right">❯</a>
             </div>
         </main>
         <div id="search_bar">
             <div id="search">
                 <label>Search by:</label>
-                <select title="How to search by.">
+                <select id="search_type" title="How to search by.">
                     <option>user</option>
                     <option>room</option>
                 </select>
-                <input type="text" placeholder="Type and press Enter" autocomplete="off">
+                <input id="search_param" type="text" placeholder="Type and press Enter" autocomplete="off">
             </div>    
             <div id="filter">
                 <label>Filter by:</label>
-                <select title="Choose how to Filter.">
-                    <option selected>Popularity</option>
-                    <option>Time Playing</option>
+                <select id="filter_type" title="Choose how to Filter.">
+                    <option selected>popularity</option>
+                    <option>time playing</option>
                 </select>
             </div>    
         </div>

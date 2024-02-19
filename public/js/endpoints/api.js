@@ -2,6 +2,7 @@ import {getTable, Table, findByColumn, safeTable} from "/js/mocks/database.js"
 import {Credentials} from "/js/mocks/server-models.js"
 import {Store, save, get} from "/js/local-store.js"
 import { AuthToken, User } from "/js/models/user.js";
+import {Filter, Search} from "/js/endpoints/request.js";
 
 export function login(credentials) {
     const cred_table = getTable(Table.CREDENTIALS);
@@ -101,6 +102,56 @@ export function edit_user_bio(bio) {
     save(Store.USER, user);
 }
 
-export function get_room_stats(room_id) {
+function shuffle(array) {
+    let currentIndex = array.length,  randomIndex;
+  
+    while (currentIndex > 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+  
+      [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+    }
+  
+    return array;
+  }
 
+const PAGE_SIZE = 9
+export async function get_rooms(room_request) {
+    let room_table = getTable(Table.ROOM);
+    if(room_table.length == 0){
+        const res = await (await fetch("/js/mocks/init-rooms.json")).json();
+        safeTable(Table.ROOM, res);
+        room_table = res;
+    }
+
+    if(room_request.search_param) {
+        const search_type = room_request.search_type ?? Search.USER;
+        switch(search_type) {
+            case Search.USER:
+                room_table = room_table.filter((room) => room.owner.username.toLowerCase().includes(room_request.search_param.toLowerCase()));
+                break;
+            case Search.ROOM:
+                room_table = room_table.filter((room) => room.title.toLowerCase().includes(room_request.search_param.toLowerCase()));
+                break;
+        }
+    }
+
+    switch(room_request.filter_type ?? Filter.TIME_STAMP) {
+        case Filter.TIME_STAMP:
+            room_table.sort((a,b)=>a.time_stamp-b.time_stamp);
+            break;
+        case Filter.POPULARITY:
+            shuffle(room_table);
+            break;
+    }
+
+    let page = room_request.page ?? 0;
+    const total = Math.ceil(room_table.length / PAGE_SIZE);
+    const rooms = room_table.splice(PAGE_SIZE*page, PAGE_SIZE*page + PAGE_SIZE);
+
+    return {
+        rooms: rooms,
+        num: page,
+        total: total
+    }    
 }
