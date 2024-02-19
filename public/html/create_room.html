@@ -10,7 +10,9 @@
         <link rel="stylesheet" href="/css/footer.css"/>
         <link rel="stylesheet" href="/css/profile.css"/>
         <link rel="stylesheet" href="/css/create_room.css"/>
-        <script src="/js/pages/shared/profile.js" type="module" defer></script>
+        <script src="/js/pages/shared/profile.js" type="module" async></script>
+        <script src="/js/pages/create_room.js" type="module" async></script>
+
 
     </head>
     <body>
@@ -43,11 +45,11 @@
         </nav>
         <main>
             <h1>Create Room:</h1>
-            <form action="view_player_room.html" method="get">
+            <form>
                 <label for="roomname_input">Enter name of room:</label>
-                <input type="text" id="roomname_input" name="room" placeholder="Room Name" />
+                <input type="text" id="roomname_input" name="room" placeholder="Room Name"  autocomplete="off" required />
                 <label for="desc_input">Enter Description:</label>
-                <textarea id="desc_input" name="description" placeholder="Description..."></textarea>
+                <textarea id="desc_input" name="description" placeholder="Description..." autocomplete="off"></textarea>
                 <input type="submit" value="Create"/>
             </form>
         </main>

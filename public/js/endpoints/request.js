@@ -13,6 +13,13 @@ export class CreateUserRequest {
     }
 }
 
+export class CreateRoomRequest {
+    constructor(title, desc) {
+        this.title = title;
+        this.description = desc;
+    }
+}
+
 export const Filter = Object.freeze({
     POPULARITY: "popularity",
     TIME_STAMP: "time_stamp"

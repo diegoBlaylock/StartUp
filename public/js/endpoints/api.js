@@ -138,7 +138,7 @@ export async function get_rooms(room_request) {
 
     switch(room_request.filter_type ?? Filter.TIME_STAMP) {
         case Filter.TIME_STAMP:
-            room_table.sort((a,b)=>a.time_stamp-b.time_stamp);
+            room_table.sort((a,b)=>b.time_stamp-a.time_stamp);
             break;
         case Filter.POPULARITY:
             shuffle(room_table);
@@ -154,4 +154,21 @@ export async function get_rooms(room_request) {
         num: page,
         total: total
     }    
+}
+
+export function create_room(create_room_request) {
+    const user = get(Store.USER);
+    const room = {
+        room_id: crypto.randomUUID(),
+        title: create_room_request.title,
+        description: create_room_request.description,
+        time_stamp: Date.now(),
+        owner: user,
+    }
+
+    const room_table = getTable(Table.ROOM);
+    room_table.push(room);
+    safeTable(Table.ROOM, room_table);
+
+    return room.room_id;
 }
