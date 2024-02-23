@@ -1,4 +1,5 @@
 import {Banshee} from "/js/mocks/banshee.js"
+import {get, Store} from "/js/local-store.js"
 
 function createMessageElement(message) {
     const frame = document.createElement("div");
@@ -27,16 +28,32 @@ function createMessageElement(message) {
     return frame;
 }
 
-const obj = {scroll: true};
+const lockScrolling = {locked: true};
 
 function onMessageEvent(messageEvent) {
     const messages = document.getElementById("chat_messages");
     messages.appendChild(createMessageElement(messageEvent));
-    if (obj.scroll) messages.scrollTop = messages.scrollHeight;
+    if (lockScrolling.locked) messages.scrollTop = messages.scrollHeight;
 }
 
 function onNoteEvent(noteEvent) {
     
+}
+
+function sendMessage() {
+    const textarea = document.querySelector("#messenger textarea");
+    const text = textarea.value;
+
+    if (text && text !== "") {
+        const user = get(Store.USER)
+        textarea.value = "";
+        onMessageEvent({
+            message_id: crypto.randomUUID(),
+            owner: user,
+            content: text,
+            time_stamp: Date.now()
+        });
+    }
 }
 
 function onLoad() {
@@ -44,12 +61,19 @@ function onLoad() {
 
     const messages = document.getElementById("chat_messages");
     messages.addEventListener("scroll", (ev) => {
-        obj.scroll = false;
+        if(ev.target.scrollTop >= (ev.target.scrollHeight - ev.target.offsetHeight)-10) {
+            lockScrolling.locked = true;
+        } else {
+            lockScrolling.locked = false;
+        }
     });
 
-    messages.addEventListener("scrollend", (ev) => {
-        if(ev.target.scrollTop >= (ev.target.scrollHeight - ev.target.offsetHeight)-10) {
-            obj.scroll = true;
+    document.querySelector("#messenger button").addEventListener("click", sendMessage);
+    document.querySelector("#messenger textarea").addEventListener("keydown", (ev)=>{
+        if(ev.key === "Enter" && !ev.shiftKey) {
+            ev.preventDefault();
+            messages.scrollTop = messages.scrollHeight;
+            sendMessage();
         }
     });
 }
