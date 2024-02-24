@@ -79,3 +79,12 @@ block dirupts flow with a distinct element, inline follows it
   - svg ; allows you to render your own graphics
   - canvas ; Works only with java script
 - Urls can be served as external (i.e. http://...) or relative (local)
+## JAVA script
+- falsy
+- nullish
+- for in (index/key)
+- for of (value)
+- arrow function capture this and forms closure
+- debounce - only allow one call at a time or refresh
+
+
