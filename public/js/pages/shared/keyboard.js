@@ -41,6 +41,9 @@ function setupInteraction(el, noteCallback) {
     el.addEventListener("mousedown", ()=>{
         noteCallback(new NoteEvent(note, EventType.NOTE_ON));
     });
+    el.addEventListener("touchstart", ()=>{
+        noteCallback(new NoteEvent(note, EventType.NOTE_ON));
+    });
     el.addEventListener("mouseenter", (ev)=>{
         if(ev.buttons === 1 || ev.buttons === 3)
             noteCallback(new NoteEvent(note, EventType.NOTE_ON));
@@ -49,6 +52,9 @@ function setupInteraction(el, noteCallback) {
         noteCallback(new NoteEvent(note, EventType.NOTE_OFF));
     });
     el.addEventListener("mouseup", ()=>{
+        noteCallback(new NoteEvent(note, EventType.NOTE_OFF));
+    });
+    el.addEventListener("touchend", ()=>{
         noteCallback(new NoteEvent(note, EventType.NOTE_OFF));
     });
 }
