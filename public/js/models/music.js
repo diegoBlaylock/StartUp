@@ -1,18 +1,15 @@
 export const EventType = Object.freeze({
-    NOTE_OFF: Symbol(0),
-    NOTE_ON: Symbol(1)
-});
-
-export const Intrument = Object.freeze({
-    PIANO: 1,
-    ORGAN: 20,
-    GUITAR: 26
+    NOTE_OFF: 0,
+    NOTE_ON: 1
 });
 
 
 export class NoteEvent {
     note;
-    instrument;
-    velocity;
     event_type;
+
+    constructor(note, type) {
+        this.note = note;
+        this.event_type = type;
+    }
 }
