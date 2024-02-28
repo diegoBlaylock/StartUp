@@ -78,3 +78,12 @@ For this deliverable I built out the structure of my application using HTML.
 - **Application elements** - Used okay contrast and whitespace for most elements. A TON of flex to center everything (because I'm lazy). Buttons! Pure CSS buttons that change based on hovering. Piano that is built from div elements galour (seriously went ham with the amount divs) and is formatted with css to be a piano. Make sure to checkout the player piano room. I am not sure what the heck you guys want me to put here.
 - **Application text content** - Appropriate Sizing of fonts to show emphasis and draw attention. Prevented selection of most navigational and informational text. A special font is used as title of piano rooms.
 - **Application images** - The only images present are the profile pictures and the footer icons. I worked to prevent their selection and dragging (which for some stupid reason can't be done in css, but has to be specified in the html). For the profile picture, I did a rounded image with a border. Actually I lied, an arrow image is present with the chat bar.
+
+
+## Javascript delivarable
+
+- **login** - The login screen will actually check that you are logged in and will force you to create a user with name and password befor proceeding. 
+- **database** - This holds the username, passwords as well as created rooms for users. This part is purely in local-storage. Rooms will be collected into pages based on filter and sorts. You can also change your picture and view your username by hovering over your porfile and clicking on view profile. Hovering over a user's name on the dicovery page shows their description.
+- **WebSocket** - Two things, first on a listener piano room, a bot will randomly play notes to represent the remote player. the other thing is that in any piano room, a bot will send random messages into the chat.
+- **application logic** - You can login, you can create a room, in your own room you can play the piano. The chatbar allows you to send message by pressing the button or hitting enter. Scrolling for this part will be locked to the bottom unless moved by the user and will relock if positioned at the bottom. The room dicovery page features realtime pagination from the database and also sorting and filtering. Try it out!
+
