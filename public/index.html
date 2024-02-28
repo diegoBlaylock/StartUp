@@ -9,6 +9,8 @@
         <link rel="stylesheet" href="css/style.css"/>
         <link rel="stylesheet" href="css/login.css"/>
         <link rel="stylesheet" href="css/footer.css"/>
+
+        <script src="./js/pages/login.js" type="module" defer></script>
     </head>
     <body>
         <header>
@@ -26,11 +28,11 @@
         </header>
         <main>
             <h1>Log In</h1>
-            <form action="html/discovery.html" method="get">
+            <form>
                     <label for="username_input">Enter username:</label>
-                    <input type="text" id="username_input" name="username" placeholder="username" />
+                    <input type="text" id="username_input" name="username" placeholder="username" required/>
                     <label for="password_input">Enter password:</label>
-                    <input type="password" id="password_input" name="password" placeholder="password" />
+                    <input type="password" id="password_input" name="password" placeholder="password" required/>
                     <input type="submit" value="Login"/>
             </form>
         

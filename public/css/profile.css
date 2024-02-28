@@ -2,9 +2,12 @@
     background-color: #FFFFFF20;
     outline: 2px solid white;
     width: 86px;
+    aspect-ratio: 1;
     border-radius: 50%;
     box-sizing: border-box;
     user-select: none;
+    object-fit:cover;
+    image-rendering: auto;
 }
 
 .profile-inv {
@@ -36,13 +39,15 @@
 .dropdown-menu label {
     background-color: #202020;
     color: wheat;
+    width: 12em;
     padding: 10px;
     padding-top: 20px;
     font-size: 20px 
+
 }
 .dropdown-menu a {
     padding: 10px;
-
+    cursor: pointer;
     color: black;
     text-decoration: none;
     

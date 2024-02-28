@@ -4,11 +4,12 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Cristofori's Café!</title>
-        <link rel="icon" href="favicon.ico">
-        <link rel="stylesheet" href="../css/header.css"/>
-        <link rel="stylesheet" href="../css/style.css"/>
-        <link rel="stylesheet" href="../css/footer.css"/>
-        <link rel="stylesheet" href="../css/create_user.css"/>
+        <link rel="icon" href="/favicon.ico">
+        <link rel="stylesheet" href="/css/header.css"/>
+        <link rel="stylesheet" href="/css/style.css"/>
+        <link rel="stylesheet" href="/css/footer.css"/>
+        <link rel="stylesheet" href="/css/create_user.css"/>
+        <script src="/js/pages/create_user.js" type="module" defer></script>
     </head>
     <body>
         <header>
@@ -17,21 +18,21 @@
                     <h1 id="app_name_label">Cristofori's Café</h1>
                 </div>
                 <div id="header_logo">
-                    <img src="../resources/piano_logo.png" alt="logo" draggable="false"/>
+                    <img src="/resources/piano_logo.png" alt="logo" draggable="false"/>
                 </div>
             </div>
         </header>
         <main>
             <h1>Create User:</h1>
-            <form action="discovery.html" method="get">
+            <form>
                 <label for="username_input">Enter username:</label>
-                <input type="text" id="username_input" name="username" placeholder="username" />
+                <input type="text" id="username_input" name="username" placeholder="username" required />
                 <label for="email_input">Enter email:</label>
-                <input type="email" id="email_input" name="email" placeholder="email" />
+                <input type="email" id="email_input" name="email" placeholder="email" required />
                 <label for="password_input">Enter password:</label>
-                <input type="password" id="password_input" name="password" placeholder="password" />
+                <input type="password" id="password_input" name="password" placeholder="password" required />
                 <label for="confirm_password_input">Confirm password:</label>
-                <input type="password" id="confirm_password_input" placeholder="retype password" />
+                <input type="password" id="confirm_password_input" placeholder="retype password" required />
                 <input type="submit" value="Create"/>
             </form>
         
@@ -40,13 +41,13 @@
             <div id="author">Author: Diego Blaylock</div>
             <div id="github_div">
                 <a href="https://github.com/diegoBlaylock/startup/" target="_blank" rel="noopener">
-                    <img src="../resources/logos/github-mark.png" alt="github" />
+                    <img src="/resources/logos/github-mark.png" alt="github" />
                     GitHub
                 </a>
             </div>
             <div id="linkedin_div">
                 <a href="https://www.linkedin.com/in/diego-blaylock/" target="_blank" rel="noopener">
-                    <img src="../resources/logos/LI-In-Bug.png" alt="linkedin" />
+                    <img src="/resources/logos/LI-In-Bug.png" alt="linkedin" />
                     LinkedIn
                 </a>
             </div>
