@@ -1,46 +1,54 @@
-/*
-pluginService(app.post, '/users/create/', parseCreateUser, createUser, 201);
-    pluginService(app.post, '/users/login/', parseLogin, loginUser, 201);
-    pluginService(app.delete, '/users/logout/', parseLogout, logoutUser, 204);
-    pluginService(app.put, '/users/edit/', parseEditUser, editUser);
-    pluginService(app.get, '/rooms/:roomID/', parseGetRoom, getRoomInfo);
-    pluginService(app.post, '/rooms/create/', parseCreateRoom, createRoom, 201);
-    pluginService(app.get, '/rooms/discover/', parseDiscover, dicoverRooms);
-    pluginService(app.get, '/chat/:chatThreadID/', parseChatHistory, getChatHistory);
-*/
+export function parseCreateUser(req) {
+    return [true, req.body ?? {}]
+}
 
+export function parseLogin(req) {
+    return [true, req.body ?? {}]
+}
 
-export function parseCreateUser(req, res) {
-    const httpRequest = req.body();
-    console.log();
+export function parseLogout(req) {
+    const body = req.body ?? {};
+    body.auth = getAuthToken(req);
+    return [true, body]
+}
+
+export function parseEditUser(req) {
+    const body = req.body ?? {};
+    body.auth = getAuthToken(req);
     return [true, ]
 }
 
-export function parseLogin(req, res) {
-    return [true, ]
+export function parseGetRoom(req) {
+    const body = req.body ?? {};
+    body.auth = getAuthToken(req);
+    body.req.params.roomID;
+    return [true, body]
 }
 
-export function parseLogout(req, res) {
-    return [true, ]
+export function parseCreateRoom(req) {
+    const body = req.body ?? {};
+    body.auth = getAuthToken(req);
+    return [true, body]
 }
 
-export function parseEditUser(req, res) {
-    return [true, ]
+import { Filter, Search } from "./room-services";
+export function parseDiscover(req) {
+    const body = req.body ?? {};
+    body.auth = getAuthToken(req);
+    body.filterType = req.query.filterType ?? Search.ROOM;
+    body.filterVal = req.query.filterVal ?? null;
+    body.sortType = req.query.sortType ?? Filter.TIME_STAMP;
+    return [true, body]
 }
 
-export function parseGetRoom(req, res) {
-    const roomID = req.params.roomID;
-    return [true, {hello: roomID}]
+export function parseChatHistory(req) {
+    const body = req.body ?? {};
+    body.auth = getAuthToken(req);
+    body.threadID = req.params.chatThreadID;
+    return [true, body]
 }
 
-export function parseCreateRoom(req, res) {
-    return [true, ]
-}
 
-export function parseDiscover(req, res) {
-    return [true, ]
-}
-
-export function parseChatHistory(req, res) {
-    return [true, ]
+function getAuthToken(req) {
+    return req.get("token");
 }

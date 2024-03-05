@@ -33,6 +33,7 @@ app.listen(5500);
 
 function setupExpress() {
     app.use(express.static('public'));
+    app.use(express.json());
 }
 
 function setupRoutes() {
