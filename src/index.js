@@ -1,19 +1,61 @@
-const express = require('express');
+import {
+    createUser,
+    loginUser,
+    logoutUser,
+    editUser
+} from './services/user-services.js';
+
+import {
+    getRoomInfo,
+    createRoom,
+    dicoverRooms,
+    getChatHistory
+} from './services/room-services.js';
+
+import {
+    parseCreateUser, 
+    parseLogin, 
+    parseLogout, 
+    parseEditUser, 
+    parseGetRoom, 
+    parseCreateRoom, 
+    parseDiscover, 
+    parseChatHistory
+} from './services/parse-requests.js';
+
+import express from 'express';
 const app = express();
 
 setupExpress();
 setupRoutes();
-app.listen(8080);
+app.listen(5500);
 
 
 function setupExpress() {
     app.use(express.static('public'));
 }
 
+function setupRoutes() {
+    const get = app.get.bind(app);
+    const post = app.post.bind(app);
+    const dlt = app.delete.bind(app);
+    const put = app.put.bind(app);
+
+    pluginService(post, '/users/create/', parseCreateUser, createUser, 201);
+    pluginService(post, '/users/login/', parseLogin, loginUser, 201);
+    pluginService(dlt, '/users/logout/', parseLogout, logoutUser, 204);
+    pluginService(put, '/users/edit/', parseEditUser, editUser);
+    pluginService(get, '/rooms/:roomID/', parseGetRoom, getRoomInfo);
+    pluginService(post, '/rooms/create/', parseCreateRoom, createRoom, 201);
+    pluginService(get, '/rooms/discover/', parseDiscover, dicoverRooms);
+    pluginService(get, '/chat/:chatThreadID/', parseChatHistory, getChatHistory);
+}
+
+
 function pluginService(
     method, 
     path, 
-    validation, 
+    requestParser, 
     service, 
     status=200,
     respond=(res, serviceResponse)=>{
@@ -22,7 +64,7 @@ function pluginService(
     }
 ) {
     method(path, (req, res)=>{
-        const [valid, serviceRequest] = validation(req, res);
+        const [valid, serviceRequest] = requestParser(req, res);
         if (valid) {
             const serviceResponse = service(serviceRequest);
             res.status(status);
@@ -30,18 +72,3 @@ function pluginService(
         }
     });
 }   
-
-import {createUser} from './services/user-services';
-import { validateCreateUser as parseCreateUser } from './services/validate-requests';
-
-function setupRoutes() {
-    pluginService(app.post, '/users/create/', parseCreateUser, createUser, 201);
-    pluginService(app.post, '/users/login/', parseLogin, loginUser, 201);
-    pluginService(app.delete, '/users/logout/', parseLogout, logoutUser, 204);
-    pluginService(app.put, '/users/edit/', parseEditUser, editUser);
-    pluginService(app.get, '/rooms/:roomID/', parseGetRoom, getRoomInfo);
-    pluginService(app.post, '/rooms/create/', parseCreateRoom, createRoom, 201);
-    pluginService(app.get, '/rooms/:roomID/', parseGetRoom, getRoomInfo);
-    pluginService(app.get, '/rooms/discover/', parseDiscover, dicoverRooms)
-}
-

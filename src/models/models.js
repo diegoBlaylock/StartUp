@@ -1,8 +1,8 @@
 class User {}
 
-class AuthToken {}
+class Credentials {}
 
-class HashSalt {}
+class AuthToken {}
 
 class Room {}
 
