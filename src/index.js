@@ -65,8 +65,8 @@ function pluginService(
     }
 ) {
     method(path, (req, res)=>{
-        const [valid, serviceRequest] = requestParser(req, res);
-        if (valid) {
+        const [valid, serviceRequest] = requestParser(req);
+        if (valid) {    
             const serviceResponse = service(serviceRequest);
             res.status(status);
             respond(res, serviceResponse);

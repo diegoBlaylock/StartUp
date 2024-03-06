@@ -14,11 +14,7 @@ export function getTable(name) {
     return table;
 }
 
-export function release(name) {
-
-}
-
-export function safeTable(name, table) {
+export function saveTable(name, table) {
     localStorage.setItem(name, JSON.stringify(table));
 }
 
@@ -30,4 +26,14 @@ export function findByColumn(table, attribute, value) {
     }
 
     return null;
+}
+
+export function contains(table, attribute, value) {
+    for(const obj of table) {
+        if(obj[attribute] === value) {
+            return true;
+        }
+    }
+
+    return false;
 }
