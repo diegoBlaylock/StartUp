@@ -7,15 +7,16 @@ export const Table = Object.freeze({
     MESSAGE: "message"
 });
 
+const tables = {}
+
 export function getTable(name) {
-    
-    const table = JSON.parse(localStorage.getItem(name));
+    const table = tables[name];
     if (table === null) return [];
     return table;
 }
 
 export function saveTable(name, table) {
-    localStorage.setItem(name, JSON.stringify(table));
+    tables[name] = table;
 }
 
 export function findByColumn(table, attribute, value) {
