@@ -1,7 +1,8 @@
 import {getTable, saveTable, findByColumn, contains} from '../database/database.js'
 import {MissingParameterError, BadParameterError, ValueTakenError} from './errors.js'
+import { User, Credentials, AuthToken } from '../models/models.js';
 
-export function createUser(req) {
+export async function createUser(req) {
 
     if(req.username == null || req.email == null || req.password == null) {
         throw new MissingParameterError("Missing needed parameters!");
@@ -12,69 +13,97 @@ export function createUser(req) {
     }
 
     const user_table = getTable(Table.USER);
-    if(contains(user, username, req.username)) {
+    if(contains(user_table, "username", req.username)) {
         throw new ValueTakenError("Username Taken!");
     }
 
-    const email_user = findByColumn(user_table, "email", user_details.email);
-    if(email_user !== null) {
+    if(contains(user_table, "email", req.email)) {
         throw new ValueTakenError("Email Taken!");
     }
 
-    const new_user = new User(user_details.username, crypto.randomUUID(), "/resources/default_profile.png", "");
+    const new_user = new User(req.username, crypto.randomUUID(), "/resources/default_profile.png", "");
     user_table.push(new_user);
     saveTable(Table.USER, user_table);
     
     let cred_table = getTable(Table.CREDENTIALS);
-    const new_cred = new Credentials(new_user.user_id, new_user.username, user_details.password);
+    const new_cred = new Credentials(new_user.user_id, req.password);
     cred_table.push(new_cred);
     saveTable(Table.CREDENTIALS, cred_table);
 
-    const token = new AuthToken(new_user.user_id, crypto.randomUUID());
+    const token = new AuthToken(new_user.user_id, crypto.randomUUID(), Date.now());
     let token_table = getTable(Table.TOKEN);
     token_table.push(token);
     saveTable(Table.TOKEN, token_table);
+
+    return token;
 }
 
-export function loginUser(req) {
+export async function loginUser(req) {
+    const user_table = getTable(Table.USER);
+    const user = findByColumn(user_table, "username", req.username);
+
+    if (user === null) {
+        throw new BadParameterError("Username doesn't exist!");
+    }
+    
     const cred_table = getTable(Table.CREDENTIALS);
-    const db_credentials = findByColumn(cred_table, "username", credentials.username);
-    if(db_credentials === null) {
-        throw "Username does not exist!";
-    } else if (db_credentials.password !== credentials.password) {
-        throw "Password not Right!";
+    const db_credentials = findByColumn(cred_table, "user_id", user.user_id);
+    if (db_credentials.password !== req.password) {
+        throw new BadParameterError("Password not Right!");
     }
 
-    const token = new AuthToken(db_credentials.user_id, crypto.randomUUID());
+    const token = new AuthToken(db_credentials.user_id, crypto.randomUUID(), Date.now());
     let token_table = getTable(Table.TOKEN);
     token_table.push(token);
     saveTable(Table.TOKEN, token_table);
 
-    const user_table = getTable(Table.USER);
-    const user = findByColumn(user_table, "user_id", token.user_id);
+    return token;
 }
 
-export function logoutUser(req) {
+export async function logoutUser(req) {
     const token_table = getTable(Table.TOKEN);
-    const index = token_table.map((t)=>t.token).indexOf(token.token);
+
+    const index = token_table.map((t)=>t.token).indexOf(req.token);
     if (index !== -1) {
         token_table.splice(index, 1);
         saveTable(Table.TOKEN, token_table);
+    } else {
+        throw new UnauthorizedError();
     }
-
-    localStorage.removeItem(Store.TOKEN);
-    localStorage.removeItem(Store.USER);
 }
 
-export function editUser(req) {
+export async function editUser(req) {
+    const token_table = getTable(Table.TOKEN);
+    const token = findByColumn(token_table, "token", req.token);
+
+    if (token == null) {
+        throw new UnauthorizedError();
+    }
+
     const user_table = getTable(Table.USER);
-    const index = user_table.map((t)=>t.user_id).indexOf(user_id);
-    user_table[index].profile = url;
+    const user = findByColumn(user_table, "user_id", token.user_id);
+    
+    if (req.profile != null) {
+        if(await isUrlValid(req.profile)) {
+            user.profile = req.profile;
+        } else {
+            throw new BadParameterError("Couldn't access profile url!")
+        }
+        
+    }
+    
+    if (req.description != null) {
+        user.description = req.description;
+    }
     saveTable(Table.USER, user_table);
-    const user = user_table[index];
+}
 
-    //
-
-    user_table[index].description = bio;
-    saveTable(Table.USER, user_table);
+async function isUrlValid(url) {
+    try {
+        const response = await fetch(url, {method: "HEAD"});
+        const type = response.headers.get("Content-Type");
+        return type.startsWith("image/");
+    } catch {
+        return false;
+    }
 }
