@@ -1,23 +1,22 @@
 import {get, Store} from "/js/local-store.js"
-import {login, validateToken} from "/js/endpoints/api.js"
+import {login} from "/js/endpoints/api.js"
 import {LoginRequest} from "/js/endpoints/request.js"
 
 const home_page = "/html/discovery.html";
 
 function tryLogin(event) {
+    event.target.disabled = true;
     event.preventDefault();
     const username = document.getElementById("username_input").value;
     const password = document.getElementById("password_input").value;
-
-    try {
-        login(
-            new LoginRequest(username, password)
-        );
-
-        window.location.replace(home_page);
-    } catch(e) {
-        alert(e);
-    }
+    
+    login(
+        new LoginRequest(username, password)
+    )
+    .then(()=>window.location.replace(home_page))
+    .catch((err)=>alert(err.message))
+    .finally(()=>(event.target.disabled = false)); 
+    return false;       
 }
 
 function onLoad() {

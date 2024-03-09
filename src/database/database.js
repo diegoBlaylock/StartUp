@@ -11,7 +11,10 @@ const tables = {}
 
 export function getTable(name) {
     const table = tables[name];
-    if (table === null) return [];
+    if (table == null) {
+        tables[name] = []
+        return tables[name];
+    }
     return table;
 }
 

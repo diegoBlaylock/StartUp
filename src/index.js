@@ -91,10 +91,11 @@ function handleError(err, res) {
             res.json({error: err.message});
             break;
         case err instanceof UnauthorizedError:
-            res.redirect(401, '/html/login.html');
+            res.redirect(401, '/');
             break;
         default:
             res.status(500);
             res.json({error: err.toString()})
+            throw err;
     }
 }

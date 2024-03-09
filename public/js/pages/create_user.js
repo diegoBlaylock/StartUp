@@ -15,15 +15,10 @@ function tryCreateUser(event) {
         return;
     }
 
-    try {
-        createUser(
-            new CreateUserRequest(username, email, password)
-        );
-        window.location.replace(home_page);
-    } catch(e) {
-        alert(e);
-    }
-
+    createUser(new CreateUserRequest(username, email, password))
+    .then(()=>window.location.replace(home_page))
+    .catch((err)=>alert(err.message));
+    return false;
 }
 
 document.querySelector("form").addEventListener("submit", (event) => tryCreateUser(event));

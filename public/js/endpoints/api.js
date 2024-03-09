@@ -185,12 +185,16 @@ function addToken(options) {
 }
 
 function addBody(body, options) {
-    options.body = JSON.stringify(body);
+    if (options == null) options = {}
+    options['body'] = JSON.stringify(body);
+    if(options.headers == null)
+        options.headers = {} 
+    options.headers["Content-Type"] = "application/json";
     return options;
 }
 
 function handleError(err, res) {
-    error = {
+    const error = {
         status: res.status,
         response: res,
         message: err.error

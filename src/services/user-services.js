@@ -1,4 +1,4 @@
-import {getTable, saveTable, findByColumn, contains} from '../database/database.js'
+import {Table, getTable, saveTable, findByColumn, contains} from '../database/database.js'
 import {MissingParameterError, BadParameterError, ValueTakenError} from './errors.js'
 import { User, Credentials, AuthToken } from '../models/models.js';
 
