@@ -44,13 +44,13 @@ function setupRoutes() {
     const get = app.get.bind(app);
     const post = app.post.bind(app);
     const dlt = app.delete.bind(app);
-    const put = app.put.bind(app);
+    const patch = app.patch.bind(app);
 
     app.get('/', (req, res)=>res.sendFile("public/html/discovery.html"));
     pluginService(post, '/users/create/', parseCreateUser, createUser, 201);
     pluginService(post, '/users/login/', parseLogin, loginUser, 201);
     pluginService(dlt, '/users/logout/', parseLogout, logoutUser, 204);
-    pluginService(put, '/users/edit/', parseEditUser, editUser, 204);
+    pluginService(patch, '/users/edit/', parseEditUser, editUser);
     pluginService(get, '/users/:userID/', parseGetUser, getUser);
     pluginService(get, '/token/validate/', parseValidateUser, validateToken);
     pluginService(get, '/rooms/:roomID/', parseGetRoom, getRoomInfo);

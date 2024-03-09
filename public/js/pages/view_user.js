@@ -1,5 +1,5 @@
 import {get, Store} from "/js/local-store.js"
-import {edit_user_bio, edit_user_picture} from "/js/endpoints/api.js"
+import {editUserBio, editUserPicture} from "/js/endpoints/api.js"
 
 function changeProfile(event) {
     document.getElementById("popup_content").style.display = "flex";
@@ -23,24 +23,22 @@ function changeBio() {
 function saveBio() {
     const bio = document.getElementById("bio_content");
 
-    try {
-        edit_user_bio(bio.value);
-    } catch(e) {
-        alert(e);
-        return;
-    }
-    const user = get(Store.USER);
-    const paragraph = document.createElement("p");
-    if(user.description !== null || user.description !== undefined) 
-        paragraph.innerText = user.description;
-    else {
-        paragraph.innerText = "None";
-    }
-    paragraph.id = "bio_content";
-    bio.replaceWith(paragraph);
-    const button = document.getElementById("bio_change");
-    button.innerText = "Edit";
-    change_fn = changeBio;
+    editUserBio(bio.value)
+    .then(()=>{
+        const user = get(Store.USER);
+        const paragraph = document.createElement("p");
+        if(user.description !== null || user.description !== undefined) 
+            paragraph.innerText = user.description;
+        else {
+            paragraph.innerText = "None";
+        }
+        paragraph.id = "bio_content";
+        bio.replaceWith(paragraph);
+        const button = document.getElementById("bio_change");
+        button.innerText = "Edit";
+        change_fn = changeBio;
+    })
+    .catch((e)=>alert(e.message));;
 }
 
 function cancel_url() {
@@ -70,10 +68,13 @@ function onUrlChange() {
 
 function onUrlSave() {
     const url = document.getElementById("image_url").value;
-    edit_user_picture(url);
-    document.querySelector("#your_profile img").src = url;
-    document.querySelector('.my-profile').src = url;
-    cancel_url();
+    editUserPicture(url)
+    .then(()=>{
+        document.querySelector("#your_profile img").src = url;
+        document.querySelector('.my-profile').src = url;
+        cancel_url();
+    })
+    .catch((e)=>alert(e.message));
 }
 
 let change_fn = changeBio;

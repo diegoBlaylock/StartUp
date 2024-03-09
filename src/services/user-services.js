@@ -84,7 +84,7 @@ export async function logoutUser(req) {
 
 export async function editUser(req) {
     const token_table = getTable(Table.TOKEN);
-    const token = findByColumn(token_table, "token", req.token);
+    const token = findByColumn(token_table, "token", req.auth);
 
     if (token == null) {
         throw new UnauthorizedError();
@@ -97,7 +97,7 @@ export async function editUser(req) {
         if(await isUrlValid(req.profile)) {
             user.profile = req.profile;
         } else {
-            throw new BadParameterError("Couldn't access profile url!")
+            throw new BadParameterError("URL is not an image.")
         }
         
     }
@@ -106,6 +106,8 @@ export async function editUser(req) {
         user.description = req.description;
     }
     saveTable(Table.USER, user_table);
+
+    return user;
 }
 
 export async function getUser(req) {

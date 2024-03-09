@@ -1,4 +1,4 @@
-import {get_room_stats} from "/js/endpoints/api.js"
+import {getRoomStats} from "/js/endpoints/api.js"
 
 function getStringTime(timeStamp) {
     const date = new Date(timeStamp);
@@ -11,7 +11,7 @@ function bsViewerCount() {
 
 async function onLoad() {
     const room_id = new URL(document.location).searchParams.get("room_id");
-    const room = get_room_stats(room_id);
+    const room = getRoomStats(room_id);
     
     if(!room) {
         document.querySelector("main").innerHTML = "404 Not found";

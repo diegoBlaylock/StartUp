@@ -27,8 +27,8 @@ export async function getUser(request) {
     );
 
     const json = await response.json();
-    if(response.status !== 200) return undefined
-    else return json
+    if(response.status !== 200) return undefined;
+    else return json;
 }
 
 export async function validateToken(token) {
@@ -77,29 +77,46 @@ export async function logout() {
     localStorage.removeItem(Store.USER);
 }
 
-export function edit_user_picture(url) {
-    const userID = get(Store.TOKEN).userID;
-    const user_table = getTable(Table.USER);
-    const index = user_table.map((t)=>t.userID).indexOf(userID);
-    user_table[index].profile = url;
-    safeTable(Table.USER, user_table);
-    const user = user_table[index];
-    save(Store.USER, user);
+export async function editUserPicture(url) {
+    const response = await fetch(
+        '/users/edit/', 
+        addToken(addBody({profile: url}, {method: "PATCH"}))
+    );
+
+    const json = await response.json();
+    
+    if(response.status != 200) {
+        handleError(json, response); 
+    }
+    
+    save(Store.USER, json);
 }
 
-export function edit_user_bio(bio) {
-    const userID = get(Store.TOKEN).userID;
-    const user_table = getTable(Table.USER);
-    const index = user_table.map((t)=>t.userID).indexOf(userID);
-    user_table[index].description = bio;
-    safeTable(Table.USER, user_table);
-    const user = user_table[index];
-    save(Store.USER, user);
+export async function editUserBio(bio) {
+    const response = await fetch(
+        '/users/edit/', 
+        addToken(addBody({description: bio}, {method: "PATCH"}))
+    );
+
+    const json = await response.json();
+    
+    if(response.status != 200) {
+        handleError(json, response); 
+    }
+    
+    save(Store.USER, json);
 }
 
-export function get_room_stats(room_id) {
-    const room_table = getTable(Table.ROOM);
-    return findByColumn(room_table, "room_id", room_id);
+export async function getRoomStats(room_id) {
+    const userID = request.userID;
+    const response = await fetch(
+        '/users/'+userID+'/', 
+        addToken({method: "GET"})
+    );
+    
+    const json = await response.json();
+    if(response.status !== 200) return undefined;
+    else return json;
 }
 
 const PAGE_SIZE = 9
