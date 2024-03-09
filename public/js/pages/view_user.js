@@ -20,7 +20,8 @@ function changeBio() {
     change_fn = saveBio;
 }
 
-function saveBio() {
+function saveBio(event) {
+    event.target.disabled = true;
     const bio = document.getElementById("bio_content");
 
     editUserBio(bio.value)
@@ -38,7 +39,8 @@ function saveBio() {
         button.innerText = "Edit";
         change_fn = changeBio;
     })
-    .catch((e)=>alert(e.message));;
+    .catch((e)=>alert(e.message))
+    .finally(()=>event.target.disabled=false);
 }
 
 function cancel_url() {
@@ -54,19 +56,17 @@ async function isImgUrl(url) {
 
 function onUrlChange() {
     const url = document.getElementById("image_url").value;
-    isImgUrl(url)
-    .then((bool)=>{
-        const preview = document.querySelector("#preview_url img");
-        if(bool) {
-            preview.src = url;
-        } else if(preview.src !== current_url) {
-            preview.src = current_url;
-        }
-    })
-    .catch(()=>{});
+    
+    const preview = document.querySelector("#preview_url img");
+    if(bool) {
+        preview.src = url;
+    } else if(preview.src !== current_url) {
+        preview.src = current_url;
+    }
 }
 
-function onUrlSave() {
+function onUrlSave(event) {
+    event.target.disabled = true;
     const url = document.getElementById("image_url").value;
     editUserPicture(url)
     .then(()=>{
@@ -74,7 +74,8 @@ function onUrlSave() {
         document.querySelector('.my-profile').src = url;
         cancel_url();
     })
-    .catch((e)=>alert(e.message));
+    .catch((e)=>alert(e.message))
+    .finally(()=>event.target.disabled=false);
 }
 
 let change_fn = changeBio;
@@ -86,13 +87,13 @@ function onLoad() {
     current_url = user.profile;
     document.querySelector("#your_profile img").src = user.profile;
     document.querySelector("#profile_title label").innerText = user.username;
-    if(user.description === null || user.description === undefined || user.description === '') {
+    if(user.description == null || user.description === '') {
         document.getElementById("bio_content").innerText = 'None';
     } else {
         document.getElementById("bio_content").innerText = user.description;
     }
     
-    document.getElementById("bio_change").addEventListener("click", ()=>change_fn());
+    document.getElementById("bio_change").addEventListener("click", (event)=>change_fn(event));
     document.querySelector("#your_profile span").addEventListener("click", changeProfile);
     document.getElementById("cancel_button").addEventListener("click", cancel_url);
     document.getElementById('save_url_button').addEventListener("click", onUrlSave);

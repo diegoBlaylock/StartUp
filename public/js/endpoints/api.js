@@ -107,10 +107,9 @@ export async function editUserBio(bio) {
     save(Store.USER, json);
 }
 
-export async function getRoomStats(room_id) {
-    const userID = request.userID;
+export async function getRoomStats(roomID) {
     const response = await fetch(
-        '/users/'+userID+'/', 
+        '/rooms/'+roomID+'/', 
         addToken({method: "GET"})
     );
     
