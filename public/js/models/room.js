@@ -11,6 +11,7 @@ export class Room {
 
 export class Page {
     room_ids;
+    rooms;
     num;
     total;
 }

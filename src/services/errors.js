@@ -1,4 +1,4 @@
-class ValueTakenError extends Error {}
-class MissingParameterError extends Error {}
-class BadParameterError extends Error {}
-class UnauthorizedError extends Error {}
+export class ValueTakenError extends Error {}
+export class MissingParameterError extends Error {}
+export class BadParameterError extends Error {}
+export class UnauthorizedError extends Error {}

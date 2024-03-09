@@ -42,6 +42,7 @@ function setupRoutes() {
     const dlt = app.delete.bind(app);
     const put = app.put.bind(app);
 
+    app.get('/', (req, res)=>res.sendFile("public/html/discovery.html"));
     pluginService(post, '/users/create/', parseCreateUser, createUser, 201);
     pluginService(post, '/users/login/', parseLogin, loginUser, 201);
     pluginService(dlt, '/users/logout/', parseLogout, logoutUser, 204);
@@ -64,12 +65,32 @@ function pluginService(
             res.send(serviceResponse)
     }
 ) {
-    method(path, (req, res)=>{
-        const [valid, serviceRequest] = requestParser(req);
-        if (valid) {    
-            const serviceResponse = service(serviceRequest);
+    method(path, async (req, res)=>{
+        try {
+            const serviceRequest = requestParser(req);
+            const serviceResponse = await service(serviceRequest);
             res.status(status);
             respond(res, serviceResponse);
+        } catch(e) {
+            handleError(e, res);
         }
     });
 }   
+
+
+import { ValueTakenError, MissingParameterError, BadParameterError, UnauthorizedError} from './services/errors.js'
+function handleError(err, res) {
+    switch (true) {
+        case err instanceof ValueTakenError:
+        case err instanceof MissingParameterError:
+        case err instanceof BadParameterError:
+            res.status(400);
+            res.send(err.message);
+            break;
+        case err instanceof UnauthorizedError:
+            res.redirect(401, '/html/login.html');
+            break;
+        default:
+            throw err;
+    }
+}
