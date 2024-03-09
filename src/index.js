@@ -3,7 +3,8 @@ import {
     loginUser,
     logoutUser,
     editUser,
-    getUser
+    getUser,
+    validateToken
 } from './services/user-services.js';
 
 import {
@@ -22,7 +23,8 @@ import {
     parseGetRoom, 
     parseCreateRoom, 
     parseDiscover, 
-    parseChatHistory
+    parseChatHistory,
+    parseValidateUser
 } from './services/parse-requests.js';
 
 import express from 'express';
@@ -49,7 +51,8 @@ function setupRoutes() {
     pluginService(post, '/users/login/', parseLogin, loginUser, 201);
     pluginService(dlt, '/users/logout/', parseLogout, logoutUser, 204);
     pluginService(put, '/users/edit/', parseEditUser, editUser, 204);
-    pluginService(get, '/users/:userID/', parseGetUser, getUser)
+    pluginService(get, '/users/:userID/', parseGetUser, getUser);
+    pluginService(get, '/token/validate/', parseValidateUser, validateToken);
     pluginService(get, '/rooms/:roomID/', parseGetRoom, getRoomInfo);
     pluginService(post, '/rooms/create/', parseCreateRoom, createRoom, 201);
     pluginService(get, '/rooms/discover/', parseDiscover, dicoverRooms);
@@ -65,7 +68,9 @@ function pluginService(
     status=200,
     respond=(res, serviceResponse)=>{
         if(serviceResponse !== undefined)
-            res.json(serviceResponse)
+            res.json(serviceResponse);
+        else
+            res.send();
     }
 ) {
     method(path, async (req, res)=>{

@@ -3,10 +3,16 @@ export const Store = Object.freeze({
     USER: "user"
 });
 
+
+
 export function get(name) {
     return JSON.parse(localStorage.getItem(name));
 }
 
 export function save(name, obj) {
     localStorage.setItem(name, JSON.stringify(obj));
+}
+
+export function remove(name) {
+    localStorage.removeItem(name);
 }

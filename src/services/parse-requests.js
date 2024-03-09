@@ -25,6 +25,12 @@ export function parseGetUser(req) {
     return body
 }
 
+export function parseValidateUser(req) {
+    const body = req.body ?? {};
+    body.auth = getAuthToken(req);
+    return body;
+}
+
 export function parseGetRoom(req) {
     const body = req.body ?? {};
     body.auth = getAuthToken(req);

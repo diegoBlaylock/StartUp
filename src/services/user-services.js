@@ -60,6 +60,16 @@ export async function loginUser(req) {
     return token;
 }
 
+export async function validateToken(req) {
+    const token_table = getTable(Table.TOKEN);
+    const token = findByColumn(token_table, "token", req.auth);
+    if (token == null) {
+        throw new UnauthorizedError();
+    } else {
+        return token;
+    }
+}
+
 export async function logoutUser(req) {
     const token_table = getTable(Table.TOKEN);
 

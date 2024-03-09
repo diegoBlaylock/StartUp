@@ -31,19 +31,19 @@ export async function getUser(request) {
     else return json
 }
 
-// export async function validateToken(token) {
-//     const token_table = getTable(Table.TOKEN);
-//     const db_token = findByColumn(token_table, "token", token.token);
-//     if(db_token === null || db_token.userID !== token.userID) {
-//         localStorage.removeItem(Store.TOKEN);
-//         throw "Not Valid";
-//     }
-//     save(Store.TOKEN, db_token);
+export async function validateToken(token) {
+    const response = await fetch(
+        '/token/validate/', 
+        {headers:{"token": token}}
+    );
+    
+    const authToken = await response.json();
 
-//     const user_table = getTable(Table.USER);
-//     const user = findByColumn(user_table, "userID", token.userID);
-//     save(Store.USER, user);
-// }
+    if (response.status != 200) {
+        throw authToken;
+    }
+    return authToken;
+}
 
 export async function createUser(userDetails) {
     const response = await fetch(
@@ -75,7 +75,6 @@ export async function logout() {
 
     localStorage.removeItem(Store.TOKEN);
     localStorage.removeItem(Store.USER);
-
 }
 
 export function edit_user_picture(url) {
@@ -184,7 +183,7 @@ function addBody(body, options) {
 function handleError(err, res) {
     if(err.redirect != null) {
         window.location.replace(err.redirect);
-        throw error("")
+        throw {message: err.message}
     }
     
     const error = {
