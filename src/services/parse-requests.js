@@ -18,6 +18,13 @@ export function parseEditUser(req) {
     return body;
 }
 
+export function parseGetUser(req) {
+    const body = req.body ?? {};
+    body.auth = getAuthToken(req);
+    body.userID = req.params.userID;
+    return body
+}
+
 export function parseGetRoom(req) {
     const body = req.body ?? {};
     body.auth = getAuthToken(req);

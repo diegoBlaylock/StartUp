@@ -21,16 +21,16 @@ export async function createUser(req) {
         throw new ValueTakenError("Email Taken!");
     }
 
-    const new_user = new User(req.username, crypto.randomUUID(), "/resources/default_profile.png", "");
+    const new_user = new User(req.username, crypto.randomUUID(), "/resources/default_profile.png", req.email, "");
     user_table.push(new_user);
     saveTable(Table.USER, user_table);
     
     let cred_table = getTable(Table.CREDENTIALS);
-    const new_cred = new Credentials(new_user.user_id, req.password);
+    const new_cred = new Credentials(new_user.userID, req.password);
     cred_table.push(new_cred);
     saveTable(Table.CREDENTIALS, cred_table);
 
-    const token = new AuthToken(new_user.user_id, crypto.randomUUID(), Date.now());
+    const token = new AuthToken(new_user.userID, crypto.randomUUID(), Date.now());
     let token_table = getTable(Table.TOKEN);
     token_table.push(token);
     saveTable(Table.TOKEN, token_table);
@@ -47,12 +47,12 @@ export async function loginUser(req) {
     }
     
     const cred_table = getTable(Table.CREDENTIALS);
-    const db_credentials = findByColumn(cred_table, "user_id", user.user_id);
+    const db_credentials = findByColumn(cred_table, "userID", user.userID);
     if (db_credentials.password !== req.password) {
         throw new BadParameterError("Password not Right!");
     }
 
-    const token = new AuthToken(db_credentials.user_id, crypto.randomUUID(), Date.now());
+    const token = new AuthToken(db_credentials.userID, crypto.randomUUID(), Date.now());
     let token_table = getTable(Table.TOKEN);
     token_table.push(token);
     saveTable(Table.TOKEN, token_table);
@@ -81,7 +81,7 @@ export async function editUser(req) {
     }
 
     const user_table = getTable(Table.USER);
-    const user = findByColumn(user_table, "user_id", token.user_id);
+    const user = findByColumn(user_table, "userID", token.userID);
     
     if (req.profile != null) {
         if(await isUrlValid(req.profile)) {
@@ -96,6 +96,24 @@ export async function editUser(req) {
         user.description = req.description;
     }
     saveTable(Table.USER, user_table);
+}
+
+export async function getUser(req) {
+    const token_table = getTable(Table.TOKEN);
+    const token = findByColumn(token_table, "token", req.token);
+
+    if (token == null) {
+        throw new UnauthorizedError();
+    }
+
+    const user_table = getTable(Table.USER);
+    const user = {... findByColumn(user_table, "userID", token.userID)};
+    
+    if(user.userID !== token.userID) {
+        user.email = undefined;
+    }
+
+    return user;
 }
 
 async function isUrlValid(url) {

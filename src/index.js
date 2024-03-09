@@ -2,7 +2,8 @@ import {
     createUser,
     loginUser,
     logoutUser,
-    editUser
+    editUser,
+    getUser
 } from './services/user-services.js';
 
 import {
@@ -17,6 +18,7 @@ import {
     parseLogin, 
     parseLogout, 
     parseEditUser, 
+    parseGetUser,
     parseGetRoom, 
     parseCreateRoom, 
     parseDiscover, 
@@ -46,7 +48,8 @@ function setupRoutes() {
     pluginService(post, '/users/create/', parseCreateUser, createUser, 201);
     pluginService(post, '/users/login/', parseLogin, loginUser, 201);
     pluginService(dlt, '/users/logout/', parseLogout, logoutUser, 204);
-    pluginService(put, '/users/edit/', parseEditUser, editUser);
+    pluginService(put, '/users/edit/', parseEditUser, editUser, 204);
+    pluginService(get, '/users/:userID/', parseGetUser, getUser)
     pluginService(get, '/rooms/:roomID/', parseGetRoom, getRoomInfo);
     pluginService(post, '/rooms/create/', parseCreateRoom, createRoom, 201);
     pluginService(get, '/rooms/discover/', parseDiscover, dicoverRooms);
@@ -62,7 +65,7 @@ function pluginService(
     status=200,
     respond=(res, serviceResponse)=>{
         if(serviceResponse !== undefined)
-            res.send(serviceResponse)
+            res.json(serviceResponse)
     }
 ) {
     method(path, async (req, res)=>{
@@ -85,12 +88,13 @@ function handleError(err, res) {
         case err instanceof MissingParameterError:
         case err instanceof BadParameterError:
             res.status(400);
-            res.send(err.message);
+            res.json({error: err.message});
             break;
         case err instanceof UnauthorizedError:
             res.redirect(401, '/html/login.html');
             break;
         default:
-            throw err;
+            res.status(500);
+            res.json({error: err.toString()})
     }
 }

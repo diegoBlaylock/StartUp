@@ -1,4 +1,4 @@
-import {create_user} from "/js/endpoints/api.js"
+import {createUser} from "/js/endpoints/api.js"
 import {CreateUserRequest} from "/js/endpoints/request.js"
 
 const home_page = "/html/discovery.html";
@@ -16,7 +16,7 @@ function tryCreateUser(event) {
     }
 
     try {
-        create_user(
+        createUser(
             new CreateUserRequest(username, email, password)
         );
         window.location.replace(home_page);

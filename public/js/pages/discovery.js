@@ -29,9 +29,9 @@ function generateRoomCard(room) {
     label.appendChild(span);
     card.appendChild(label);
 
-    const user_id = get(Store.USER).user_id;
+    const userID = get(Store.USER).userID;
     const url = new URL(
-        (user_id === room.owner.user_id)?  "/html/view_player_room.html": "/html/view_listener_room.html" ,
+        (userID === room.owner.userID)?  "/html/view_player_room.html": "/html/view_listener_room.html" ,
         window.location.origin
     );
     url.searchParams.append("room_id", room.room_id);

@@ -1,80 +1,76 @@
-import {getTable, Table, findByColumn, safeTable} from "/js/mocks/database.js"
-import {Credentials} from "/js/mocks/server-models.js"
 import {Store, save, get} from "/js/local-store.js"
-import { AuthToken, User } from "/js/models/user.js";
-import {Filter, Search} from "/js/endpoints/request.js";
+import {Filter, Search, GetUserRequest} from "/js/endpoints/request.js";
 
-export function login(credentials) {
-    const cred_table = getTable(Table.CREDENTIALS);
-    const db_credentials = findByColumn(cred_table, "username", credentials.username);
-    if(db_credentials === null) {
-        throw "Username does not exist!";
-    } else if (db_credentials.password !== credentials.password) {
-        throw "Password not Right!";
-    }
+export async function login(credentials) {
 
-    const token = new AuthToken(db_credentials.user_id, crypto.randomUUID());
-    let token_table = getTable(Table.TOKEN);
-    token_table.push(token);
-    safeTable(Table.TOKEN, token_table);
+    const response = await fetch(
+        '/users/login/', 
+        addToken(addBody(credentials, {method: "POST"}))
+    );
+
+    const json = await response.json();
+    
+    if(response.status != 201) handleError(json, response); 
+
+    const token = json.token;
     save(Store.TOKEN, token);
 
-    const user_table = getTable(Table.USER);
-    const user = findByColumn(user_table, "user_id", token.user_id);
+    const user = await getUser(new GetUserRequest(json.userID));
     save(Store.USER, user);
 }
 
-export function validate_token(token) {
-    const token_table = getTable(Table.TOKEN);
-    const db_token = findByColumn(token_table, "token", token.token);
-    if(db_token === null || db_token.user_id !== token.user_id) {
-        localStorage.removeItem(Store.TOKEN);
-        throw "Not Valid";
-    }
-    save(Store.TOKEN, db_token);
+export async function getUser(request) {
+    const userID = request.userID;
+    const response = await fetch(
+        '/users/'+userID+'/', 
+        addToken({method: "GET"})
+    );
 
-    const user_table = getTable(Table.USER);
-    const user = findByColumn(user_table, "user_id", token.user_id);
+    const json = await response.json();
+    if(response.status !== 200) return undefined
+    else return json
+}
+
+// export async function validateToken(token) {
+//     const token_table = getTable(Table.TOKEN);
+//     const db_token = findByColumn(token_table, "token", token.token);
+//     if(db_token === null || db_token.userID !== token.userID) {
+//         localStorage.removeItem(Store.TOKEN);
+//         throw "Not Valid";
+//     }
+//     save(Store.TOKEN, db_token);
+
+//     const user_table = getTable(Table.USER);
+//     const user = findByColumn(user_table, "userID", token.userID);
+//     save(Store.USER, user);
+// }
+
+export async function createUser(userDetails) {
+    const response = await fetch(
+        '/users/create/', 
+        addToken(addBody(userDetails, {method: "POST"}))
+    );
+
+    const json = await response.json();
+    
+    if(response.status != 201) handleError(json, response); 
+
+    const token = token.token;
+    save(Store.TOKEN, token.token);
+
+    const user = await getUser(new GetUserRequest(json.userID));
     save(Store.USER, user);
 }
 
-export function create_user(user_details) {
+export async function logout() {
+    const response = await fetch(
+        '/users/login/', 
+        addToken({method: "POST"})
+    );
     
-    const user_table = getTable(Table.USER);
-    const user = findByColumn(user_table, "username", user_details.username);
-    if(user !== null) {
-        throw "Username taken!"
-    }
-
-    const email_user = findByColumn(user_table, "email", user_details.email);
-    if(email_user !== null) {
-        throw "Email taken!"
-    }
-
-    const new_user = new User(user_details.username, crypto.randomUUID(), "/resources/default_profile.png", "");
-    user_table.push(new_user);
-    safeTable(Table.USER, user_table);
-    save(Store.USER, new_user);
-    
-    let cred_table = getTable(Table.CREDENTIALS);
-    const new_cred = new Credentials(new_user.user_id, new_user.username, user_details.password);
-    cred_table.push(new_cred);
-    safeTable(Table.CREDENTIALS, cred_table);
-
-    const token = new AuthToken(new_user.user_id, crypto.randomUUID());
-    let token_table = getTable(Table.TOKEN);
-    token_table.push(token);
-    safeTable(Table.TOKEN, token_table);
-    save(Store.TOKEN, token);
-}
-
-export function sign_out() {
-    const token = get(Store.TOKEN);
-    const token_table = getTable(Table.TOKEN);
-    const index = token_table.map((t)=>t.token).indexOf(token.token);
-    if (index !== -1) {
-        token_table.splice(index, 1);
-        safeTable(Table.TOKEN, token_table);
+    if(response.status != 204) {
+        const json = await response.json();
+        handleError(json, response); 
     }
 
     localStorage.removeItem(Store.TOKEN);
@@ -83,9 +79,9 @@ export function sign_out() {
 }
 
 export function edit_user_picture(url) {
-    const user_id = get(Store.TOKEN).user_id;
+    const userID = get(Store.TOKEN).userID;
     const user_table = getTable(Table.USER);
-    const index = user_table.map((t)=>t.user_id).indexOf(user_id);
+    const index = user_table.map((t)=>t.userID).indexOf(userID);
     user_table[index].profile = url;
     safeTable(Table.USER, user_table);
     const user = user_table[index];
@@ -93,9 +89,9 @@ export function edit_user_picture(url) {
 }
 
 export function edit_user_bio(bio) {
-    const user_id = get(Store.TOKEN).user_id;
+    const userID = get(Store.TOKEN).userID;
     const user_table = getTable(Table.USER);
-    const index = user_table.map((t)=>t.user_id).indexOf(user_id);
+    const index = user_table.map((t)=>t.userID).indexOf(userID);
     user_table[index].description = bio;
     safeTable(Table.USER, user_table);
     const user = user_table[index];
@@ -176,4 +172,29 @@ export function create_room(create_room_request) {
     safeTable(Table.ROOM, room_table);
 
     return room.room_id;
+}
+
+
+function addToken(options) {
+    const token = get(Store.TOKEN);
+    if(token) {
+        if (options == null) options = {}
+        if(options.headers) options.headers["token"] = token;
+    }
+    return options;
+}
+
+function addBody(body, options) {
+    options.body = JSON.stringify(body);
+    return options;
+}
+
+function handleError(err, res) {
+    error = {
+        status: res.status,
+        response: res,
+        message: err.error
+    };
+    console.log(error);
+    throw error;
 }

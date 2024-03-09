@@ -13,6 +13,12 @@ export class CreateUserRequest {
     }
 }
 
+export class GetUserRequest {
+    constructor(userID) {
+        this.userID = userID;
+    }
+}
+
 export class CreateRoomRequest {
     constructor(title, desc) {
         this.title = title;
