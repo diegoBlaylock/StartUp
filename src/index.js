@@ -91,7 +91,9 @@ function handleError(err, res) {
             res.json({error: err.message});
             break;
         case err instanceof UnauthorizedError:
-            res.redirect(401, '/');
+            res
+            .status(401)
+            .json({redirect: '/', error: "Not loggedin!"});
             break;
         default:
             res.status(500);

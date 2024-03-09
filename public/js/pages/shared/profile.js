@@ -3,23 +3,21 @@ import {get, Store} from "/js/local-store.js"
 const home_page = "/";
 
 function trySignOut(event) {
+    event.target.disabled = true;
     event.preventDefault();
     if (window.getComputedStyle(event.target).display === "none") return;
-    try {
-        logout();
-        window.location.replace(home_page);
-    } catch(e) {
-        console.log(e);
-        alert(e);
-    }
 
+    logout()
+    .then(()=>window.location.replace(home_page))
+    .catch((e)=>alert(e.message))
+    .finally(()=>event.target.disabled = false);
 }
 
 function onLoad() {
 
     const user = get(Store.USER);
 
-    document.getElementById("logout").addEventListener("click", (event) => trySignOut(event));
+    document.getElementById("sign_out").addEventListener("click", (event) => trySignOut(event));
     document.querySelector(".my-profile").src = user.profile;
     document.querySelector(".dropdown-menu label").innerText = user.username;
 }

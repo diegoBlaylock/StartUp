@@ -4,6 +4,7 @@ import {CreateUserRequest} from "/js/endpoints/request.js"
 const home_page = "/html/discovery.html";
 
 function tryCreateUser(event) {
+    event.target.disabled=true;
     event.preventDefault();
     const username = document.getElementById("username_input").value;
     const email = document.getElementById("email_input").value;
@@ -17,7 +18,8 @@ function tryCreateUser(event) {
 
     createUser(new CreateUserRequest(username, email, password))
     .then(()=>window.location.replace(home_page))
-    .catch((err)=>alert(err.message));
+    .catch((err)=>alert(err.message))
+    .finally(()=>event.target.disabled=false);
     return false;
 }
 

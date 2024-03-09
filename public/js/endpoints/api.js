@@ -55,8 +55,8 @@ export async function createUser(userDetails) {
     
     if(response.status != 201) handleError(json, response); 
 
-    const token = token.token;
-    save(Store.TOKEN, token.token);
+    const token = json.token;
+    save(Store.TOKEN, token);
 
     const user = await getUser(new GetUserRequest(json.userID));
     save(Store.USER, user);
@@ -64,8 +64,8 @@ export async function createUser(userDetails) {
 
 export async function logout() {
     const response = await fetch(
-        '/users/login/', 
-        addToken({method: "POST"})
+        '/users/logout/', 
+        addToken({method: "DELETE"})
     );
     
     if(response.status != 204) {
@@ -102,19 +102,6 @@ export function get_room_stats(room_id) {
     const room_table = getTable(Table.ROOM);
     return findByColumn(room_table, "room_id", room_id);
 }
-
-function shuffle(array) {
-    let currentIndex = array.length,  randomIndex;
-  
-    while (currentIndex > 0) {
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
-  
-      [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
-    }
-  
-    return array;
-  }
 
 const PAGE_SIZE = 9
 export async function get_rooms(room_request) {
@@ -179,7 +166,8 @@ function addToken(options) {
     const token = get(Store.TOKEN);
     if(token) {
         if (options == null) options = {}
-        if(options.headers) options.headers["token"] = token;
+        if(options.headers == null) options.headers = {} 
+        options.headers["token"] = token;
     }
     return options;
 }
@@ -194,6 +182,11 @@ function addBody(body, options) {
 }
 
 function handleError(err, res) {
+    if(err.redirect != null) {
+        window.location.replace(err.redirect);
+        throw error("")
+    }
+    
     const error = {
         status: res.status,
         response: res,

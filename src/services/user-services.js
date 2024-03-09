@@ -1,5 +1,5 @@
 import {Table, getTable, saveTable, findByColumn, contains} from '../database/database.js'
-import {MissingParameterError, BadParameterError, ValueTakenError} from './errors.js'
+import {MissingParameterError, BadParameterError, ValueTakenError, UnauthorizedError} from './errors.js'
 import { User, Credentials, AuthToken } from '../models/models.js';
 
 export async function createUser(req) {
@@ -63,7 +63,7 @@ export async function loginUser(req) {
 export async function logoutUser(req) {
     const token_table = getTable(Table.TOKEN);
 
-    const index = token_table.map((t)=>t.token).indexOf(req.token);
+    const index = token_table.map((t)=>t.token).indexOf(req.auth);
     if (index !== -1) {
         token_table.splice(index, 1);
         saveTable(Table.TOKEN, token_table);
@@ -100,7 +100,7 @@ export async function editUser(req) {
 
 export async function getUser(req) {
     const token_table = getTable(Table.TOKEN);
-    const token = findByColumn(token_table, "token", req.token);
+    const token = findByColumn(token_table, "token", req.auth);
 
     if (token == null) {
         throw new UnauthorizedError();
