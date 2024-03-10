@@ -1,11 +1,12 @@
 import { Page, Room } from "../models/models.js";
 import { saveTable, getTable, Table, findByColumn } from "../database/database.js";
-import { BadParameterError } from "./errors.js";
+import { BadParameterError, ResourceNotFoundError } from "./errors.js";
 import { checkToken, findRoomByID, findUserByID, inflateWithOwner } from "./service-utils.js";
 
 export function getRoomInfo(req) {
     checkToken(req.auth);
     const room = findRoomByID(req.roomID);
+    if(room == null) throw ResourceNotFoundError("Couldn't find room!")
     return inflateWithOwner(room);
 }
 

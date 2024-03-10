@@ -6,6 +6,7 @@ import { EventType } from "/js/models/music.js"
 function createMessageElement(message) {
     const frame = document.createElement("div");
     frame.classList.add("message");
+    frame.dataset.id = message.messageID;
 
     const img = document.createElement("img");
     img.src = message.owner.profile;
@@ -57,7 +58,8 @@ function sendMessage() {
         const user = get(Store.USER)
         textarea.value = "";
         onMessageEvent({
-            message_id: crypto.randomUUID(),
+            messageID: crypto.randomUUID(),
+            ownerID: user.userID,
             owner: user,
             content: text,
             timeStamp: Date.now()
@@ -65,9 +67,9 @@ function sendMessage() {
     }
 }
 
-function onLoad() {
+async function onLoad() {
+    const messageHistory = 
     new Banshee(onMessageEvent);
-
     setupKeyboard(true, onNoteEvent);
 
     const messages = document.getElementById("chat_messages");
@@ -89,4 +91,4 @@ function onLoad() {
     });
 }
 
-onLoad();
+await onLoad();

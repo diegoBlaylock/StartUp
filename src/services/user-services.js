@@ -1,5 +1,5 @@
 import {Table, getTable, saveTable, findByColumn, contains} from '../database/database.js'
-import {MissingParameterError, BadParameterError, ValueTakenError, UnauthorizedError} from './errors.js'
+import {MissingParameterError, BadParameterError, ValueTakenError, UnauthorizedError, ResourceNotFoundError} from './errors.js'
 import { User, Credentials, AuthToken } from '../models/models.js';
 import { checkToken, filterUserObj, findUserByID } from './service-utils.js';
 
@@ -101,6 +101,7 @@ export async function getUser(req) {
     const token = checkToken(req.auth);
     const user = findUserByID(token.userID);
     
+    if (user == null) throw ResourceNotFoundError("Couldn't find User!");
     if(user.userID !== token.userID) {
         return filterUserObj(user);
     }

@@ -39,6 +39,7 @@ export function findRoomByID(roomID) {
 export function inflateWithOwner(obj) {
     const owner = filterUserObj(findUserByID(obj.ownerID));
     obj = {...obj};
+    if (obj == null) return null;
     if(!obj.owner) obj.owner = owner;
     return obj;
 }

@@ -160,6 +160,18 @@ export async function createRoom(createRoomRequest) {
     return json; 
 }
 
+export async function getChatHistory(roomID) {
+    const response = await fetch(
+        '/chat/'+roomID +'/', 
+        addToken( {method: "GET"})
+    );
+
+    const json = await response.json();
+    
+    if(response.status != 200) handleError(json, response); 
+    return json;
+}
+
 
 function addToken(options) {
     const token = get(Store.TOKEN);

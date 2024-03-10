@@ -86,7 +86,7 @@ function pluginService(
 }   
 
 
-import { ValueTakenError, MissingParameterError, BadParameterError, UnauthorizedError} from './services/errors.js'
+import { ValueTakenError, MissingParameterError, BadParameterError, UnauthorizedError, ResourceNotFoundError} from './services/errors.js'
 function handleError(err, res) {
     switch (true) {
         case err instanceof ValueTakenError:
@@ -99,6 +99,10 @@ function handleError(err, res) {
             res
             .status(401)
             .json({redirect: '/', error: "Not loggedin!"});
+            break;
+        case err instanceof ResourceNotFoundError:
+            res.status(404);
+            res.json({error: err.message});
             break;
         default:
             res.status(500);
