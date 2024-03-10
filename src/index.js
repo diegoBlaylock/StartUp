@@ -53,9 +53,9 @@ function setupRoutes() {
     pluginService(patch, '/users/edit/', parseEditUser, editUser);
     pluginService(get, '/users/:userID/', parseGetUser, getUser);
     pluginService(get, '/token/validate/', parseValidateUser, validateToken);
+    pluginService(get, '/rooms/discover/', parseDiscover, dicoverRooms);
     pluginService(get, '/rooms/:roomID/', parseGetRoom, getRoomInfo);
     pluginService(post, '/rooms/create/', parseCreateRoom, createRoom, 201);
-    pluginService(get, '/rooms/discover/', parseDiscover, dicoverRooms);
     pluginService(get, '/chat/:chatThreadID/', parseChatHistory, getChatHistory);
 }
 
@@ -103,6 +103,6 @@ function handleError(err, res) {
         default:
             res.status(500);
             res.json({error: err.toString()})
-            throw err;
+          // throw err;
     }
 }

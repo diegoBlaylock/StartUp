@@ -119,61 +119,45 @@ export async function getRoomStats(roomID) {
 }
 
 const PAGE_SIZE = 9
-export async function get_rooms(room_request) {
-    let room_table = getTable(Table.ROOM);
-    if(room_table.length == 0){
-        const res = await (await fetch("/js/mocks/init-rooms.json")).json();
-        safeTable(Table.ROOM, res);
-        room_table = res;
+export async function discoverRooms(room_request) {
+    let query = [];
+    if(room_request.filterVal) {
+        const filterType = room_request.filterType ?? Search.USER;
+        query.push(`filterType=${encodeURIComponent(filterType)}`);
+        query.push(`filterVal=${encodeURIComponent(room_request.filterVal)}`);
     }
 
-    if(room_request.search_param) {
-        const search_type = room_request.search_type ?? Search.USER;
-        switch(search_type) {
-            case Search.USER:
-                room_table = room_table.filter((room) => room.owner.username.toLowerCase().includes(room_request.search_param.toLowerCase()));
-                break;
-            case Search.ROOM:
-                room_table = room_table.filter((room) => room.title.toLowerCase().includes(room_request.search_param.toLowerCase()));
-                break;
-        }
+    if(room_request.sortType) {
+        query.push(`sortType=${encodeURIComponent(room_request.sortType)}`);
     }
 
-    switch(room_request.filter_type ?? Filter.TIME_STAMP) {
-        case Filter.TIME_STAMP:
-            room_table.sort((a,b)=>b.timeStamp-a.timeStamp);
-            break;
-        case Filter.POPULARITY:
-            shuffle(room_table);
-            break;
+    if (room_request.page) {
+        query.push(`p=${encodeURIComponent(room_request.page)}`);
     }
 
-    let page = room_request.page ?? 0;
-    const total = Math.ceil(room_table.length / PAGE_SIZE);
-    const rooms = room_table.splice(PAGE_SIZE*page, PAGE_SIZE*page + PAGE_SIZE);
+    const url = "/rooms/discover/?" + query.join('&'); 
+    const response = await fetch(url, addToken());
+    const json = await response.json();
 
-    return {
-        rooms: rooms,
-        num: page,
-        total: total
-    }    
+    if(response.status != 200) {
+        handleError(json, response); 
+    }
+
+    return json;
 }
 
-export function create_room(create_room_request) {
-    const user = get(Store.USER);
-    const room = {
-        room_id: crypto.randomUUID(),
-        title: create_room_request.title,
-        description: create_room_request.description,
-        timeStamp: Date.now(),
-        owner: user,
-    }
+export async function createRoom(createRoomRequest) {
 
-    const room_table = getTable(Table.ROOM);
-    room_table.push(room);
-    safeTable(Table.ROOM, room_table);
+    const response = await fetch(
+        '/rooms/create/', 
+        addToken(addBody(createRoomRequest, {method: "POST"}))
+    );
 
-    return room.room_id;
+    const json = await response.json();
+    
+    if(response.status != 201) handleError(json, response); 
+
+    return json; 
 }
 
 

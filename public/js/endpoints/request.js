@@ -37,10 +37,10 @@ export const Search = Object.freeze({
 });
 
 export class RoomRequest {
-    constructor(page, filter_type, search_type, search_param) {
+    constructor(page, sortType, filterType, filterVal) {
         this.page = page;
-        this.filter_type = filter_type;
-        this.search_type = search_type;
-        this.search_param = search_param;
+        this.sortType = sortType;
+        this.filterType = filterType;
+        this.filterVal = filterVal;
     }
 }

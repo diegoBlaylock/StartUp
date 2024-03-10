@@ -51,6 +51,7 @@ export function parseDiscover(req) {
     body.filterType = req.query.filterType ?? Filter.ROOM;
     body.filterVal = req.query.filterVal ?? null;
     body.sortType = req.query.sortType ?? Sort.TIME_STAMP;
+    body.page = parseInt(req.query.p ?? "0");
     return body
 }
 

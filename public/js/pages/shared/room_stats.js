@@ -10,8 +10,8 @@ function bsViewerCount() {
 }
 
 async function onLoad() {
-    const room_id = new URL(document.location).searchParams.get("room_id");
-    const room = getRoomStats(room_id);
+    const roomID = new URL(document.location).searchParams.get("roomID");
+    const room = await getRoomStats(roomID);
     
     if(!room) {
         document.querySelector("main").innerHTML = "404 Not found";
@@ -34,4 +34,4 @@ async function onLoad() {
     date.textContent = getStringTime(room.timeStamp);
 }
 
-onLoad();
+await onLoad();

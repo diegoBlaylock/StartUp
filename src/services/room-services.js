@@ -25,15 +25,17 @@ export async function createRoom(req) {
     return room.roomID;
 }
 
+import * as fs from 'node:fs';
 const PAGE_SIZE = 9;
 export async function dicoverRooms(req) {
     checkToken(req.auth);
 
-    let roomTable = [... getTable(Table.ROOM)];
+    let roomTable = [...getTable(Table.ROOM)];
     if(roomTable.length == 0){
-        const res = await (await fetch("/js/mocks/init-rooms.json")).json();
+        const data = fs.readFileSync("./public/js/mocks/init-rooms.json", 'utf-8');
+        const res = JSON.parse(data);
         saveTable(Table.ROOM, res);
-        roomTable = res;
+        roomTable = [...res];
     }
 
     const filterType = req.filterType;
@@ -68,7 +70,7 @@ export async function dicoverRooms(req) {
             break;
     }
 
-    let page = room_request.page ?? 0;
+    let page = req.page ?? 0;
     const total = Math.ceil(roomTable.length / PAGE_SIZE);
 
     if(page !== 0 && page >= total) {
