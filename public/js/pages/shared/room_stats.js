@@ -31,7 +31,7 @@ async function onLoad() {
     count.textContent = bsViewerCount().toString();
 
     const date = document.getElementById("time_stamp");
-    date.textContent = getStringTime(room.time_stamp);
+    date.textContent = getStringTime(room.timeStamp);
 }
 
 onLoad();

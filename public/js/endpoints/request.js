@@ -28,7 +28,7 @@ export class CreateRoomRequest {
 
 export const Filter = Object.freeze({
     POPULARITY: "popularity",
-    TIME_STAMP: "time_stamp"
+    TIME_STAMP: "timeStamp"
 });
 
 export const Search = Object.freeze({

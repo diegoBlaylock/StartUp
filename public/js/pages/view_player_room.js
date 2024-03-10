@@ -60,7 +60,7 @@ function sendMessage() {
             message_id: crypto.randomUUID(),
             owner: user,
             content: text,
-            time_stamp: Date.now()
+            timeStamp: Date.now()
         });
     }
 }

@@ -62,7 +62,7 @@ export class Banshee {
             message_id: crypto.randomUUID(),
             owner: usernames[Math.trunc(Math.random()*usernames.length)],
             content: this.quotes[Math.trunc(Math.random()*this.quotes.length)],
-            time_stamp: Date.now(),
+            timeStamp: Date.now(),
         }
     }
 

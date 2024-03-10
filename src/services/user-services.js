@@ -1,6 +1,7 @@
 import {Table, getTable, saveTable, findByColumn, contains} from '../database/database.js'
 import {MissingParameterError, BadParameterError, ValueTakenError, UnauthorizedError} from './errors.js'
 import { User, Credentials, AuthToken } from '../models/models.js';
+import { checkToken, filterUserObj, findUserByID } from './service-utils.js';
 
 export async function createUser(req) {
 
@@ -21,7 +22,7 @@ export async function createUser(req) {
         throw new ValueTakenError("Email Taken!");
     }
 
-    const new_user = new User(req.username, crypto.randomUUID(), "/resources/default_profile.png", req.email, "");
+    const new_user = new User(req.username, "/resources/default_profile.png", req.email, "");
     user_table.push(new_user);
     saveTable(Table.USER, user_table);
     
@@ -30,7 +31,7 @@ export async function createUser(req) {
     cred_table.push(new_cred);
     saveTable(Table.CREDENTIALS, cred_table);
 
-    const token = new AuthToken(new_user.userID, crypto.randomUUID(), Date.now());
+    const token = new AuthToken(new_user.userID);
     let token_table = getTable(Table.TOKEN);
     token_table.push(token);
     saveTable(Table.TOKEN, token_table);
@@ -52,7 +53,7 @@ export async function loginUser(req) {
         throw new BadParameterError("Password not Right!");
     }
 
-    const token = new AuthToken(db_credentials.userID, crypto.randomUUID(), Date.now());
+    const token = new AuthToken(db_credentials.userID);
     let token_table = getTable(Table.TOKEN);
     token_table.push(token);
     saveTable(Table.TOKEN, token_table);
@@ -61,13 +62,7 @@ export async function loginUser(req) {
 }
 
 export async function validateToken(req) {
-    const token_table = getTable(Table.TOKEN);
-    const token = findByColumn(token_table, "token", req.auth);
-    if (token == null) {
-        throw new UnauthorizedError();
-    } else {
-        return token;
-    }
+    return checkToken(req.auth);
 }
 
 export async function logoutUser(req) {
@@ -83,15 +78,8 @@ export async function logoutUser(req) {
 }
 
 export async function editUser(req) {
-    const token_table = getTable(Table.TOKEN);
-    const token = findByColumn(token_table, "token", req.auth);
-
-    if (token == null) {
-        throw new UnauthorizedError();
-    }
-
-    const user_table = getTable(Table.USER);
-    const user = findByColumn(user_table, "userID", token.userID);
+    const token = checkToken(req.auth);
+    const user = findUserByID(token.userID);
     
     if (req.profile != null) {
         if(await isUrlValid(req.profile)) {
@@ -105,24 +93,16 @@ export async function editUser(req) {
     if (req.description != null) {
         user.description = req.description;
     }
-    saveTable(Table.USER, user_table);
 
     return user;
 }
 
 export async function getUser(req) {
-    const token_table = getTable(Table.TOKEN);
-    const token = findByColumn(token_table, "token", req.auth);
-
-    if (token == null) {
-        throw new UnauthorizedError();
-    }
-
-    const user_table = getTable(Table.USER);
-    const user = {... findByColumn(user_table, "userID", token.userID)};
+    const token = checkToken(req.auth);
+    const user = findUserByID(token.userID);
     
     if(user.userID !== token.userID) {
-        user.email = undefined;
+        return filterUserObj(user);
     }
 
     return user;

@@ -3,7 +3,6 @@ export const Table = Object.freeze({
     TOKEN: "token_table",
     ROOM: "room_table",
     CREDENTIALS: "credentials",
-    MESSAGE_THREAD: "message_thread_table",
     MESSAGE: "message"
 });
 

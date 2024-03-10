@@ -44,13 +44,13 @@ export function parseCreateRoom(req) {
     return body
 }
 
-import { Filter, Search } from "./room-services.js";
+import { Sort, Filter } from "./room-services.js";
 export function parseDiscover(req) {
     const body = req.body ?? {};
     body.auth = getAuthToken(req);
-    body.filterType = req.query.filterType ?? Search.ROOM;
+    body.filterType = req.query.filterType ?? Filter.ROOM;
     body.filterVal = req.query.filterVal ?? null;
-    body.sortType = req.query.sortType ?? Filter.TIME_STAMP;
+    body.sortType = req.query.sortType ?? Sort.TIME_STAMP;
     return body
 }
 

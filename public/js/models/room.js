@@ -4,7 +4,7 @@ export class Room {
     title;
     description;
     
-    time_stamp;
+    timeStamp;
 
     message_thread_id;
 }
@@ -26,7 +26,7 @@ export class Message {
     message_id;
     owner_id;
     content;
-    time_stamp;
+    timeStamp;
 
     message_thread_id;
 }

@@ -3,7 +3,7 @@
         "room_id": "1234",
         "title": "Bach Absolution",
         "description": "For Bach afficcionados only",
-        "time_stamp": 1708171483,
+        "timeStamp": 1708171483,
         "owner": {
             "username": "b-boy",
             "userID": "1",
@@ -17,7 +17,7 @@
         "room_id": "2345",
         "title": "Nocturne Op55",
         "description": "J'aime Chopin",
-        "time_stamp": 1708193483,
+        "timeStamp": 1708193483,
         "owner": {
             "username": "L'Étranger",
             "userID": "2",
@@ -30,7 +30,7 @@
         "room_id": "3456",
         "title": "Rosie Days",
         "description": "",
-        "time_stamp": 1708191200,
+        "timeStamp": 1708191200,
         "owner": {
             "username": "Kurtz",
             "userID": "3",
@@ -43,7 +43,7 @@
         "room_id": "4567",
         "title": "I am the walrus",
         "description": "Beetles songs and more",
-        "time_stamp": 1708191490,
+        "timeStamp": 1708191490,
         "owner": {
             "username": "RainerMariaRilke",
             "userID": "4",
@@ -56,7 +56,7 @@
         "room_id": "5678",
         "title": "Dazed and confused",
         "description": "Some Led Zeppilin songs",
-        "time_stamp": 1708191440,
+        "timeStamp": 1708191440,
         "owner": {
             "username": "Santiago",
             "userID": "5",
@@ -69,7 +69,7 @@
         "room_id": "98765",
         "title": "Zenith Watch Prototype",
         "description": "Every second counts, make them remarkable.",
-        "time_stamp": 1708191340,
+        "timeStamp": 1708191340,
         "owner": {
             "username": "TimeTraveler88",
             "userID": "6",
@@ -82,7 +82,7 @@
         "room_id": "23456",
         "title": "Smart Home Controller Interface",
         "description": "Home is where the Wi-Fi connects automatically",
-        "time_stamp": 1708192340,
+        "timeStamp": 1708192340,
         "owner": {
             "username": "TechWizard21",
             "userID": "7",
@@ -95,7 +95,7 @@
         "room_id": "34567",
         "title": "Eco-Friendly Electric Vehicle Design",
         "description": "Drive electric, drive the future",
-        "time_stamp": 1708191340,
+        "timeStamp": 1708191340,
         "owner": {
             "username": "GreenMachine77",
             "userID": "8",
@@ -108,7 +108,7 @@
         "room_id": "23456",
         "title": "1984 Surveillance Society Dashboard",
         "description": "War is peace. Freedom is slavery. Ignorance is strength.",
-        "time_stamp": 1708151340,
+        "timeStamp": 1708151340,
         "owner": {
             "username": "BigBrotherIsWatching",
             "userID": "8",
@@ -121,7 +121,7 @@
         "room_id": "34567",
         "title": "The Lord of the Rings Journey Tracker",
         "description": "One ring to rule them all, one ring to find them, one ring to bring them all, and in the darkness bind them.",
-        "time_stamp": 170815140,
+        "timeStamp": 170815140,
         "owner": {
             "username": "FellowshipOfTheRing",
             "userID": "8",
