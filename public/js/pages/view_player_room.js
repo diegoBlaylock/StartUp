@@ -2,6 +2,7 @@ import {Banshee} from "/js/mocks/banshee.js"
 import {get, Store} from "/js/local-store.js"
 import {noteOn, noteOff, setupKeyboard} from "/js/pages/shared/keyboard.js"
 import { EventType } from "/js/models/music.js"
+import { getChatHistory } from "/js/endpoints/api.js";
 
 function createMessageElement(message) {
     const frame = document.createElement("div");
@@ -68,7 +69,7 @@ function sendMessage() {
 }
 
 async function onLoad() {
-    const messageHistory = 
+    const messageHistory = await getChatHistory();
     new Banshee(onMessageEvent);
     setupKeyboard(true, onNoteEvent);
 

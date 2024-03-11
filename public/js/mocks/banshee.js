@@ -8,7 +8,7 @@ const usernames = [
     {
         userID: crypto.randomUUID(),
         username: "John",
-        profile: "https://lh3.googleusercontent.com/ci/AE9Axz-pMf9ZlgceQu6eT-CF1J6P1nApbSYLfaC3J1RbvqP6k0Qyz6K5ig_w7-0qh3XhLk57EgacZCU=s1200",
+        profile: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4pFPJTmN1fHFsz4AP_B-nv-xhDfTn7n5Pbw&usqp=CAU",
         description: "Hello"
     },
     {

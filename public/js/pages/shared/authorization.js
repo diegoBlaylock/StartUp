@@ -9,6 +9,10 @@ function forceLogOut() {
     window.location.replace('/')
 }
 
+fetch("https://api.quotable.io/random")
+.then(response=>response.json())
+.then(json=>console.log(json.content, "- " + json.author));
+
 const token = get(Store.TOKEN);
 if(token != null) {
     validateToken(token)

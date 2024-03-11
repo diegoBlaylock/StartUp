@@ -32,7 +32,7 @@ const app = express();
 
 setupExpress();
 setupRoutes();
-app.listen(5500);
+app.listen(4000);
 
 
 function setupExpress() {
