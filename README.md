@@ -87,3 +87,10 @@ For this deliverable I built out the structure of my application using HTML.
 - **WebSocket** - Two things, first on a listener piano room, a bot will randomly play notes to represent the remote player. the other thing is that in any piano room, a bot will send random messages into the chat.
 - **application logic** - You can login, you can create a room, in your own room you can play the piano. The chatbar allows you to send message by pressing the button or hitting enter. Scrolling for this part will be locked to the bottom unless moved by the user and will relock if positioned at the bottom. The room dicovery page features realtime pagination from the database and also sorting and filtering. Try it out!
 
+## Service deliverable
+
+- **Node.js/Express HTTP service** - done!
+- **Static middleware for frontend** - done!
+- **Calls to third party endpoints** - For the mock rooms, some of them use the random picture generator as display pics, and if you wanted me to use fetch, I had the console log a random quote for pages after login.
+- **Backend service endpoints** - This include endpoints to create a user, to login, to edit a user profile, to logout, to validate a token, to get userinfo based on an ID, to fetch room info based on ID, to fetch sorted/filtered pages by parameters in the discovery room, to create a room.
+- **Frontend calls service endpoints** - The file named ./public/js/endpoints/api, uses fetch to call all the above functions
