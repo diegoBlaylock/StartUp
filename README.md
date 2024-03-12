@@ -64,7 +64,7 @@ I am going to use the required technologies in the following ways.
 For this deliverable I built out the structure of my application using HTML.
 
 - **HTML pages** - Seven HTML page that represent the ability to login, create a user, create a room, search for a room, and watch a room as a listener and a piano player.
-- **Links** - The login page automatically links to the create_user page and discover page. Every page after login contains a link to the login page as well as the view_profile page. The discovery page contains links to the player_room page and listener_room page.
+- **Links** - The login page automatically links to the createUser page and discover page. Every page after login contains a link to the login page as well as the view_profile page. The discovery page contains links to the player_room page and listener_room page.
 - **Text** - Text is represented on almost every level. Text is on the player profile as bio. Text is also present in descriptions of the rooms shown as tooltips on the discover page. Also in the Chat function in the rooms page
 - **Images** - I added images simply as the favicon.ico and at the top of most pages. The piano for the room pages will be rendered using css
 - **DB/Login** - Input box and submit button for login. All rooms will be stored on the database
@@ -73,7 +73,7 @@ For this deliverable I built out the structure of my application using HTML.
 ## CSS deliverable
 
 - **Header, footer, and main content body** - On most pages I stylized these except for the rooms for aesthetic and spacing purposes. 
-- **Navigation elements** - The navigation elements in the discovery page, create_page, create_user, and piano rooms all are shown on a navbar and don't have any underlining or blue color. The nav bar for discovery and create room have the bullet on purpose. The profile icon will show a menu when hovered over (only after login).
+- **Navigation elements** - The navigation elements in the discovery page, create_page, createUser, and piano rooms all are shown on a navbar and don't have any underlining or blue color. The nav bar for discovery and create room have the bullet on purpose. The profile icon will show a menu when hovered over (only after login).
 - **Responsive to window resizing** - I spent so much time and lines of code trying to make it look pretty. Don't overdo it because it will break, but most formatting will change to match the screen size down to an IPhone SE both landscape and portrait. The header will shrink and hide elements as both width or height goes down, footer is the same deal. Piano and chat will change formatting to better fit a scrolling approach (piano is one row, chat appears after content). So try this on various pages, specifically the piano rooms, discover rooms and create room pages.
 - **Application elements** - Used okay contrast and whitespace for most elements. A TON of flex to center everything (because I'm lazy). Buttons! Pure CSS buttons that change based on hovering. Piano that is built from div elements galour (seriously went ham with the amount divs) and is formatted with css to be a piano. Make sure to checkout the player piano room. I am not sure what the heck you guys want me to put here.
 - **Application text content** - Appropriate Sizing of fonts to show emphasis and draw attention. Prevented selection of most navigational and informational text. A special font is used as title of piano rooms.
@@ -87,3 +87,10 @@ For this deliverable I built out the structure of my application using HTML.
 - **WebSocket** - Two things, first on a listener piano room, a bot will randomly play notes to represent the remote player. the other thing is that in any piano room, a bot will send random messages into the chat.
 - **application logic** - You can login, you can create a room, in your own room you can play the piano. The chatbar allows you to send message by pressing the button or hitting enter. Scrolling for this part will be locked to the bottom unless moved by the user and will relock if positioned at the bottom. The room dicovery page features realtime pagination from the database and also sorting and filtering. Try it out!
 
+## Service deliverable
+
+- **Node.js/Express HTTP service** - done!
+- **Static middleware for frontend** - done!
+- **Calls to third party endpoints** - For the mock rooms, some of them use the random picture generator as display pics, and if you wanted me to use fetch, I had the console log a random quote for pages after login.
+- **Backend service endpoints** - This include endpoints to create a user, to login, to edit a user profile, to logout, to validate a token, to get userinfo based on an ID, to fetch room info based on ID, to fetch sorted/filtered pages by parameters in the discovery room, to create a room.
+- **Frontend calls service endpoints** - The file named ./public/js/endpoints/api, uses fetch to call all the above functions

@@ -1,179 +1,208 @@
-import {getTable, Table, findByColumn, safeTable} from "/js/mocks/database.js"
-import {Credentials} from "/js/mocks/server-models.js"
 import {Store, save, get} from "/js/local-store.js"
-import { AuthToken, User } from "/js/models/user.js";
-import {Filter, Search} from "/js/endpoints/request.js";
+import {Filter, Search, GetUserRequest} from "/js/endpoints/request.js";
 
-export function login(credentials) {
-    const cred_table = getTable(Table.CREDENTIALS);
-    const db_credentials = findByColumn(cred_table, "username", credentials.username);
-    if(db_credentials === null) {
-        throw "Username does not exist!";
-    } else if (db_credentials.password !== credentials.password) {
-        throw "Password not Right!";
-    }
+export async function login(credentials) {
 
-    const token = new AuthToken(db_credentials.user_id, crypto.randomUUID());
-    let token_table = getTable(Table.TOKEN);
-    token_table.push(token);
-    safeTable(Table.TOKEN, token_table);
+    const response = await fetch(
+        '/users/login/', 
+        addToken(addBody(credentials, {method: "POST"}))
+    );
+
+    const json = await response.json();
+    
+    if(response.status != 201) handleError(json, response); 
+
+    const token = json.token;
     save(Store.TOKEN, token);
 
-    const user_table = getTable(Table.USER);
-    const user = findByColumn(user_table, "user_id", token.user_id);
+    const user = await getUser(new GetUserRequest(json.userID));
     save(Store.USER, user);
 }
 
-export function validate_token(token) {
-    const token_table = getTable(Table.TOKEN);
-    const db_token = findByColumn(token_table, "token", token.token);
-    if(db_token === null || db_token.user_id !== token.user_id) {
-        localStorage.removeItem(Store.TOKEN);
-        throw "Not Valid";
-    }
-    save(Store.TOKEN, db_token);
+export async function getUser(request) {
+    const userID = request.userID;
+    const response = await fetch(
+        '/users/'+userID+'/', 
+        addToken({method: "GET"})
+    );
 
-    const user_table = getTable(Table.USER);
-    const user = findByColumn(user_table, "user_id", token.user_id);
+    const json = await response.json();
+    if(response.status !== 200) return undefined;
+    else return json;
+}
+
+export async function validateToken(token) {
+    const response = await fetch(
+        '/token/validate/', 
+        {headers:{"token": token}}
+    );
+    
+    const authToken = await response.json();
+
+    if (response.status != 200) {
+        throw authToken;
+    }
+    return authToken;
+}
+
+export async function createUser(userDetails) {
+    const response = await fetch(
+        '/users/create/', 
+        addToken(addBody(userDetails, {method: "POST"}))
+    );
+
+    const json = await response.json();
+    
+    if(response.status != 201) handleError(json, response); 
+
+    const token = json.token;
+    save(Store.TOKEN, token);
+
+    const user = await getUser(new GetUserRequest(json.userID));
     save(Store.USER, user);
 }
 
-export function create_user(user_details) {
+export async function logout() {
+    const response = await fetch(
+        '/users/logout/', 
+        addToken({method: "DELETE"})
+    );
     
-    const user_table = getTable(Table.USER);
-    const user = findByColumn(user_table, "username", user_details.username);
-    if(user !== null) {
-        throw "Username taken!"
-    }
-
-    const email_user = findByColumn(user_table, "email", user_details.email);
-    if(email_user !== null) {
-        throw "Email taken!"
-    }
-
-    const new_user = new User(user_details.username, crypto.randomUUID(), "/resources/default_profile.png", "");
-    user_table.push(new_user);
-    safeTable(Table.USER, user_table);
-    save(Store.USER, new_user);
-    
-    let cred_table = getTable(Table.CREDENTIALS);
-    const new_cred = new Credentials(new_user.user_id, new_user.username, user_details.password);
-    cred_table.push(new_cred);
-    safeTable(Table.CREDENTIALS, cred_table);
-
-    const token = new AuthToken(new_user.user_id, crypto.randomUUID());
-    let token_table = getTable(Table.TOKEN);
-    token_table.push(token);
-    safeTable(Table.TOKEN, token_table);
-    save(Store.TOKEN, token);
-}
-
-export function sign_out() {
-    const token = get(Store.TOKEN);
-    const token_table = getTable(Table.TOKEN);
-    const index = token_table.map((t)=>t.token).indexOf(token.token);
-    if (index !== -1) {
-        token_table.splice(index, 1);
-        safeTable(Table.TOKEN, token_table);
+    if(response.status != 204) {
+        const json = await response.json();
+        handleError(json, response); 
     }
 
     localStorage.removeItem(Store.TOKEN);
     localStorage.removeItem(Store.USER);
-
 }
 
-export function edit_user_picture(url) {
-    const user_id = get(Store.TOKEN).user_id;
-    const user_table = getTable(Table.USER);
-    const index = user_table.map((t)=>t.user_id).indexOf(user_id);
-    user_table[index].profile = url;
-    safeTable(Table.USER, user_table);
-    const user = user_table[index];
-    save(Store.USER, user);
-}
+export async function editUserPicture(url) {
+    const response = await fetch(
+        '/users/edit/', 
+        addToken(addBody({profile: url}, {method: "PATCH"}))
+    );
 
-export function edit_user_bio(bio) {
-    const user_id = get(Store.TOKEN).user_id;
-    const user_table = getTable(Table.USER);
-    const index = user_table.map((t)=>t.user_id).indexOf(user_id);
-    user_table[index].description = bio;
-    safeTable(Table.USER, user_table);
-    const user = user_table[index];
-    save(Store.USER, user);
-}
-
-export function get_room_stats(room_id) {
-    const room_table = getTable(Table.ROOM);
-    return findByColumn(room_table, "room_id", room_id);
-}
-
-function shuffle(array) {
-    let currentIndex = array.length,  randomIndex;
-  
-    while (currentIndex > 0) {
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
-  
-      [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+    const json = await response.json();
+    
+    if(response.status != 200) {
+        handleError(json, response); 
     }
-  
-    return array;
-  }
+    
+    save(Store.USER, json);
+}
+
+export async function editUserBio(bio) {
+    const response = await fetch(
+        '/users/edit/', 
+        addToken(addBody({description: bio}, {method: "PATCH"}))
+    );
+
+    const json = await response.json();
+    
+    if(response.status != 200) {
+        handleError(json, response); 
+    }
+    
+    save(Store.USER, json);
+}
+
+export async function getRoomStats(roomID) {
+    const response = await fetch(
+        '/rooms/'+roomID+'/', 
+        addToken({method: "GET"})
+    );
+    
+    const json = await response.json();
+    if(response.status !== 200) return undefined;
+    else return json;
+}
 
 const PAGE_SIZE = 9
-export async function get_rooms(room_request) {
-    let room_table = getTable(Table.ROOM);
-    if(room_table.length == 0){
-        const res = await (await fetch("/js/mocks/init-rooms.json")).json();
-        safeTable(Table.ROOM, res);
-        room_table = res;
+export async function discoverRooms(room_request) {
+    let query = [];
+    if(room_request.filterVal) {
+        const filterType = room_request.filterType ?? Search.USER;
+        query.push(`filterType=${encodeURIComponent(filterType)}`);
+        query.push(`filterVal=${encodeURIComponent(room_request.filterVal)}`);
     }
 
-    if(room_request.search_param) {
-        const search_type = room_request.search_type ?? Search.USER;
-        switch(search_type) {
-            case Search.USER:
-                room_table = room_table.filter((room) => room.owner.username.toLowerCase().includes(room_request.search_param.toLowerCase()));
-                break;
-            case Search.ROOM:
-                room_table = room_table.filter((room) => room.title.toLowerCase().includes(room_request.search_param.toLowerCase()));
-                break;
-        }
+    if(room_request.sortType) {
+        query.push(`sortType=${encodeURIComponent(room_request.sortType)}`);
     }
 
-    switch(room_request.filter_type ?? Filter.TIME_STAMP) {
-        case Filter.TIME_STAMP:
-            room_table.sort((a,b)=>b.time_stamp-a.time_stamp);
-            break;
-        case Filter.POPULARITY:
-            shuffle(room_table);
-            break;
+    if (room_request.page) {
+        query.push(`p=${encodeURIComponent(room_request.page)}`);
     }
 
-    let page = room_request.page ?? 0;
-    const total = Math.ceil(room_table.length / PAGE_SIZE);
-    const rooms = room_table.splice(PAGE_SIZE*page, PAGE_SIZE*page + PAGE_SIZE);
+    const url = "/rooms/discover/?" + query.join('&'); 
+    const response = await fetch(url, addToken());
+    const json = await response.json();
 
-    return {
-        rooms: rooms,
-        num: page,
-        total: total
-    }    
+    if(response.status != 200) {
+        handleError(json, response); 
+    }
+
+    return json;
 }
 
-export function create_room(create_room_request) {
-    const user = get(Store.USER);
-    const room = {
-        room_id: crypto.randomUUID(),
-        title: create_room_request.title,
-        description: create_room_request.description,
-        time_stamp: Date.now(),
-        owner: user,
+export async function createRoom(createRoomRequest) {
+
+    const response = await fetch(
+        '/rooms/create/', 
+        addToken(addBody(createRoomRequest, {method: "POST"}))
+    );
+
+    const json = await response.json();
+    
+    if(response.status != 201) handleError(json, response); 
+
+    return json; 
+}
+
+export async function getChatHistory(roomID) {
+    const response = await fetch(
+        '/chat/'+roomID +'/', 
+        addToken( {method: "GET"})
+    );
+
+    const json = await response.json();
+    
+    if(response.status != 200) handleError(json, response); 
+    return json;
+}
+
+
+function addToken(options) {
+    const token = get(Store.TOKEN);
+    if(token) {
+        if (options == null) options = {}
+        if(options.headers == null) options.headers = {} 
+        options.headers["token"] = token;
     }
+    return options;
+}
 
-    const room_table = getTable(Table.ROOM);
-    room_table.push(room);
-    safeTable(Table.ROOM, room_table);
+function addBody(body, options) {
+    if (options == null) options = {}
+    options['body'] = JSON.stringify(body);
+    if(options.headers == null)
+        options.headers = {} 
+    options.headers["Content-Type"] = "application/json";
+    return options;
+}
 
-    return room.room_id;
+function handleError(err, res) {
+    if(err.redirect != null) {
+        window.location.replace(err.redirect);
+        throw {message: err.message}
+    }
+    
+    const error = {
+        status: res.status,
+        response: res,
+        message: err.error
+    };
+    console.log(error);
+    throw error;
 }

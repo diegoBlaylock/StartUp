@@ -3,23 +3,22 @@ export const Table = Object.freeze({
     TOKEN: "token_table",
     ROOM: "room_table",
     CREDENTIALS: "credentials",
-    MESSAGE_THREAD: "message_thread_table",
     MESSAGE: "message"
 });
 
+const tables = {}
+
 export function getTable(name) {
-    
-    const table = JSON.parse(localStorage.getItem(name));
-    if (table === null) return [];
+    const table = tables[name];
+    if (table == null) {
+        tables[name] = []
+        return tables[name];
+    }
     return table;
 }
 
-export function release(name) {
-
-}
-
-export function safeTable(name, table) {
-    localStorage.setItem(name, JSON.stringify(table));
+export function saveTable(name, table) {
+    tables[name] = table;
 }
 
 export function findByColumn(table, attribute, value) {
@@ -30,4 +29,14 @@ export function findByColumn(table, attribute, value) {
     }
 
     return null;
+}
+
+export function contains(table, attribute, value) {
+    for(const obj of table) {
+        if(obj[attribute] === value) {
+            return true;
+        }
+    }
+
+    return false;
 }

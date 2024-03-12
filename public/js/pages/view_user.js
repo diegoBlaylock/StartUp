@@ -1,5 +1,5 @@
 import {get, Store} from "/js/local-store.js"
-import {edit_user_bio, edit_user_picture} from "/js/endpoints/api.js"
+import {editUserBio, editUserPicture} from "/js/endpoints/api.js"
 
 function changeProfile(event) {
     document.getElementById("popup_content").style.display = "flex";
@@ -20,27 +20,27 @@ function changeBio() {
     change_fn = saveBio;
 }
 
-function saveBio() {
+function saveBio(event) {
+    event.target.disabled = true;
     const bio = document.getElementById("bio_content");
 
-    try {
-        edit_user_bio(bio.value);
-    } catch(e) {
-        alert(e);
-        return;
-    }
-    const user = get(Store.USER);
-    const paragraph = document.createElement("p");
-    if(user.description !== null || user.description !== undefined) 
-        paragraph.innerText = user.description;
-    else {
-        paragraph.innerText = "None";
-    }
-    paragraph.id = "bio_content";
-    bio.replaceWith(paragraph);
-    const button = document.getElementById("bio_change");
-    button.innerText = "Edit";
-    change_fn = changeBio;
+    editUserBio(bio.value)
+    .then(()=>{
+        const user = get(Store.USER);
+        const paragraph = document.createElement("p");
+        if(user.description !== null || user.description !== undefined) 
+            paragraph.innerText = user.description;
+        else {
+            paragraph.innerText = "None";
+        }
+        paragraph.id = "bio_content";
+        bio.replaceWith(paragraph);
+        const button = document.getElementById("bio_change");
+        button.innerText = "Edit";
+        change_fn = changeBio;
+    })
+    .catch((e)=>alert(e.message))
+    .finally(()=>event.target.disabled=false);
 }
 
 function cancel_url() {
@@ -56,24 +56,26 @@ async function isImgUrl(url) {
 
 function onUrlChange() {
     const url = document.getElementById("image_url").value;
-    isImgUrl(url)
-    .then((bool)=>{
-        const preview = document.querySelector("#preview_url img");
-        if(bool) {
-            preview.src = url;
-        } else if(preview.src !== current_url) {
-            preview.src = current_url;
-        }
-    })
-    .catch(()=>{});
+    
+    const preview = document.querySelector("#preview_url img");
+    if(bool) {
+        preview.src = url;
+    } else if(preview.src !== current_url) {
+        preview.src = current_url;
+    }
 }
 
-function onUrlSave() {
+function onUrlSave(event) {
+    event.target.disabled = true;
     const url = document.getElementById("image_url").value;
-    edit_user_picture(url);
-    document.querySelector("#your_profile img").src = url;
-    document.querySelector('.my-profile').src = url;
-    cancel_url();
+    editUserPicture(url)
+    .then(()=>{
+        document.querySelector("#your_profile img").src = url;
+        document.querySelector('.my-profile').src = url;
+        cancel_url();
+    })
+    .catch((e)=>alert(e.message))
+    .finally(()=>event.target.disabled=false);
 }
 
 let change_fn = changeBio;
@@ -85,13 +87,13 @@ function onLoad() {
     current_url = user.profile;
     document.querySelector("#your_profile img").src = user.profile;
     document.querySelector("#profile_title label").innerText = user.username;
-    if(user.description === null || user.description === undefined || user.description === '') {
+    if(user.description == null || user.description === '') {
         document.getElementById("bio_content").innerText = 'None';
     } else {
         document.getElementById("bio_content").innerText = user.description;
     }
     
-    document.getElementById("bio_change").addEventListener("click", ()=>change_fn());
+    document.getElementById("bio_change").addEventListener("click", (event)=>change_fn(event));
     document.querySelector("#your_profile span").addEventListener("click", changeProfile);
     document.getElementById("cancel_button").addEventListener("click", cancel_url);
     document.getElementById('save_url_button').addEventListener("click", onUrlSave);

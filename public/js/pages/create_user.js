@@ -1,9 +1,10 @@
-import {create_user} from "/js/endpoints/api.js"
+import {createUser} from "/js/endpoints/api.js"
 import {CreateUserRequest} from "/js/endpoints/request.js"
 
 const home_page = "/html/discovery.html";
 
 function tryCreateUser(event) {
+    event.target.disabled=true;
     event.preventDefault();
     const username = document.getElementById("username_input").value;
     const email = document.getElementById("email_input").value;
@@ -15,15 +16,11 @@ function tryCreateUser(event) {
         return;
     }
 
-    try {
-        create_user(
-            new CreateUserRequest(username, email, password)
-        );
-        window.location.replace(home_page);
-    } catch(e) {
-        alert(e);
-    }
-
+    createUser(new CreateUserRequest(username, email, password))
+    .then(()=>window.location.replace(home_page))
+    .catch((err)=>alert(err.message))
+    .finally(()=>event.target.disabled=false);
+    return false;
 }
 
 document.querySelector("form").addEventListener("submit", (event) => tryCreateUser(event));

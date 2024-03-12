@@ -1,18 +1,16 @@
-import {sign_out} from "/js/endpoints/api.js"
+import {logout} from "/js/endpoints/api.js"
 import {get, Store} from "/js/local-store.js"
 const home_page = "/";
 
 function trySignOut(event) {
+    event.target.disabled = true;
     event.preventDefault();
     if (window.getComputedStyle(event.target).display === "none") return;
-    try {
-        sign_out();
-        window.location.replace(home_page);
-    } catch(e) {
-        console.log(e);
-        alert(e);
-    }
 
+    logout()
+    .then(()=>window.location.replace(home_page))
+    .catch((e)=>alert(e.message))
+    .finally(()=>event.target.disabled = false);
 }
 
 function onLoad() {

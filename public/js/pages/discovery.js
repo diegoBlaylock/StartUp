@@ -1,12 +1,12 @@
 import {Search, Filter, RoomRequest} from "/js/endpoints/request.js"
-import {get_rooms} from "/js/endpoints/api.js"
+import {discoverRooms} from "/js/endpoints/api.js"
 import {Store, get} from "/js/local-store.js"
 
 
 function generateRoomCard(room) {
     const card = document.createElement("a");
     card.className = "room-desc";
-    card.dataset.id = room.room_id;
+    card.dataset.id = room.roomID;
 
     const title = document.createElement("h2");
     title.textContent = room.title;
@@ -29,12 +29,12 @@ function generateRoomCard(room) {
     label.appendChild(span);
     card.appendChild(label);
 
-    const user_id = get(Store.USER).user_id;
+    const userID = get(Store.USER).userID;
     const url = new URL(
-        (user_id === room.owner.user_id)?  "/html/view_player_room.html": "/html/view_listener_room.html" ,
+        (userID === room.owner.userID)?  "/html/view_player_room.html": "/html/view_listener_room.html" ,
         window.location.origin
     );
-    url.searchParams.append("room_id", room.room_id);
+    url.searchParams.append("roomID", room.roomID);
     card.href = url.href;
     return card;
 }
@@ -60,7 +60,7 @@ async function loadRooms(page) {
     const request = new RoomRequest(page, filter_type, search_type, search_param);
 
     try {
-        const response = await get_rooms(request);
+        const response = await discoverRooms(request);
         const room_div = document.getElementById("roomspage");
         while (room_div.firstChild) {
             room_div.removeChild(room_div.firstChild);

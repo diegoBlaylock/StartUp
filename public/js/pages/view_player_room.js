@@ -2,10 +2,12 @@ import {Banshee} from "/js/mocks/banshee.js"
 import {get, Store} from "/js/local-store.js"
 import {noteOn, noteOff, setupKeyboard} from "/js/pages/shared/keyboard.js"
 import { EventType } from "/js/models/music.js"
+import { getChatHistory } from "/js/endpoints/api.js";
 
 function createMessageElement(message) {
     const frame = document.createElement("div");
     frame.classList.add("message");
+    frame.dataset.id = message.messageID;
 
     const img = document.createElement("img");
     img.src = message.owner.profile;
@@ -57,17 +59,18 @@ function sendMessage() {
         const user = get(Store.USER)
         textarea.value = "";
         onMessageEvent({
-            message_id: crypto.randomUUID(),
+            messageID: crypto.randomUUID(),
+            ownerID: user.userID,
             owner: user,
             content: text,
-            time_stamp: Date.now()
+            timeStamp: Date.now()
         });
     }
 }
 
-function onLoad() {
+async function onLoad() {
+    const messageHistory = await getChatHistory();
     new Banshee(onMessageEvent);
-
     setupKeyboard(true, onNoteEvent);
 
     const messages = document.getElementById("chat_messages");
@@ -89,4 +92,4 @@ function onLoad() {
     });
 }
 
-onLoad();
+await onLoad();

@@ -3,6 +3,7 @@ import {get, Store} from "/js/local-store.js"
 import { Pianist } from "/js/mocks/pianist.js"
 import {noteOn, noteOff, setupKeyboard} from "/js/pages/shared/keyboard.js"
 import { EventType } from "/js/models/music.js"
+import { getChatHistory } from "/js/endpoints/api.js"
 
 
 function createMessageElement(message) {
@@ -62,12 +63,13 @@ function sendMessage() {
             message_id: crypto.randomUUID(),
             owner: user,
             content: text,
-            time_stamp: Date.now()
+            timeStamp: Date.now()
         });
     }
 }
 
-function onLoad() {
+async function onLoad() {
+    const messageHistory = await getChatHistory();
     new Banshee(onMessageEvent);
     new Pianist(onNoteEvent);
 
@@ -92,4 +94,4 @@ function onLoad() {
     });
 }
 
-onLoad();
+await onLoad();
