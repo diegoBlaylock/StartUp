@@ -54,10 +54,10 @@ export async function dicoverRooms(req) {
     if(filterVal) {
         switch(filterType) {
             case Filter.USER:
-                roomTable = roomTable.filter((room) => room.owner.username.toLowerCase().includes(room_request.search_param.toLowerCase()));
+                roomTable = roomTable.filter((room) => inflateWithOwner(room).owner.username.toLowerCase().includes(filterVal.toLowerCase()));
                 break;
             case Filter.ROOM:
-                roomTable = roomTable.filter((room) => room.title.toLowerCase().includes(room_request.search_param.toLowerCase()));
+                roomTable = roomTable.filter((room) => room.title.toLowerCase().includes(filterVal.toLowerCase()));
                 break;
         }
     }
