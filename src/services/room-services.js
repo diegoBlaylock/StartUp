@@ -23,7 +23,7 @@ export async function createRoom(req) {
     roomTable.push(room);
     saveTable(Table.ROOM, roomTable);
 
-    return room.roomID;
+    return room._id;
 }
 
 import * as fs from 'node:fs';

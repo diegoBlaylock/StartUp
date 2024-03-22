@@ -19,99 +19,134 @@ const roomCollection = db.collection('rooms');
 const credentialCollection = db.collection('credentials');
 const messageCollection = db.collection('messages');
 
-export function addRoom(room) {
-
+export async function addRoom(room) {
+    const result = await roomCollection.insertOne(room);
+    return result;
 }
 
-export function getRoomByID(roomID) {
-
-}
-
-export function getPage(){
-
-}
-
-export function getMessageThreadByRoomID(roomID) {
-
-}
-
-export function addToken(token) {
-
-}
-
-export function getToken(token) {
-
-}
-
-export function deleteToken(token) {
-    
-}
-
-export function addUser(user) {
-
-}
-
-export function getUserByID(userID) {
-    
-}
-
-export function doesUserWithUsernameExist(username) {
-    
-}
-
-export function doesUserWithEmailExist(email) {
-    
-}
-
-export function addCredential(credential) {
-
-}
-
-export function getCredentialByUsername(username) {
-
-}
-
-
-
-export const Table = Object.freeze({
-    USER: "user_table",
-    TOKEN: "token_table",
-    ROOM: "room_table",
-    CREDENTIALS: "credentials",
-    MESSAGE: "message"
-});
-
-const tables = {}
-
-export function getTable(name) {
-    const table = tables[name];
-    if (table == null) {
-        tables[name] = []
-        return tables[name];
-    }
-    return table;
-}
-
-export function saveTable(name, table) {
-    tables[name] = table;
-}
-
-export function findByColumn(table, attribute, value) {
-    for(const obj of table) {
-        if(obj[attribute] === value) {
-            return obj;
+export async function getRoomByID(roomID) {
+    const query = { _id: roomID };
+    const cursor = await roomCollection.find(query);
+    try {
+        if (cursor.hasNext()) {
+            return cursor.next();
         }
-    }
 
-    return null;
+        return null;
+    } finally {
+        cursor.close();
+    }
 }
 
-export function contains(table, attribute, value) {
-    for(const obj of table) {
-        if(obj[attribute] === value) {
+export async function getPage(){
+
+}
+
+export async function getMessageThreadByRoomID(roomID) {
+    
+}
+
+export async function addToken(token) {
+    const result = await tokenCollection.insertOne(token);
+    return result;
+}
+
+export async function getToken(token) {
+    const query = { _id: token };
+    const cursor = await tokenCollection.find(query);
+    try {
+        if (cursor.hasNext()) {
+            return cursor.next();
+        }
+
+        return null;
+    } finally {
+        cursor.close();
+    }
+}
+
+export async function deleteToken(token) {
+    const query = { _id: token };
+    const result = await roomCollection.remove(query);
+    return result;
+}
+
+export async function addUser(user) {
+    const result = await userCollection.insertOne(user);
+    return result;
+}
+
+export async function getUserByID(userID) {
+    const query = { _id: userID };
+    const cursor = await userCollection.find(query);
+    try {
+        if (cursor.hasNext()) {
+            return cursor.next();
+        }
+
+        return null;
+    } finally {
+        cursor.close();
+    }
+}
+
+export async function getUserByUsername(username) {
+    const query = { username: username };
+    const cursor = await userCollection.find(query);
+    try {
+        if (cursor.hasNext()) {
+            return cursor.next();
+        }
+
+        return null;
+    } finally {
+        cursor.close();
+    }
+}
+
+export async function doesUserWithUsernameExist(username) {
+    const query = { username: username };
+    const cursor = await userCollection.find(query);
+    try {
+        if (cursor.hasNext()) {
             return true;
         }
-    }
 
-    return false;
+        return false;
+    } finally {
+        cursor.close();
+    }
+}
+
+export async function doesUserWithEmailExist(email) {
+    const query = { email: email };
+    const cursor = await userCollection.find(query);
+    try {
+        if (cursor.hasNext()) {
+            return true;
+        }
+
+        return false;
+    } finally {
+        cursor.close();
+    }
+}
+
+export async function addCredential(credential) {
+    const result = await credentialCollection.insertOne(credential);
+    return result;
+}
+
+export async function getCredentialByUserID(userID) {
+    const query = { _id: userID };
+    const cursor = await credentialCollection.find(query);
+    try {
+        if (cursor.hasNext()) {
+            return cursor.next();
+        }
+
+        return null;
+    } finally {
+        cursor.close();
+    }
 }

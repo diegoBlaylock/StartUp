@@ -27,11 +27,11 @@ export async function createUser(req) {
     saveTable(Table.USER, user_table);
     
     let cred_table = getTable(Table.CREDENTIALS);
-    const new_cred = new Credentials(new_user.userID, req.password);
+    const new_cred = new Credentials(new_user._id, req.password);
     cred_table.push(new_cred);
     saveTable(Table.CREDENTIALS, cred_table);
 
-    const token = new AuthToken(new_user.userID);
+    const token = new AuthToken(new_user._id);
     let token_table = getTable(Table.TOKEN);
     token_table.push(token);
     saveTable(Table.TOKEN, token_table);
