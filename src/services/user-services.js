@@ -2,7 +2,7 @@ import {MissingParameterError, BadParameterError, ValueTakenError, ResourceNotFo
 import { User, Credentials, AuthToken } from '../models/models.js';
 import { checkToken, filterUserObj, findUserByID } from './service-utils.js';
 import * as database from '../database/database.js'
-
+import * as bcrypt from 'bcrypt'
 
 export async function createUser(req) {
 
@@ -42,13 +42,15 @@ export async function loginUser(req) {
     }
     
     const db_credentials = await database.getCredentialByUserID(user._id);
-    if (db_credentials.password !== req.password) {
+    if (! await bcrypt.compare(req.password, db_credentials.password)) {
         throw new BadParameterError("Password not Right!");
     }
 
-    const token = new AuthToken(db_credentials._id);
-    await database.addToken(token);
-
+    let token = await database.getTokenByID(db_credentials._id); 
+    if(token == null) {
+        token = new AuthToken(db_credentials._id);
+        await database.addToken(token);
+    }
     return token;
 }
 

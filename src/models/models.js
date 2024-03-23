@@ -8,10 +8,11 @@ export class User {
     }
 }
 
+import * as bcrypt from 'bcrypt'
 export class Credentials {
     constructor(userID, password) {
         this._id = userID;
-        this.password = password;
+        this.password = bcrypt.hashSync(password, 12);
     }
 }
 

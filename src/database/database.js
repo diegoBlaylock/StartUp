@@ -244,6 +244,20 @@ export async function getToken(token) {
     }
 }
 
+export async function getTokenByID(token) {
+    const query = { userID: token };
+    const cursor = await tokenCollection.find(query);
+    try {
+        if (await cursor.hasNext()) {
+            return await cursor.next();
+        }
+
+        return null;
+    } finally {
+        cursor.close();
+    }
+}
+
 export async function deleteToken(token) {
     const query = { userID: token };
     const result = await tokenCollection.deleteMany(query);
