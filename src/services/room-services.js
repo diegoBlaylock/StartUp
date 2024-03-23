@@ -6,8 +6,8 @@ import * as database from '../database/database.js'
 
 export async function getRoomInfo(req) {
     await checkToken(req.auth);
-    const room = findRoomByID(req.roomID);
-    if(room == null) throw ResourceNotFoundError("Couldn't find room!")
+    const room = await findRoomByID(req.roomID);
+    if(room == null) throw new ResourceNotFoundError("Couldn't find room!")
     return await inflateWithOwner(room);
 }
 

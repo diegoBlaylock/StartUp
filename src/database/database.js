@@ -163,11 +163,28 @@ export async function getPage(page, sortType, filterType, filterVal) {
 }
 
 export async function getMessageThreadByRoomID(roomID) {
-    const query = { threadID: roomID };
-    const cursor = messageCollection
-        .find(query)
-        .sort({timeStamp:-1})
-        .limit(100)
+    const cursor = messageCollection.aggregate([
+        {
+            $match: {threadID: roomID}
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "ownerID",
+                foreignField: "_id",
+                as: "owner",
+                pipeline: [
+                    {
+                        $project: {
+                            username: 1,
+                            profile: 1,
+                            description: 1
+                        }
+                    }
+                ]
+            }    
+        }
+    ])
         .sort({timeStamp: 1});
 
     try {

@@ -69,7 +69,9 @@ function sendMessage() {
 }
 
 async function onLoad() {
-    const messageHistory = await getChatHistory();
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomID = urlParams.get('roomID');
+    const messageHistory = await getChatHistory(roomID);
     new Banshee(onMessageEvent);
     new Pianist(onNoteEvent);
 
