@@ -6,7 +6,7 @@ import {Store, get} from "/js/local-store.js"
 function generateRoomCard(room) {
     const card = document.createElement("a");
     card.className = "room-desc";
-    card.dataset.id = room.roomID;
+    card.dataset.id = room._id;
 
     const title = document.createElement("h2");
     title.textContent = room.title;
@@ -34,7 +34,7 @@ function generateRoomCard(room) {
         (userID === room.owner._id)?  "/html/view_player_room.html": "/html/view_listener_room.html" ,
         window.location.origin
     );
-    url.searchParams.append("roomID", room.roomID);
+    url.searchParams.append("roomID", room._id);
     card.href = url.href;
     return card;
 }

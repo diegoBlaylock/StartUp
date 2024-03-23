@@ -49,15 +49,19 @@ export async function getPage(page, sortType, filterType, filterVal) {
     if(filterVal) {
         switch(filterType) {
             case Filter.USER:
-                query['username'] = filterVal.toLowerCase();
+                query.username = {
+                    $regex: new RegExp(filterVal, 'i'),
+                };
                 break;
             case Filter.ROOM:
-                query['title'] = filterVal.toLowerCase();
+                query.title = {
+                    $regex: new RegExp(filterVal, 'i'),
+                };
                 break;
         }
     }
 
-    const total = await roomCollection
+    const total = (await roomCollection
         .aggregate([
             {
                 $lookup: {
@@ -86,7 +90,12 @@ export async function getPage(page, sortType, filterType, filterVal) {
             {
                 $project: {
                     title: 1,
-                    username: {$toLower: "owner.$username"}
+                    username: {
+                        $getField: {
+                            field: "username",
+                            input: "$owner"
+                        }
+                    }
                 }
             },
             {
@@ -96,7 +105,7 @@ export async function getPage(page, sortType, filterType, filterVal) {
                 $count: "total"
             }
 
-        ]).next();
+        ]).next()) ?? {total: 0};
     
     
     let cursor = roomCollection
@@ -134,7 +143,12 @@ export async function getPage(page, sortType, filterType, filterVal) {
                 title: 1,
                 description: 1,
                 timeStamp: 1,
-                'username': {$toLower: "owner.$username"}
+                username: {
+                    $getField: {
+                        field: "username",
+                        input: "$owner"
+                    }
+                }
             }
         },
         {
@@ -152,6 +166,7 @@ export async function getPage(page, sortType, filterType, filterVal) {
     ]);
 
     try {
+        
         const num_pages = Math.ceil(total.total/PAGE_SIZE);
 
         if(page !== 0 && page >= total) {
@@ -160,7 +175,7 @@ export async function getPage(page, sortType, filterType, filterVal) {
         
         switch(sortType) {
             case Sort.TIME_STAMP:
-                cursor = cursor.sort({timeStamp:-1});
+                cursor = cursor.sort({timeStamp:1});
                 break;
             case Sort.POPULARITY:
                 cursor = cursor.sort({title: 1});

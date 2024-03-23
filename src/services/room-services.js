@@ -43,10 +43,10 @@ export async function dicoverRooms(req) {
     }
     const pageObj = await database.getPage(page, sortType, filterType, filterVal);
 
-    pageObj.rooms = pageObj.rooms.map((room)=>{
-        room.owner = filterUserObj(room.owner);
-        return room;
-    });
+    // pageObj.rooms = pageObj.rooms.map((room)=>{
+    //     room.owner = filterUserObj(room.owner);
+    //     return room;
+    // });
 
     return pageObj;
 }
