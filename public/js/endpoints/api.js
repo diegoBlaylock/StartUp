@@ -15,7 +15,7 @@ export async function login(credentials) {
     const token = json.token;
     save(Store.TOKEN, token);
 
-    const user = await getUser(new GetUserRequest(json.userID));
+    const user = await getUser(new GetUserRequest(json._id));
     save(Store.USER, user);
 }
 
@@ -58,7 +58,7 @@ export async function createUser(userDetails) {
     const token = json.token;
     save(Store.TOKEN, token);
 
-    const user = await getUser(new GetUserRequest(json.userID));
+    const user = await getUser(new GetUserRequest(json._id));
     save(Store.USER, user);
 }
 

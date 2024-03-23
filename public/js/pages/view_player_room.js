@@ -60,7 +60,7 @@ function sendMessage() {
         textarea.value = "";
         onMessageEvent({
             messageID: crypto.randomUUID(),
-            ownerID: user.userID,
+            ownerID: user._id,
             owner: user,
             content: text,
             timeStamp: Date.now()
