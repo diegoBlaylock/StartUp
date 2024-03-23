@@ -1,7 +1,6 @@
 import { Page, Room } from "../models/models.js";
-import { saveTable, getTable, Table, findByColumn } from "../database/database.js";
 import { BadParameterError, ResourceNotFoundError } from "./errors.js";
-import { checkToken, findRoomByID, findUserByID, inflateWithOwner } from "./service-utils.js";
+import { checkToken, findRoomByID, inflateWithOwner } from "./service-utils.js";
 import * as database from '../database/database.js'
 
 
@@ -9,11 +8,11 @@ export async function getRoomInfo(req) {
     await checkToken(req.auth);
     const room = findRoomByID(req.roomID);
     if(room == null) throw ResourceNotFoundError("Couldn't find room!")
-    return inflateWithOwner(room);
+    return await inflateWithOwner(room);
 }
 
 export async function createRoom(req) {
-    const token = checkToken(req.auth);
+    const token = await checkToken(req.auth);
 
     const room = new Room(
         token.userID,
@@ -26,14 +25,14 @@ export async function createRoom(req) {
     return room._id;
 }
 
-const PAGE_SIZE = 9;
 export async function dicoverRooms(req) {
-    checkToken(req.auth);
+    await checkToken(req.auth);
 
-    let roomTable = [...getTable(Table.ROOM)];
     const filterType = req.filterType;
     const filterVal = req.filterVal;
     const sortType = req.sortType;
+
+    const page = req.page ?? 0;
     
     if (!Object.values(Filter).includes(filterType)) {
         throw new BadParameterError("Couldn't understand filterType " + filterType);
@@ -43,47 +42,16 @@ export async function dicoverRooms(req) {
         throw new BadParameterError("Couldn't understand sortType " + sortType);
     }
 
-    if(filterVal) {
-        switch(filterType) {
-            case Filter.USER:
-                roomTable = roomTable.filter((room) => inflateWithOwner(room).owner.username.toLowerCase().includes(filterVal.toLowerCase()));
-                break;
-            case Filter.ROOM:
-                roomTable = roomTable.filter((room) => room.title.toLowerCase().includes(filterVal.toLowerCase()));
-                break;
-        }
-    }
+    const rooms = await Promise.all((await database.getPage(page, sortType, filterType, filterVal)).map(inflateWithOwner));
 
-    switch(sortType) {
-        case Sort.TIME_STAMP:
-            roomTable.sort((a,b)=>b.timeStamp-a.timeStamp);
-            break;
-        case Sort.POPULARITY:
-            roomTable;
-            break;
-    }
-
-    let page = req.page ?? 0;
-    const total = Math.ceil(roomTable.length / PAGE_SIZE);
-
-    if(page !== 0 && page >= total) {
-        page = total-1;
-    }
-
-    const rooms = roomTable.splice(PAGE_SIZE*page, PAGE_SIZE*page + PAGE_SIZE).map(inflateWithOwner);
-
-    return new Page(rooms, page, total);
+    return rooms;
 }
 
 export async function getChatHistory(req) {
-    checkToken(req.auth);
+    await checkToken(req.auth);
 
-    const messageTable = [... getTable(Table.MESSAGE)];
-
-    const threadID = req.threadID;
-    messageTable.filter((v)=>v.threadID===threadID).sort((a,b)=>b.timeStamp-a.timeStamp);
-
-    return messageTable.map(inflateWithOwner);
+    const messageTable = await database.getMessageThreadByRoomID(req.threadID);
+    return await Promise.all(messageTable.map(inflateWithOwner));
 }
 
 export const Sort = Object.freeze({

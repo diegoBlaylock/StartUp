@@ -31,7 +31,7 @@ export async function findRoomByID(roomID) {
 }
 
 export async function inflateWithOwner(obj) {
-    const owner = await filterUserObj(findUserByID(obj.ownerID));
+    const owner = filterUserObj(await findUserByID(obj.ownerID));
     obj = {...obj};
     if (obj == null) return null;
     if(!obj.owner) obj.owner = owner;
