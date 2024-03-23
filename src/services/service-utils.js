@@ -1,15 +1,13 @@
-import { getTable, findByColumn, Table } from "../database/database.js";
 import { UnauthorizedError } from "./errors.js";
+import * as database from '../database/database.js'
 
-export function findToken(tok) {
-    const tokenTable = getTable(Table.TOKEN);
-    const token = findByColumn(tokenTable, "token", tok);
-
+export async function findToken(tok) {
+    const token = await database.getToken(tok);
     return token;
 }
 
-export function checkToken(tok) {
-    const token = findToken(tok);
+export async function checkToken(tok) {
+    const token = await findToken(tok);
 
     if (token == null) {
         throw new UnauthorizedError();
@@ -18,10 +16,8 @@ export function checkToken(tok) {
     return token;
 }
 
-export function findUserByID(userID) {
-    const userTable = getTable(Table.USER);
-    const user = findByColumn(userTable, "userID", userID);
-    return user;
+export async function findUserByID(userID) {
+    return await database.getUserByID(userID);
 }
 
 export function filterUserObj(user) {
@@ -30,14 +26,12 @@ export function filterUserObj(user) {
     return filtered;
 }
 
-export function findRoomByID(roomID) {
-    const roomTable = getTable(Table.ROOM);
-    const room = findByColumn(roomTable, "roomID", roomID);
-    return room;
+export async function findRoomByID(roomID) {
+    return await database.getRoomByID(roomID);
 }
 
-export function inflateWithOwner(obj) {
-    const owner = filterUserObj(findUserByID(obj.ownerID));
+export async function inflateWithOwner(obj) {
+    const owner = await filterUserObj(findUserByID(obj.ownerID));
     obj = {...obj};
     if (obj == null) return null;
     if(!obj.owner) obj.owner = owner;

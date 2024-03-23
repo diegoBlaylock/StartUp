@@ -2,9 +2,11 @@ import { Page, Room } from "../models/models.js";
 import { saveTable, getTable, Table, findByColumn } from "../database/database.js";
 import { BadParameterError, ResourceNotFoundError } from "./errors.js";
 import { checkToken, findRoomByID, findUserByID, inflateWithOwner } from "./service-utils.js";
+import * as database from '../database/database.js'
 
-export function getRoomInfo(req) {
-    checkToken(req.auth);
+
+export async function getRoomInfo(req) {
+    await checkToken(req.auth);
     const room = findRoomByID(req.roomID);
     if(room == null) throw ResourceNotFoundError("Couldn't find room!")
     return inflateWithOwner(room);
@@ -18,27 +20,17 @@ export async function createRoom(req) {
         req.title,
         req.description,
     );
-
-    const roomTable = getTable(Table.ROOM);
-    roomTable.push(room);
-    saveTable(Table.ROOM, roomTable);
+    
+    await database.addRoom(room);
 
     return room._id;
 }
 
-import * as fs from 'node:fs';
 const PAGE_SIZE = 9;
 export async function dicoverRooms(req) {
     checkToken(req.auth);
 
     let roomTable = [...getTable(Table.ROOM)];
-    if(roomTable.length == 0){
-        const data = fs.readFileSync("./public/js/mocks/init-rooms.json", 'utf-8');
-        const res = JSON.parse(data);
-        saveTable(Table.ROOM, res);
-        roomTable = [...res];
-    }
-
     const filterType = req.filterType;
     const filterVal = req.filterVal;
     const sortType = req.sortType;
