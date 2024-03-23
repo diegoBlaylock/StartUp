@@ -64,7 +64,14 @@ export async function getPage(page, sortType, filterType, filterVal) {
                     from: "users",
                     localField: "ownerID",
                     foreignField: "_id",
-                    as: "owner"
+                    as: "owner",
+                    pipeline: [
+                        {
+                            $project: {
+                                username: 1,
+                            }
+                        }
+                    ]
                 }
             },
             {
@@ -99,7 +106,16 @@ export async function getPage(page, sortType, filterType, filterVal) {
                 from: "users",
                 localField: "ownerID",
                 foreignField: "_id",
-                as: "owner"
+                as: "owner",
+                pipeline: [
+                    {
+                        $project: {
+                            username: 1,
+                            profile: 1,
+                            description: 1
+                        }
+                    }
+                ]
             }
         },
         {

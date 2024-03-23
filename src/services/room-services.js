@@ -55,7 +55,7 @@ export async function getChatHistory(req) {
     await checkToken(req.auth);
 
     const messageTable = await database.getMessageThreadByRoomID(req.threadID);
-    return await Promise.all(messageTable.map(inflateWithOwner));
+    return messageTable;
 }
 
 export const Sort = Object.freeze({

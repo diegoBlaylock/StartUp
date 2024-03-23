@@ -88,11 +88,7 @@ export async function getUser(req) {
     const user = await findUserByID(req.userID);
     
     if (user == null) throw new ResourceNotFoundError("Couldn't find User!");
-    if(user._id !== token.userID) {
-        return filterUserObj(user);
-    }
-
-    return user;
+    return filterUserObj(user);
 }
 
 async function isUrlValid(url) {
