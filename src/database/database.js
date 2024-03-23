@@ -41,21 +41,9 @@ export async function getRoomByID(roomID) {
 
 const PAGE_SIZE = 9
 import { Sort, Filter } from '../services/room-services.js'
+import { Page } from '../models/models.js';
 export async function getPage(page, sortType, filterType, filterVal) {
-    const aggregated = roomCollection
-        .aggregate([
-            {
-                $lookup: {
-                    from: "users",
-                    localField: "ownerID",
-                    foreignField: "_id",
-                    as: "ownerID"
-                }
-            },
-            {
-                $toLower: "$username"
-            }
-        ])
+
     const query = {};
 
     if(filterVal) {
@@ -68,11 +56,87 @@ export async function getPage(page, sortType, filterType, filterVal) {
                 break;
         }
     }
+
+    const total = await roomCollection
+        .aggregate([
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "ownerID",
+                    foreignField: "_id",
+                    as: "owner"
+                }
+            },
+            {
+                $project: {
+                    ownerID: 1,
+                    owner: { $arrayElemAt: ["$owner", 0]},
+                    title: 1,
+                    description: 1,
+                    timeStamp: 1,
+                }
+            },
+            {
+                $project: {
+                    title: 1,
+                    username: {$toLower: "owner.$username"}
+                }
+            },
+            {
+                $match: query
+            }, 
+            {
+                $count: "total"
+            }
+
+        ]).next();
     
-    let cursor = aggregated.find(query);
+    
+    let cursor = roomCollection
+    .aggregate([
+        {
+            $lookup: {
+                from: "users",
+                localField: "ownerID",
+                foreignField: "_id",
+                as: "owner"
+            }
+        },
+        {
+            $project: {
+                ownerID: 1,
+                owner: { $arrayElemAt: ["$owner", 0]},
+                title: 1,
+                description: 1,
+                timeStamp: 1,
+            }
+        },
+        {
+            $project: {
+                ownerID: 1,
+                owner: 1,
+                title: 1,
+                description: 1,
+                timeStamp: 1,
+                'username': {$toLower: "owner.$username"}
+            }
+        },
+        {
+            $match: query
+        },
+        {
+            $project: {
+                ownerID: 1,
+                owner: 1,
+                title: 1,
+                description: 1,
+                timeStamp: 1,
+            }
+        }
+    ]);
 
     try {
-        const num_pages = Math.ceil(cursor.count()/PAGE_SIZE);
+        const num_pages = Math.ceil(total.total/PAGE_SIZE);
 
         if(page !== 0 && page >= total) {
             page = total-1;
@@ -91,6 +155,8 @@ export async function getPage(page, sortType, filterType, filterVal) {
             .limit(PAGE_SIZE);
 
         return new Page(await cursor.toArray(), page, num_pages);
+    } catch(e) {
+        console.log(e);
     } finally {
         cursor.close();
     }
@@ -99,7 +165,7 @@ export async function getPage(page, sortType, filterType, filterVal) {
 export async function getMessageThreadByRoomID(roomID) {
     const query = { threadID: roomID };
     const cursor = messageCollection
-        .find(query, options)
+        .find(query)
         .sort({timeStamp:-1})
         .limit(100)
         .sort({timeStamp: 1});

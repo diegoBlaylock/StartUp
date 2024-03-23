@@ -1,6 +1,6 @@
 import { Page, Room } from "../models/models.js";
 import { BadParameterError, ResourceNotFoundError } from "./errors.js";
-import { checkToken, findRoomByID, inflateWithOwner } from "./service-utils.js";
+import { checkToken, filterUserObj, findRoomByID, inflateWithOwner } from "./service-utils.js";
 import * as database from '../database/database.js'
 
 
@@ -41,8 +41,12 @@ export async function dicoverRooms(req) {
     if (!Object.values(Sort).includes(sortType)) {
         throw new BadParameterError("Couldn't understand sortType " + sortType);
     }
+    const pageObj = await database.getPage(page, sortType, filterType, filterVal);
 
-    const rooms = await Promise.all((await database.getPage(page, sortType, filterType, filterVal)).map(inflateWithOwner));
+    pageObj.rooms = pageObj.rooms.map((room)=>{
+        room.owner = filterUserObj(room.owner);
+        return room;
+    });
 
     return rooms;
 }

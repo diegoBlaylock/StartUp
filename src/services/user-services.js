@@ -41,7 +41,7 @@ export async function loginUser(req) {
         throw new BadParameterError("Username doesn't exist!");
     }
     
-    const db_credentials = await database.getCredentialByUserID(user.userID);
+    const db_credentials = await database.getCredentialByUserID(user._id);
     if (db_credentials.password !== req.password) {
         throw new BadParameterError("Password not Right!");
     }
@@ -68,7 +68,7 @@ export async function editUser(req) {
     if (req.profile != null) {
         if(await isUrlValid(req.profile)) {
             user.profile = req.profile;
-            await database.updateUserProfile(user.userID, req.profile);
+            await database.updateUserProfile(user._id, req.profile);
         } else {
             throw new BadParameterError("URL is not an image.");
         }
@@ -77,7 +77,7 @@ export async function editUser(req) {
     
     if (req.description != null) {
         user.description = req.description;
-        await database.updateUserProfile(user.userID, req.description);
+        await database.updateUserProfile(user._id, req.description);
     }
 
     return user;
@@ -88,7 +88,7 @@ export async function getUser(req) {
     const user = await findUserByID(req.userID);
     
     if (user == null) throw ResourceNotFoundError("Couldn't find User!");
-    if(user.userID !== token.userID) {
+    if(user._id !== token.userID) {
         return filterUserObj(user);
     }
 
