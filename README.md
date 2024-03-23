@@ -94,3 +94,12 @@ For this deliverable I built out the structure of my application using HTML.
 - **Calls to third party endpoints** - For the mock rooms, some of them use the random picture generator as display pics, and if you wanted me to use fetch, I had the console log a random quote for pages after login.
 - **Backend service endpoints** - This include endpoints to create a user, to login, to edit a user profile, to logout, to validate a token, to get userinfo based on an ID, to fetch room info based on ID, to fetch sorted/filtered pages by parameters in the discovery room, to create a room.
 - **Frontend calls service endpoints** - The file named ./public/js/endpoints/api, uses fetch to call all the above functions
+
+## DB/Login deliverable
+
+- **MongoDB Atlas database created** - With the help of TA's, this has been done!
+- **Stores data in MongoDB** - done, will even retreive all data from database.
+- **User registration** - Creates a new User and new Credentials in the database. 
+- **existing user** - Will be able to fetch data from previous users. In fact most tables relate to each other through indices so everytime a room is fetched, it uses an id to fetch the owner too. Can modify existing user data using a profile picutre or biography that is shown when hovering over a user on the discovery page.
+- **Use MongoDB to store credentials** - Credentials hold only a hashed password and a userid. They are stored seperatly from userdata, but still using MongoDB
+- **Restricts functionality** - Any attempt to login without a valid token will force the user to the signin screen. Even if the frontend were modified, the backend will refuse to serve up content returning a Unauthorized status code.
