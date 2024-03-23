@@ -57,8 +57,8 @@ export async function validateToken(req) {
 }
 
 export async function logoutUser(req) {
-    await checkToken(req.auth);
-    const result = await database.deleteToken(req.auth);
+    const token = await checkToken(req.auth);
+    const result = await database.deleteToken(token.userID);
 }
 
 export async function editUser(req) {

@@ -230,8 +230,8 @@ export async function getToken(token) {
 }
 
 export async function deleteToken(token) {
-    const query = { _id: token };
-    const result = await roomCollection.remove(query);
+    const query = { userID: token };
+    const result = await tokenCollection.deleteMany(query);
     return result;
 }
 
