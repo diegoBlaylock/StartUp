@@ -18,11 +18,12 @@ if(token != null) {
     validateToken(token)
     .then((auth)=>{
         if (get(Store.USER) == null) {
-            return getUser(new GetUserRequest(auth._id));
+            return getUser(new GetUserRequest(auth.userID));
         }    
     })
     .then(user=>{
-        save(Store.USER, user);
+        if(user)
+            save(Store.USER, user);
     })
     .catch(()=>forceLogOut());
 } else {

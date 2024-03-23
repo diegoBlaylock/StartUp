@@ -58,7 +58,7 @@ function onUrlChange() {
     const url = document.getElementById("image_url").value;
     
     const preview = document.querySelector("#preview_url img");
-    if(bool) {
+    if(true) {
         preview.src = url;
     } else if(preview.src !== current_url) {
         preview.src = current_url;

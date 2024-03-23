@@ -48,7 +48,7 @@ export async function dicoverRooms(req) {
         return room;
     });
 
-    return rooms;
+    return pageObj;
 }
 
 export async function getChatHistory(req) {

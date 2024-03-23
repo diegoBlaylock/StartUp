@@ -46,7 +46,7 @@ export async function loginUser(req) {
         throw new BadParameterError("Password not Right!");
     }
 
-    const token = new AuthToken(db_credentials.userID);
+    const token = new AuthToken(db_credentials._id);
     await database.addToken(token);
 
     return token;
@@ -62,8 +62,8 @@ export async function logoutUser(req) {
 }
 
 export async function editUser(req) {
-    const token = checkToken(req.auth);
-    const user = findUserByID(token.userID);
+    const token = await checkToken(req.auth);
+    const user = await findUserByID(token.userID);
     
     if (req.profile != null) {
         if(await isUrlValid(req.profile)) {
@@ -77,7 +77,7 @@ export async function editUser(req) {
     
     if (req.description != null) {
         user.description = req.description;
-        await database.updateUserProfile(user._id, req.description);
+        await database.updateUserBio(user._id, req.description);
     }
 
     return user;
@@ -87,7 +87,7 @@ export async function getUser(req) {
     const token = await checkToken(req.auth);
     const user = await findUserByID(req.userID);
     
-    if (user == null) throw ResourceNotFoundError("Couldn't find User!");
+    if (user == null) throw new ResourceNotFoundError("Couldn't find User!");
     if(user._id !== token.userID) {
         return filterUserObj(user);
     }
