@@ -16,6 +16,7 @@
 
 import { WebSocketServer } from 'ws';
 import { checkToken, findToken } from '../services/service-utils';
+import { addWS } from './socket-pool';
 
 const wss = new WebSocketServer({ noServer: true });
 
@@ -41,9 +42,46 @@ wss.on("connection", async (ws, request)=>{
   
   const connection = {
     token: token,
+    alive: true,
     ws: ws,
     room: null
   }
 
+  const wsID = addWS(connection);
+
+  ws.on('message', function message(data) {
+    connections.forEach((c) => {
+      if (c.id !== connection.id) {
+        c.ws.send(data);
+      }
+    });
+  });
+
+  // Remove the closed connection so we don't try to forward anymore
+  ws.on('close', () => {
+    connections.findIndex((o, i) => {
+      if (o.id === connection.id) {
+        connections.splice(i, 1);
+        return true;
+      }
+    });
+  });
+
+  ws.on('pong', () => {
+    connection.alive = true;
+  });
 
 });
+
+
+setInterval(() => {
+  connections.forEach((c) => {
+    // Kill any connection that didn't respond to the ping last time
+    if (!c.alive) {
+      c.ws.terminate();
+    } else {
+      c.alive = false;
+      c.ws.ping();
+    }
+  });
+}, 10000);
