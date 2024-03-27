@@ -39,3 +39,13 @@ export function removeRoom(roomID) {
     const wsIDs = roomIDToWSIDs.get(roomID) ?? [];
     wsIDs.forEach(id => removeWS(id));
 }
+
+export function broadcast(roomID, data, wsID=null) {
+    const wsIDs = roomIDToWSIDs.get(roomID) ?? [];
+    wsIDs.forEach((id)=>{
+        if(id === wsID) return;
+        const wsInfo = idToWS.get(id);
+        if(wsInfo == null) wsIDs.delete(id);
+        wsInfo.ws.send(JSON.stringify(data));
+    });
+}
