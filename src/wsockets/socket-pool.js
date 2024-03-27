@@ -19,7 +19,8 @@ export function connectWSToRoom(wsID, roomID) {
     const wsInfo = idToWS.get(wsID);
     if (wsInfo.room != undefined) {
         roomIDToWSIDs.get(wsInfo.room)?.delete(wsInfo._id);
-    }
+    }  
+    wsInfo.room = roomID;
 
     roomIDToWSIDs.get(roomID)?.add(wsID);
 }

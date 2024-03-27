@@ -16,7 +16,7 @@
 
 import { WebSocketServer } from 'ws';
 import { checkToken, findToken } from '../services/service-utils';
-import { addWS, connectWSToRoom, removeWS } from './socket-pool';
+import { addWS, broadcast, connectWSToRoom, removeWS } from './socket-pool';
 
 const wss = new WebSocketServer({ noServer: true });
 
@@ -62,11 +62,11 @@ function onMessage(connection, message) {
   }
   
   function onNoteEvent(data) {
-
+    broadcast(connect.room, data, connection._id);
   }
 
   function onChatEvent(data) {
-    
+    broadcast(connect.room, data, connection._id);
   }
 
   const json = JSON.parse(message);
