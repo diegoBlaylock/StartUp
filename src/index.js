@@ -27,13 +27,15 @@ import {
     parseValidateUser
 } from './services/parse-requests.js';
 
+import { setupWebsockets } from './wsockets/websocket.js';
+
 import express from 'express';
 const app = express();
 
 setupExpress();
 setupRoutes();
+setupWebsockets(app);
 app.listen(4000);
-
 
 function setupExpress() {
     app.use(express.static('public'));

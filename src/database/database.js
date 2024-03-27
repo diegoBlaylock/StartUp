@@ -119,6 +119,7 @@ export async function getPage(page, sortType, filterType, filterVal) {
                 pipeline: [
                     {
                         $project: {
+                            _id: 0,
                             username: 1,
                             profile: 1,
                             description: 1
@@ -156,7 +157,7 @@ export async function getPage(page, sortType, filterType, filterVal) {
         },
         {
             $project: {
-                ownerID: 1,
+                ownerID: 0,
                 owner: 1,
                 title: 1,
                 description: 1,
@@ -207,6 +208,7 @@ export async function getMessageThreadByRoomID(roomID) {
                 pipeline: [
                     {
                         $project: {
+                            _id: 0,
                             username: 1,
                             profile: 1,
                             description: 1
