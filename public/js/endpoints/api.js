@@ -172,6 +172,12 @@ export async function getChatHistory(roomID) {
     return json;
 }
 
+export function openWebsocket() {
+    const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
+    const socket = new WebSocket(`${protocol}://${window.location.host}/ws`);
+    return socket
+}
+
 
 function addToken(options) {
     const token = get(Store.TOKEN);

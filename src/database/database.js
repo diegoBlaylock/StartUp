@@ -130,7 +130,6 @@ export async function getPage(page, sortType, filterType, filterVal) {
         },
         {
             $project: {
-                ownerID: 1,
                 owner: { $arrayElemAt: ["$owner", 0]},
                 title: 1,
                 description: 1,
@@ -139,7 +138,6 @@ export async function getPage(page, sortType, filterType, filterVal) {
         },
         {
             $project: {
-                ownerID: 1,
                 owner: 1,
                 title: 1,
                 description: 1,
@@ -157,7 +155,6 @@ export async function getPage(page, sortType, filterType, filterVal) {
         },
         {
             $project: {
-                ownerID: 0,
                 owner: 1,
                 title: 1,
                 description: 1,

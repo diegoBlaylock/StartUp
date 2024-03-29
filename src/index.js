@@ -34,8 +34,9 @@ const app = express();
 
 setupExpress();
 setupRoutes();
-setupWebsockets(app);
-app.listen(4000);
+const server = app.listen(4000);
+setupWebsockets(server);
+
 
 function setupExpress() {
     app.use(express.static('public'));

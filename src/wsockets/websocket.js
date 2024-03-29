@@ -15,8 +15,8 @@
 */
 
 import { WebSocketServer } from 'ws';
-import { checkToken, findToken } from '../services/service-utils';
-import { addWS, broadcast, connectWSToRoom, removeWS } from './socket-pool';
+import { checkToken, findToken } from '../services/service-utils.js';
+import { addWS, broadcast, connectWSToRoom, getConnections, removeWS } from './socket-pool.js';
 
 const wss = new WebSocketServer({ noServer: true });
 
@@ -63,30 +63,41 @@ wss.on("connection", async (ws, request)=>{
 });
 
 function onMessage(connection, message) {
-  
-  function onJoinRoomEvent(data) {
-    connectWSToRoom(connection._id, data.roomID);
-  }
-  
-  function onNoteEvent(data) {
-    broadcast(connect.room, data,) // connection._id);
-  }
+  try {
+    function onJoinRoomEvent(data) {
+      connectWSToRoom(connection._id, data.roomID);
+    }
+    
+    function onNoteEvent(data) {
+      broadcast(connect.room, data,) // connection._id);
+    }
 
-  function onChatEvent(data) {
-    broadcast(connect.room, data,) // connection._id);
-  }
+    function onChatEvent(data) {
+      broadcast(connect.room, data,) // connection._id);
+    }
 
-  const json = JSON.parse(message);
-  switch(json.type) {
-    case ReceiveEventType.JOIN_ROOM:
-      onJoinRoomEvent(json);
-      break;
-    case ReceiveEventType.MESSAGE:
-      onChatEvent(json);
-      break;
-    case ReceiveEventType.NOTE:
-      onNoteEvent(json);
-      break;
+    const json = JSON.parse(message);
+    switch(json.type) {
+      case ReceiveEventType.JOIN_ROOM:
+        onJoinRoomEvent(json);
+        break;
+      case ReceiveEventType.MESSAGE:
+        onChatEvent(json);
+        break;
+      case ReceiveEventType.NOTE:
+        onNoteEvent(json);
+        break;
+    }
+  } catch(e) {
+    const data = {
+      status: 500,
+      message: "Nope"
+    }
+
+    connection.ws?.send(JSON.stringify({
+      type: SendMessageType.ERROR,
+      data: data
+    }))
   }
 }
 
@@ -99,12 +110,12 @@ function onPong(connection) {
 }
 
 setInterval(() => {
-  connections.forEach((c) => {
+  for(const c of getConnections()) {
     if (!c.alive) {
       c.ws.terminate();
     } else {
       c.alive = false;
       c.ws.ping();
     }
-  });
+  }
 }, 10000);

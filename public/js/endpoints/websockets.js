@@ -148,7 +148,7 @@ export class ChatSocket {
                 this.#errorCallback(this, obj.data);
                 break;
             default:
-                this.#errorCallback(this, obj);
+                this.#errorCallback(this, obj.data);
         }
     }
 }

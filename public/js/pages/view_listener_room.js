@@ -1,9 +1,8 @@
-import {Banshee} from "/js/mocks/banshee.js"
 import {get, Store} from "/js/local-store.js"
-import { Pianist } from "/js/mocks/pianist.js"
 import {noteOn, noteOff, setupKeyboard} from "/js/pages/shared/keyboard.js"
 import { EventType } from "/js/models/music.js"
-import { getChatHistory } from "/js/endpoints/api.js"
+import { getChatHistory, openWebsocket } from "/js/endpoints/api.js"
+import { ChatSocket, MusicSocket } from "../endpoints/websockets.js"
 
 
 function createMessageElement(message) {
@@ -35,9 +34,9 @@ function createMessageElement(message) {
 
 const lockScrolling = {locked: true};
 
-function onMessageEvent(messageEvent) {
+function onMessageEvent(message) {
     const messages = document.getElementById("chat_messages");
-    messages.appendChild(createMessageElement(messageEvent));
+    messages.appendChild(createMessageElement(message));
     if (lockScrolling.locked) messages.scrollTop = messages.scrollHeight;
 }
 
@@ -65,6 +64,13 @@ function sendMessage() {
             content: text,
             timeStamp: Date.now()
         });
+
+        chatSocket.sendMessage({
+            message_id: crypto.randomUUID(),
+            owner: user,
+            content: text,
+            timeStamp: Date.now()
+        });
     }
 }
 
@@ -72,8 +78,7 @@ async function onLoad() {
     const urlParams = new URLSearchParams(window.location.search);
     const roomID = urlParams.get('roomID');
     const messageHistory = await getChatHistory(roomID);
-    new Banshee(onMessageEvent);
-    new Pianist(onNoteEvent);
+    messageHistory.forEach(message => onMessageEvent(message));
 
     setupKeyboard();
 
@@ -97,3 +102,12 @@ async function onLoad() {
 }
 
 await onLoad();
+
+const socket = openWebsocket();
+const chatSocket = ChatSocket(socket);
+const musicSocket = MusicSocket(socket);
+
+chatSocket.addMessageListener((message) => console.log(message));//onMessageEvent(message));
+chatSocket.addViewerCountListener((newCount) => null);
+chatSocket.onError((error) => console.log(error));
+musicSocket.addNoteEventListener(note => console.log(note));//onNoteEvent(note));

@@ -50,3 +50,7 @@ export function broadcast(roomID, data, wsID=null) {
         wsInfo.ws.send(JSON.stringify(data));
     });
 }
+
+export function getConnections() {
+    return idToWS.values();
+}
