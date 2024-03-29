@@ -1,40 +1,11 @@
-
-/*
-  Chat Methods
-
-  Client -> Server
-
-    Auth?
-    Write Message
-
-  server -> Client
-
-    Notification
-    Message
-    
-*/
-
 import { WebSocketServer } from 'ws';
 import { checkToken, findToken } from '../services/service-utils.js';
 import { addWS, broadcast, connectWSToRoom, getConnections, removeWS } from './socket-pool.js';
+import EventHandler, { ReceiveEventType, SendMessageType } from './event-handler.js';
 
 const wss = new WebSocketServer({ noServer: true });
 
-const ReceiveEventType = Object.freeze({ 
-  JOIN_ROOM: 0,
-  NOTE: 1,
-  MESSAGE: 2
-});
-
-const SendMessageType = Object.freeze({
-  ERROR: 0,
-  NOTE: 1,
-  MESSAGE: 2,
-  VIEWER_COUNT: 3    
-});
-
 export function setupWebsockets(server) {
-  
   server.on('upgrade', async (request, socket, head) => {
     try {
       const token = getToken(request);
@@ -67,28 +38,16 @@ wss.on("connection", async (ws, request)=>{
 
 function onMessage(connection, message) {
   try {
-    function onJoinRoomEvent(data) {
-      connectWSToRoom(connection._id, data.roomID);
-    }
-    
-    function onNoteEvent(data) {
-      broadcast(connection.room, data,) // connection._id);
-    }
-
-    function onChatEvent(data) {
-      broadcast(connection.room, data,) // connection._id);
-    }
-
     const json = JSON.parse(message);
     switch(json.type) {
       case ReceiveEventType.JOIN_ROOM:
-        onJoinRoomEvent(json.data);
+        EventHandler.onJoinRoomEvent(connection, json.data);
         break;
       case ReceiveEventType.MESSAGE:
-        onChatEvent(json.data);
+        EventHandler.onChatEvent(connection, json.data);
         break;
       case ReceiveEventType.NOTE:
-        onNoteEvent(json.data);
+        EventHandler.onNoteEvent(connection, json.data);
         break;
     }
   } catch(e) {
@@ -126,14 +85,12 @@ setInterval(() => {
 
 function getToken(request) {
   const cookie = request.headers.cookie;
-
   const pairs = cookie.split(';')
     .map(
       pair => pair.split('=')
-        .map(el=>el.trim())
-    )
+                .map(el=>el.trim()))
     .filter(pair=>pair[0]==="token");
-
-  return (pairs[0] ?? [])[1] ?? null;
-
+  
+  if(pairs.length === 0) return null;
+  else return pairs[0][1] ?? null;
 }
