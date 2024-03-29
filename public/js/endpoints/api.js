@@ -5,15 +5,12 @@ export async function login(credentials) {
 
     const response = await fetch(
         '/users/login/', 
-        addToken(addBody(credentials, {method: "POST"}))
+        addBody(credentials, {method: "POST"})
     );
 
     const json = await response.json();
     
     if(response.status != 201) handleError(json, response); 
-
-    const token = json.token;
-    save(Store.TOKEN, token);
 
     const user = await getUser(new GetUserRequest(json.userID));
     save(Store.USER, user);
@@ -23,7 +20,7 @@ export async function getUser(request) {
     const userID = request.userID;
     const response = await fetch(
         '/users/'+userID+'/', 
-        addToken({method: "GET"})
+        {method: "GET"}
     );
 
     const json = await response.json();
@@ -31,10 +28,10 @@ export async function getUser(request) {
     else return json;
 }
 
-export async function validateToken(token) {
+export async function validateToken() {
     const response = await fetch(
         '/token/validate/', 
-        {headers:{"token": token}}
+        {}
     );
     
     const authToken = await response.json();
@@ -48,15 +45,12 @@ export async function validateToken(token) {
 export async function createUser(userDetails) {
     const response = await fetch(
         '/users/create/', 
-        addToken(addBody(userDetails, {method: "POST"}))
+        addBody(userDetails, {method: "POST"})
     );
 
     const json = await response.json();
     
     if(response.status != 201) handleError(json, response); 
-
-    const token = json.token;
-    save(Store.TOKEN, token);
 
     const user = await getUser(new GetUserRequest(json.userID));
     save(Store.USER, user);
@@ -65,22 +59,20 @@ export async function createUser(userDetails) {
 export async function logout() {
     const response = await fetch(
         '/users/logout/', 
-        addToken({method: "DELETE"})
+        {method: "DELETE"}
     );
     
     if(response.status != 204) {
         const json = await response.json();
         handleError(json, response); 
     }
-
-    localStorage.removeItem(Store.TOKEN);
-    localStorage.removeItem(Store.USER);
+    sessionStorage.removeItem(Store.USER);
 }
 
 export async function editUserPicture(url) {
     const response = await fetch(
         '/users/edit/', 
-        addToken(addBody({profile: url}, {method: "PATCH"}))
+        addBody({profile: url}, {method: "PATCH"})
     );
 
     const json = await response.json();
@@ -95,7 +87,7 @@ export async function editUserPicture(url) {
 export async function editUserBio(bio) {
     const response = await fetch(
         '/users/edit/', 
-        addToken(addBody({description: bio}, {method: "PATCH"}))
+        addBody({description: bio}, {method: "PATCH"})
     );
 
     const json = await response.json();
@@ -110,7 +102,7 @@ export async function editUserBio(bio) {
 export async function getRoomStats(roomID) {
     const response = await fetch(
         '/rooms/'+roomID+'/', 
-        addToken({method: "GET"})
+        {method: "GET"}
     );
     
     const json = await response.json();
@@ -136,7 +128,7 @@ export async function discoverRooms(room_request) {
     }
 
     const url = "/rooms/discover/?" + query.join('&'); 
-    const response = await fetch(url, addToken());
+    const response = await fetch(url);
     const json = await response.json();
 
     if(response.status != 200) {
@@ -150,7 +142,7 @@ export async function createRoom(createRoomRequest) {
 
     const response = await fetch(
         '/rooms/create/', 
-        addToken(addBody(createRoomRequest, {method: "POST"}))
+        addBody(createRoomRequest, {method: "POST"})
     );
 
     const json = await response.json();
@@ -163,7 +155,7 @@ export async function createRoom(createRoomRequest) {
 export async function getChatHistory(roomID) {
     const response = await fetch(
         '/chat/'+roomID +'/', 
-        addToken( {method: "GET"})
+        {method: "GET"}
     );
 
     const json = await response.json();
@@ -176,17 +168,6 @@ export function openWebsocket() {
     const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
     const socket = new WebSocket(`${protocol}://${window.location.host}/ws`);
     return socket
-}
-
-
-function addToken(options) {
-    const token = get(Store.TOKEN);
-    if(token) {
-        if (options == null) options = {}
-        if(options.headers == null) options.headers = {} 
-        options.headers["token"] = token;
-    }
-    return options;
 }
 
 function addBody(body, options) {

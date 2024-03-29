@@ -28,12 +28,13 @@ import {
 } from './services/parse-requests.js';
 
 import { setupWebsockets } from './wsockets/websocket.js';
-
+import cookieParser from 'cookie-parser';
 import express from 'express';
 const app = express();
 
 setupExpress();
 setupRoutes();
+
 const server = app.listen(4000);
 setupWebsockets(server);
 
@@ -41,6 +42,7 @@ setupWebsockets(server);
 function setupExpress() {
     app.use(express.static('public'));
     app.use(express.json());
+    app.use(cookieParser());
 }
 
 function setupRoutes() {
@@ -79,7 +81,7 @@ function pluginService(
     method(path, async (req, res)=>{
         try {
             const serviceRequest = requestParser(req);
-            const serviceResponse = await service(serviceRequest);
+            const serviceResponse = await service(serviceRequest, res);
             res.status(status);
             respond(res, serviceResponse);
         } catch(e) {

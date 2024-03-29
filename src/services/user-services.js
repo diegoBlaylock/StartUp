@@ -4,7 +4,7 @@ import { checkToken, filterUserObj, findUserByID } from './service-utils.js';
 import * as database from '../database/database.js'
 import * as bcrypt from 'bcrypt'
 
-export async function createUser(req) {
+export async function createUser(req, res) {
 
     if(req.username == null || req.email == null || req.password == null) {
         throw new MissingParameterError("Missing needed parameters!");
@@ -31,10 +31,16 @@ export async function createUser(req) {
     const token = new AuthToken(new_user._id);
     await database.addToken(token);
 
-    return token;
+    res.cookie("token", token.token, {
+        secure: true,
+        httpOnly: true,
+        sameSite: 'strict',
+    });
+
+    return {userID: token.userID};
 }
 
-export async function loginUser(req) {
+export async function loginUser(req, res) {
     const user = await database.getUserByUsername(req.username);
 
     if (user == null) {
@@ -51,16 +57,25 @@ export async function loginUser(req) {
         token = new AuthToken(db_credentials._id);
         await database.addToken(token);
     }
-    return token;
+
+    res.cookie("token", token.token, {
+        secure: true,
+        httpOnly: true,
+        sameSite: 'strict',
+    });
+
+    return {userID: token.userID};;
 }
 
 export async function validateToken(req) {
-    return await checkToken(req.auth);
+    const token = await checkToken(req.auth);
+    return {userID: token.userID}
 }
 
-export async function logoutUser(req) {
+export async function logoutUser(req, res) {
     const token = await checkToken(req.auth);
-    const result = await database.deleteToken(token.userID);
+    await database.deleteToken(token.userID);
+    res.clearCookie("token");
 }
 
 export async function editUser(req) {
@@ -86,7 +101,7 @@ export async function editUser(req) {
 }
 
 export async function getUser(req) {
-    const token = await checkToken(req.auth);
+    await checkToken(req.auth);
     const user = await findUserByID(req.userID);
     
     if (user == null) throw new ResourceNotFoundError("Couldn't find User!");

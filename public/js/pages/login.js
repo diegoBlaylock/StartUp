@@ -1,5 +1,5 @@
 import {get, Store} from "/js/local-store.js"
-import {login} from "/js/endpoints/api.js"
+import {login, validateToken} from "/js/endpoints/api.js"
 import {LoginRequest} from "/js/endpoints/request.js"
 
 const home_page = "/html/discovery.html";
@@ -19,19 +19,17 @@ function tryLogin(event) {
     return false;       
 }
 
-function onLoad() {
-    const token = get(Store.TOKEN);
-    if(token !== null) {
-        try {
-            validateToken(token);
-            window.location.replace(home_page);
-        } catch {
-            console.log("Token Invalid");
-        }
+async function onLoad() {
+    
+    try {
+        await validateToken(token);
+        window.location.replace(home_page);
+    } catch {
+        console.log("Token Invalid");
     }
 }
 
 
-window.onload = onLoad;
+await onLoad();
 
 document.querySelector("form").addEventListener("submit", (event) => tryLogin(event));
