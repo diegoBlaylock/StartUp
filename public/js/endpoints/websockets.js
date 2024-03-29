@@ -63,13 +63,16 @@ export class MusicSocket {
         const obj = JSON.parse(message);
         switch(obj.type) {
             case ServerMessageType.NOTE:
-                this.#noteEventCallback(this, obj.data);
+                if(this.#noteEventCallback)
+                    this.#noteEventCallback(this, obj.data);
                 break;
             case ServerMessageType.ERROR:
-                this.#errorCallback(this, obj.data);
+                if(this.#errorCallback)
+                    this.#errorCallback(this, obj.data);
                 break;
             default:
-                this.#errorCallback(this, obj);
+                if(this.#errorCallback)
+                    this.#errorCallback(this, obj);
         }
     }
 }
@@ -99,6 +102,7 @@ export class ChatSocket {
 
     addOpenListener(callback) {
         this.#socket.addEventListener("open", (event) => callback(this, event));
+        if (this.#socket.readyState == WebSocket.OPEN ) callback(this);
     }
 
     addCloseListener(callback) {
@@ -120,12 +124,12 @@ export class ChatSocket {
         );
     }
 
-    sendJoinRoomEvent(joinEvent) {
+    sendJoinRoomEvent(roomID) {
         this.#socket.send(
             JSON.stringify(
                 {
                     type: ClientMessageType.JOIN_ROOM,
-                    data: joinEvent 
+                    data: {roomID: roomID} 
                 }
             )
         );
@@ -139,16 +143,20 @@ export class ChatSocket {
         const obj = JSON.parse(message);
         switch(obj.type) {
             case ServerMessageType.MESSAGE:
-                this.#messageCallback(this, obj.data);
+                if(this.#messageCallback)
+                    this.#messageCallback(this, obj.data);
                 break;
             case ServerMessageType.VIEWER_COUNT:
-                this.#viewerCountCallback(this, obj.data);
+                if(this.#viewerCountCallback)
+                    this.#viewerCountCallback(this, obj.data);
                 break;
             case ServerMessageType.ERROR:
-                this.#errorCallback(this, obj.data);
+                if(this.#errorCallback)
+                    this.#errorCallback(this, obj.data);
                 break;
             default:
-                this.#errorCallback(this, obj.data);
+                if(this.#errorCallback)
+                    this.#errorCallback(this, obj.data);
         }
     }
 }

@@ -8,7 +8,7 @@ function forceLogOut() {
     window.location.replace('/')
 }
 
-validateToken(token)
+await validateToken()
 .then((auth)=>{
     if (get(Store.USER) == null) {
         return getUser(new GetUserRequest(auth.userID));

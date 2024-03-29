@@ -65,7 +65,7 @@ function sendMessage() {
             timeStamp: Date.now()
         });
 
-        chatSocket.sendMessage({
+        chatSocket.sendChatEvent({
             message_id: crypto.randomUUID(),
             owner: user,
             content: text,
@@ -99,15 +99,17 @@ async function onLoad() {
             sendMessage();
         }
     });
+
+    chatSocket.addOpenListener(()=>chatSocket.sendJoinRoomEvent(roomID));
 }
 
-await onLoad();
-
 const socket = openWebsocket();
-const chatSocket = ChatSocket(socket);
-const musicSocket = MusicSocket(socket);
+const chatSocket = new ChatSocket(socket);
+const musicSocket = new MusicSocket(socket);
 
 chatSocket.addMessageListener((message) => console.log(message));//onMessageEvent(message));
 chatSocket.addViewerCountListener((newCount) => null);
-chatSocket.onError((error) => console.log(error));
+chatSocket.addErrorListener((error) => console.log(error));
 musicSocket.addNoteEventListener(note => console.log(note));//onNoteEvent(note));
+
+await onLoad();

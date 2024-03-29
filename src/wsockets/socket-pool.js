@@ -1,6 +1,7 @@
+import { getAllRoomIDs } from "../database/database.js";
+
 const idToWS = new Map();
 const roomIDToWSIDs = new Map();
-
 
 export function addRoom(roomID) {
     roomIDToWSIDs.set(roomID, new Set());
@@ -54,3 +55,5 @@ export function broadcast(roomID, data, wsID=null) {
 export function getConnections() {
     return idToWS.values();
 }
+
+(await getAllRoomIDs()).forEach(room=>addRoom(room._id));

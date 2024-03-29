@@ -36,11 +36,14 @@ const SendMessageType = Object.freeze({
 export function setupWebsockets(server) {
   
   server.on('upgrade', async (request, socket, head) => {
-    const token = request.headers.token;
-    await checkToken(token);
-    wss.handleUpgrade(request, socket, head, function done(ws) {
-      wss.emit('connection', ws, request);
-    });
+    try {
+      const token = getToken(request);
+      await checkToken(token);
+      wss.handleUpgrade(request, socket, head, function done(ws) {
+        wss.emit('connection', ws, request);
+      });
+    } catch(e) {
+    }
   });
 }
 
@@ -69,23 +72,23 @@ function onMessage(connection, message) {
     }
     
     function onNoteEvent(data) {
-      broadcast(connect.room, data,) // connection._id);
+      broadcast(connection.room, data,) // connection._id);
     }
 
     function onChatEvent(data) {
-      broadcast(connect.room, data,) // connection._id);
+      broadcast(connection.room, data,) // connection._id);
     }
 
     const json = JSON.parse(message);
     switch(json.type) {
       case ReceiveEventType.JOIN_ROOM:
-        onJoinRoomEvent(json);
+        onJoinRoomEvent(json.data);
         break;
       case ReceiveEventType.MESSAGE:
-        onChatEvent(json);
+        onChatEvent(json.data);
         break;
       case ReceiveEventType.NOTE:
-        onNoteEvent(json);
+        onNoteEvent(json.data);
         break;
     }
   } catch(e) {
@@ -119,3 +122,18 @@ setInterval(() => {
     }
   }
 }, 10000);
+
+
+function getToken(request) {
+  const cookie = request.headers.cookie;
+
+  const pairs = cookie.split(';')
+    .map(
+      pair => pair.split('=')
+        .map(el=>el.trim())
+    )
+    .filter(pair=>pair[0]==="token");
+
+  return (pairs[0] ?? [])[1] ?? null;
+
+}

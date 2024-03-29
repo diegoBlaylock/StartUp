@@ -283,7 +283,7 @@ export async function getUserByID(userID) {
 }
 
 export async function getUserByUsername(username) {
-    const query = { username: username };
+    const query = { username: new RegExp("^"+username+"$", "i")};
     const cursor = userCollection.find(query);
     try {
         if (await cursor.hasNext()) {
@@ -356,6 +356,18 @@ export async function getCredentialByUserID(userID) {
         }
 
         return null;
+    } finally {
+        cursor.close();
+    }
+}
+
+export async function getAllRoomIDs() {
+    let cursor = roomCollection
+        .find()
+        .project({_id: 1});
+
+    try {
+        return await cursor.toArray();   
     } finally {
         cursor.close();
     }
