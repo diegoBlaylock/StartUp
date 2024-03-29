@@ -1,9 +1,15 @@
-const MessageType = Object.freeze({
+const ServerMessageType = Object.freeze({
     ERROR: 0,
-    NOTE_EVENT: 1,
-    MESSAGE_EVENT: 2,
-    VIEWER_COUNT_EVENT: 3    
+    NOTE: 1,
+    MESSAGE: 2,
+    VIEWER_COUNT: 3    
 });
+
+const ClientMessageType = Object.freeze({ 
+    JOIN_ROOM: 0,
+    NOTE: 1,
+    MESSAGE: 2
+  });
 
 
 /**
@@ -39,7 +45,14 @@ export class MusicSocket {
     }
 
     sendNoteEvent(noteEvent) {
-        this.#socket.send(JSON.stringify(noteEvent));
+        this.#socket.send(
+            JSON.stringify(
+                {
+                    type: ClientMessageType.NOTE,
+                    data: noteEvent 
+                }
+            )
+        );
     }
 
     close(code, reason) {
@@ -49,10 +62,10 @@ export class MusicSocket {
     #interceptMessage(message) {
         const obj = JSON.parse(message);
         switch(obj.type) {
-            case MessageType.NOTE_EVENT:
+            case ServerMessageType.NOTE:
                 this.#noteEventCallback(this, obj.data);
                 break;
-            case MessageType.ERROR:
+            case ServerMessageType.ERROR:
                 this.#errorCallback(this, obj.data);
                 break;
             default:
@@ -96,8 +109,26 @@ export class ChatSocket {
         this.#errorCallback = callback;
     }
 
-    sendNoteEvent(noteEvent) {
-        this.#socket.send(JSON.stringify(noteEvent));
+    sendChatEvent(chatEvent) {
+        this.#socket.send(
+            JSON.stringify(
+                {
+                    type: ClientMessageType.MESSAGE,
+                    data: chatEvent 
+                }
+            )
+        );
+    }
+
+    sendJoinRoomEvent(joinEvent) {
+        this.#socket.send(
+            JSON.stringify(
+                {
+                    type: ClientMessageType.JOIN_ROOM,
+                    data: joinEvent 
+                }
+            )
+        );
     }
 
     close(code, reason) {
@@ -107,13 +138,13 @@ export class ChatSocket {
     #interceptMessage(message) {
         const obj = JSON.parse(message);
         switch(obj.type) {
-            case MessageType.MESSAGE_EVENT:
+            case ServerMessageType.MESSAGE:
                 this.#messageCallback(this, obj.data);
                 break;
-            case MessageType.VIEWER_COUNT_EVENT:
+            case ServerMessageType.VIEWER_COUNT:
                 this.#viewerCountCallback(this, obj.data);
                 break;
-            case MessageType.ERROR:
+            case ServerMessageType.ERROR:
                 this.#errorCallback(this, obj.data);
                 break;
             default:

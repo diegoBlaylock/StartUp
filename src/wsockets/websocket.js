@@ -20,10 +20,17 @@ import { addWS, broadcast, connectWSToRoom, removeWS } from './socket-pool';
 
 const wss = new WebSocketServer({ noServer: true });
 
-const EventType = Object.freeze({ 
-  JOIN_ROOM: "join_room",
-  NOTE: "note",
-  MESSAGE: "message"
+const ReceiveEventType = Object.freeze({ 
+  JOIN_ROOM: 0,
+  NOTE: 1,
+  MESSAGE: 2
+});
+
+const SendMessageType = Object.freeze({
+  ERROR: 0,
+  NOTE: 1,
+  MESSAGE: 2,
+  VIEWER_COUNT: 3    
 });
 
 export function setupWebsockets(server) {
@@ -62,22 +69,22 @@ function onMessage(connection, message) {
   }
   
   function onNoteEvent(data) {
-    broadcast(connect.room, data, connection._id);
+    broadcast(connect.room, data,) // connection._id);
   }
 
   function onChatEvent(data) {
-    broadcast(connect.room, data, connection._id);
+    broadcast(connect.room, data,) // connection._id);
   }
 
   const json = JSON.parse(message);
   switch(json.type) {
-    case EventType.JOIN_ROOM:
+    case ReceiveEventType.JOIN_ROOM:
       onJoinRoomEvent(json);
       break;
-    case EventType.MESSAGE:
+    case ReceiveEventType.MESSAGE:
       onChatEvent(json);
       break;
-    case EventType.NOTE:
+    case ReceiveEventType.NOTE:
       onNoteEvent(json);
       break;
   }
