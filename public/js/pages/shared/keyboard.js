@@ -37,26 +37,17 @@ export function noteOff(note) {
 
 function setupInteraction(el, noteCallback) {
     const note = getNote(el);
-    
-    el.addEventListener("mousedown", ()=>{
-        noteCallback(new NoteEvent(note, EventType.NOTE_ON));
-    });
-    el.addEventListener("touchstart", ()=>{
-        noteCallback(new NoteEvent(note, EventType.NOTE_ON));
-    });
+    const playNote = ()=>noteCallback(new NoteEvent(note, EventType.NOTE_ON));
+    const stopNote = ()=>noteCallback(new NoteEvent(note, EventType.NOTE_OFF));
+
+    el.addEventListener("mousedown", playNote);
+    el.addEventListener("touchstart", playNote);
     el.addEventListener("mouseenter", (ev)=>{
-        if(ev.buttons === 1 || ev.buttons === 3)
-            noteCallback(new NoteEvent(note, EventType.NOTE_ON));
+        if(ev.buttons === 1 || ev.buttons === 3) playNote();
     });
-    el.addEventListener("mouseleave", ()=>{
-        noteCallback(new NoteEvent(note, EventType.NOTE_OFF));
-    });
-    el.addEventListener("mouseup", ()=>{
-        noteCallback(new NoteEvent(note, EventType.NOTE_OFF));
-    });
-    el.addEventListener("touchend", ()=>{
-        noteCallback(new NoteEvent(note, EventType.NOTE_OFF));
-    });
+    el.addEventListener("mouseleave", stopNote);
+    el.addEventListener("mouseup", stopNote);
+    el.addEventListener("touchend", stopNote);
 }
 
 export function setupKeyboard(playable=false, noteCallback) {

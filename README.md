@@ -103,3 +103,10 @@ For this deliverable I built out the structure of my application using HTML.
 - **existing user** - Will be able to fetch data from previous users. In fact most tables relate to each other through indices so everytime a room is fetched, it uses an id to fetch the owner too. Can modify existing user data using a profile picutre or biography that is shown when hovering over a user on the discovery page.
 - **Use MongoDB to store credentials** - Credentials hold only a hashed password and a userid. They are stored seperatly from userdata, but still using MongoDB
 - **Restricts functionality** - Any attempt to login without a valid token will force the user to the signin screen. Even if the frontend were modified, the backend will refuse to serve up content returning a Unauthorized status code.
+
+## WebSocket deliverable
+
+- **Backend listens for WebSocket connection** - Done, the backend has various handler functions that are called based on a type passed by the websocket.
+- **Frontend makes WebSocket connection** - Done, the frontend uses two different wrappers to handle and send data related to chat or music. 
+- **Data sent over WebSocket connection** - Data passed is either a chat message, a music note, a join room request, or an update for the viewer count.
+- **WebSocket data displayed** - Messages are updated for all clients, the viewer count updates for each person, and notes will be played and highlighted for all listeners. A caveat is that the web audio api forces users to interact with a webpage before it will play audio so try clicking the page.

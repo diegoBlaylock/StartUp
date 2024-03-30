@@ -1,9 +1,15 @@
-const MessageType = Object.freeze({
+const ServerMessageType = Object.freeze({
     ERROR: 0,
-    NOTE_EVENT: 1,
-    MESSAGE_EVENT: 2,
-    VIEWER_COUNT_EVENT: 3    
+    NOTE: 1,
+    MESSAGE: 2,
+    VIEWER_COUNT: 3    
 });
+
+const ClientMessageType = Object.freeze({ 
+    JOIN_ROOM: 0,
+    NOTE: 1,
+    MESSAGE: 2
+  });
 
 
 /**
@@ -39,7 +45,14 @@ export class MusicSocket {
     }
 
     sendNoteEvent(noteEvent) {
-        this.#socket.send(JSON.stringify(noteEvent));
+        this.#socket.send(
+            JSON.stringify(
+                {
+                    type: ClientMessageType.NOTE,
+                    data: noteEvent 
+                }
+            )
+        );
     }
 
     close(code, reason) {
@@ -49,14 +62,17 @@ export class MusicSocket {
     #interceptMessage(message) {
         const obj = JSON.parse(message);
         switch(obj.type) {
-            case MessageType.NOTE_EVENT:
-                this.#noteEventCallback(this, obj.data);
+            case ServerMessageType.NOTE:
+                if(this.#noteEventCallback)
+                    this.#noteEventCallback(this, obj.data);
                 break;
-            case MessageType.ERROR:
-                this.#errorCallback(this, obj.data);
+            case ServerMessageType.ERROR:
+                if(this.#errorCallback)
+                    this.#errorCallback(this, obj.data);
                 break;
             default:
-                this.#errorCallback(this, obj);
+                if(this.#errorCallback)
+                    this.#errorCallback(this, obj);
         }
     }
 }
@@ -86,6 +102,7 @@ export class ChatSocket {
 
     addOpenListener(callback) {
         this.#socket.addEventListener("open", (event) => callback(this, event));
+        if (this.#socket.readyState == WebSocket.OPEN ) callback(this);
     }
 
     addCloseListener(callback) {
@@ -96,8 +113,26 @@ export class ChatSocket {
         this.#errorCallback = callback;
     }
 
-    sendNoteEvent(noteEvent) {
-        this.#socket.send(JSON.stringify(noteEvent));
+    sendChatEvent(chatEvent) {
+        this.#socket.send(
+            JSON.stringify(
+                {
+                    type: ClientMessageType.MESSAGE,
+                    data: chatEvent 
+                }
+            )
+        );
+    }
+
+    sendJoinRoomEvent(roomID) {
+        this.#socket.send(
+            JSON.stringify(
+                {
+                    type: ClientMessageType.JOIN_ROOM,
+                    data: {roomID: roomID} 
+                }
+            )
+        );
     }
 
     close(code, reason) {
@@ -107,17 +142,21 @@ export class ChatSocket {
     #interceptMessage(message) {
         const obj = JSON.parse(message);
         switch(obj.type) {
-            case MessageType.MESSAGE_EVENT:
-                this.#messageCallback(this, obj.data);
+            case ServerMessageType.MESSAGE:
+                if(this.#messageCallback)
+                    this.#messageCallback(this, obj.data);
                 break;
-            case MessageType.VIEWER_COUNT_EVENT:
-                this.#viewerCountCallback(this, obj.data);
+            case ServerMessageType.VIEWER_COUNT:
+                if(this.#viewerCountCallback)
+                    this.#viewerCountCallback(this, obj.data);
                 break;
-            case MessageType.ERROR:
-                this.#errorCallback(this, obj.data);
+            case ServerMessageType.ERROR:
+                if(this.#errorCallback)
+                    this.#errorCallback(this, obj.data);
                 break;
             default:
-                this.#errorCallback(this, obj);
+                if(this.#errorCallback)
+                    this.#errorCallback(this, obj.data);
         }
     }
 }

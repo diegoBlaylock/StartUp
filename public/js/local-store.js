@@ -1,20 +1,19 @@
 export const Store = Object.freeze({
-    TOKEN: "token",
     USER: "user"
 });
 
 
 
 export function get(name) {
-    const item = localStorage.getItem(name);
+    const item = sessionStorage.getItem(name);
     if(item == null) return item;
     return JSON.parse(item);
 }
 
 export function save(name, obj) {
-    localStorage.setItem(name, JSON.stringify(obj));
+    sessionStorage.setItem(name, JSON.stringify(obj));
 }
 
 export function remove(name) {
-    localStorage.removeItem(name);
+    sessionStorage.removeItem(name);
 }

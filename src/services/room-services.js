@@ -2,6 +2,7 @@ import { Page, Room } from "../models/models.js";
 import { BadParameterError, ResourceNotFoundError } from "./errors.js";
 import { checkToken, filterUserObj, findRoomByID, inflateWithOwner } from "./service-utils.js";
 import * as database from '../database/database.js'
+import { application } from "express";
 
 
 export async function getRoomInfo(req) {
@@ -42,18 +43,11 @@ export async function dicoverRooms(req) {
         throw new BadParameterError("Couldn't understand sortType " + sortType);
     }
     const pageObj = await database.getPage(page, sortType, filterType, filterVal);
-
-    // pageObj.rooms = pageObj.rooms.map((room)=>{
-    //     room.owner = filterUserObj(room.owner);
-    //     return room;
-    // });
-
     return pageObj;
 }
 
 export async function getChatHistory(req) {
     await checkToken(req.auth);
-
     const messageTable = await database.getMessageThreadByRoomID(req.threadID);
     return messageTable;
 }

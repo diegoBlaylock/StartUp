@@ -119,6 +119,7 @@ export async function getPage(page, sortType, filterType, filterVal) {
                 pipeline: [
                     {
                         $project: {
+                            _id: 0,
                             username: 1,
                             profile: 1,
                             description: 1
@@ -129,7 +130,6 @@ export async function getPage(page, sortType, filterType, filterVal) {
         },
         {
             $project: {
-                ownerID: 1,
                 owner: { $arrayElemAt: ["$owner", 0]},
                 title: 1,
                 description: 1,
@@ -138,7 +138,6 @@ export async function getPage(page, sortType, filterType, filterVal) {
         },
         {
             $project: {
-                ownerID: 1,
                 owner: 1,
                 title: 1,
                 description: 1,
@@ -156,7 +155,6 @@ export async function getPage(page, sortType, filterType, filterVal) {
         },
         {
             $project: {
-                ownerID: 1,
                 owner: 1,
                 title: 1,
                 description: 1,
@@ -207,6 +205,7 @@ export async function getMessageThreadByRoomID(roomID) {
                 pipeline: [
                     {
                         $project: {
+                            _id: 0,
                             username: 1,
                             profile: 1,
                             description: 1
@@ -214,6 +213,14 @@ export async function getMessageThreadByRoomID(roomID) {
                     }
                 ]
             }    
+        },
+        {
+            $project: {
+                owner: { $arrayElemAt: ["$owner", 0]},
+                content: 1,
+                threadID: 1,
+                timeStamp: 1,
+            }  
         }
     ])
         .sort({timeStamp: 1});
@@ -223,6 +230,11 @@ export async function getMessageThreadByRoomID(roomID) {
     } finally {
         cursor.close();
     }
+}
+
+export async function addMessage(message) {
+    const result = await messageCollection.insertOne(message);
+    return result;
 }
 
 export async function addToken(token) {
@@ -284,7 +296,7 @@ export async function getUserByID(userID) {
 }
 
 export async function getUserByUsername(username) {
-    const query = { username: username };
+    const query = { username: new RegExp("^"+username+"$", "i")};
     const cursor = userCollection.find(query);
     try {
         if (await cursor.hasNext()) {
@@ -357,6 +369,18 @@ export async function getCredentialByUserID(userID) {
         }
 
         return null;
+    } finally {
+        cursor.close();
+    }
+}
+
+export async function getAllRoomIDs() {
+    let cursor = roomCollection
+        .find()
+        .project({_id: 1});
+
+    try {
+        return await cursor.toArray();   
     } finally {
         cursor.close();
     }

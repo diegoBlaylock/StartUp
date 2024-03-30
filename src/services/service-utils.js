@@ -22,7 +22,7 @@ export async function findUserByID(userID) {
 
 export function filterUserObj(user) {
     const filtered = {...user}
-    filtered.email = undefined;
+    delete filtered.email;
     return filtered;
 }
 

@@ -64,5 +64,5 @@ export function parseChatHistory(req) {
 
 
 function getAuthToken(req) {
-    return req.get("token");
+    return req.cookies.token;
 }
