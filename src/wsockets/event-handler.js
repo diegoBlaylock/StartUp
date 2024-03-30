@@ -1,7 +1,7 @@
 import { addMessage } from "../database/database.js";
 import { Message } from "../models/models.js";
 import { UnauthorizedError, NotInRoomError } from "../services/errors.js";
-import { findToken, inflateWithOwner } from "../services/service-utils.js";
+import { findRoomByID, findToken, inflateWithOwner } from "../services/service-utils.js";
 import { isRoomIDActive, connectWSToRoom, broadcast, getRoomCount } from "./socket-pool.js";
 
 export const ReceiveEventType = Object.freeze({
@@ -19,13 +19,14 @@ export const SendMessageType = Object.freeze({
 
 async function onJoinRoomEvent(connection, data) {
     if(data.roomID == null || !isRoomIDActive(data.roomID)) throw new NotInRoomError();
-    connectWSToRoom(connection._id, data.roomID);
+    await connectWSToRoom(connection._id, data.roomID);
     const count = getRoomCount(data.roomID);
     broadcast(connection.room, buildResponse(SendMessageType.VIEWER_COUNT, {count: count}));
 }
   
 async function onNoteEvent(connection, data) {
-    broadcast(connection.room, buildResponse(SendMessageType.NOTE, data)); // connection._id);
+    if(connection.player && data.note > 20 && data.note < 90)
+        broadcast(connection.room, buildResponse(SendMessageType.NOTE, data), connection._id);
 }
 
 async function onChatEvent(connection, data) {

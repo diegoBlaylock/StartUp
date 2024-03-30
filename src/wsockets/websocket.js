@@ -1,6 +1,6 @@
 import { WebSocketServer } from 'ws';
 import { checkToken, findToken } from '../services/service-utils.js';
-import { addWS, broadcast, connectWSToRoom, getConnections, getRoomCount, removeWS } from './socket-pool.js';
+import { addWS, broadcast, getConnections, getRoomCount, removeWS } from './socket-pool.js';
 import EventHandler, { ReceiveEventType, SendMessageType } from './event-handler.js';
 
 const wss = new WebSocketServer({ noServer: true });
@@ -20,7 +20,7 @@ export function setupWebsockets(server) {
   wss.on("connection", async (ws, request)=>{
     const auth = getToken(request);
     const token = await findToken(auth);    
-    const connection = {token: token, alive: true, ws: ws, room: null}
+    const connection = {token: token, alive: true, ws: ws, room: null, player: false}
     addWS(connection);
     ws.on('message', async (data) => onMessage(connection, data));
     ws.on('close', () => onClose(connection));

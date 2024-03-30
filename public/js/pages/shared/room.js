@@ -32,7 +32,7 @@ export async function setupPage() {
     onLoad(
         message=>onMessageEvent(message), 
         count=>onViewCountEvent(count), 
-        note=>console.log(note),
+        note=>onNoteEvent(note),
         error=>console.log(error)
     );
 
