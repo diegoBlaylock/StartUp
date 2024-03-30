@@ -13,9 +13,9 @@ function tryLogin(event) {
     login(
         new LoginRequest(username, password)
     )
-    .then(()=>window.location.replace(home_page))
-    .catch((err)=>alert(err.message))
-    .finally(()=>(event.target.disabled = false)); 
+        .then(()=>window.location.replace(home_page))
+        .catch((err)=>alert(err.message))
+        .finally(()=>(event.target.disabled = false)); 
     return false;       
 }
 
