@@ -2,11 +2,15 @@ import {getRoomStats} from "/js/endpoints/api.js"
 
 function getStringTime(timeStamp) {
     const date = new Date(timeStamp);
-    return date.toLocaleTimeString();
-}
+    const diff_days = new Date().getDate() - date;
+    const diff_months = new Date().getMonth() - date.getMonth();
+    const diff_years = new Date().getFullYear() - date.getFullYear();
 
-function bsViewerCount() {
-    return Math.ceil(Math.random()*50);
+    if (diff_days === 0 && diff_months === 0 && diff_years === 0) {
+        return date.toLocaleTimeString();
+    } else {
+        return date.toLocaleDateString();
+    }
 }
 
 async function onLoad() {
@@ -26,9 +30,6 @@ async function onLoad() {
 
     const label = document.querySelector("#player_profile label");
     label.textContent = room.owner.username;
-
-    const count = document.getElementById("view_count");
-    count.textContent = bsViewerCount().toString();
 
     const date = document.getElementById("time_stamp");
     date.textContent = getStringTime(room.timeStamp);

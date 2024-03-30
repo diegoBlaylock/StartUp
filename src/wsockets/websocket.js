@@ -1,6 +1,6 @@
 import { WebSocketServer } from 'ws';
 import { checkToken, findToken } from '../services/service-utils.js';
-import { addWS, broadcast, connectWSToRoom, getConnections, removeWS } from './socket-pool.js';
+import { addWS, broadcast, connectWSToRoom, getConnections, getRoomCount, removeWS } from './socket-pool.js';
 import EventHandler, { ReceiveEventType, SendMessageType } from './event-handler.js';
 
 const wss = new WebSocketServer({ noServer: true });
@@ -16,72 +16,63 @@ export function setupWebsockets(server) {
     } catch(e) {
     }
   });
+  
+  wss.on("connection", async (ws, request)=>{
+    const auth = getToken(request);
+    const token = await findToken(auth);    
+    const connection = {token: token, alive: true, ws: ws, room: null}
+    addWS(connection);
+    ws.on('message', async (data) => onMessage(connection, data));
+    ws.on('close', () => onClose(connection));
+    ws.on('pong', () => onPong(connection));
+  });
+
+  setInterval(() => {
+    for(const c of getConnections()) {
+      if (!c.alive) {
+        c.ws.terminate();
+      } else {
+        c.alive = false;
+        c.ws.ping();
+      }
+    }
+  }, 10000);
+
 }
 
-wss.on("connection", async (ws, request)=>{
-  const token = await findToken(request.headers.token);
-  
-  const connection = {
-    token: token,
-    alive: true,
-    ws: ws,
-    room: null
-  }
-  
-  addWS(connection);
-
-  ws.on('message', (data) => onMessage(connection, data));
-  ws.on('close', () => onClose(connection));
-  ws.on('pong', () => onPong(connection));
-
-});
-
-function onMessage(connection, message) {
+async function onMessage(connection, message) {
   try {
     const json = JSON.parse(message);
     switch(json.type) {
       case ReceiveEventType.JOIN_ROOM:
-        EventHandler.onJoinRoomEvent(connection, json.data);
+        await EventHandler.onJoinRoomEvent(connection, json.data);
         break;
       case ReceiveEventType.MESSAGE:
-        EventHandler.onChatEvent(connection, json.data);
+        await EventHandler.onChatEvent(connection, json.data);
         break;
       case ReceiveEventType.NOTE:
-        EventHandler.onNoteEvent(connection, json.data);
+        await EventHandler.onNoteEvent(connection, json.data);
         break;
     }
   } catch(e) {
-    const data = {
-      status: 500,
-      message: "Nope"
-    }
+    const data = {status: 500, message: "Nope"}
 
-    connection.ws?.send(JSON.stringify({
-      type: SendMessageType.ERROR,
-      data: data
-    }))
+    connection.ws?.send(
+      JSON.stringify({type: SendMessageType.ERROR, data: data})
+    )
   }
 }
 
 function onClose(connection) {
+  const room = connection.room;
   removeWS(connection._id);
+  const count = getRoomCount(room); 
+  broadcast(connection.room, {type: SendMessageType.VIEWER_COUNT, data: {count: count}});
 }
 
 function onPong(connection) {
   connection.alive = true;
 }
-
-setInterval(() => {
-  for(const c of getConnections()) {
-    if (!c.alive) {
-      c.ws.terminate();
-    } else {
-      c.alive = false;
-      c.ws.ping();
-    }
-  }
-}, 10000);
-
 
 function getToken(request) {
   const cookie = request.headers.cookie;

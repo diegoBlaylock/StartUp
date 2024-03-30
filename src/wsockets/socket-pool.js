@@ -56,4 +56,12 @@ export function getConnections() {
     return idToWS.values();
 }
 
+export function isRoomIDActive(roomID) {
+    return roomIDToWSIDs.has(roomID);
+}
+
+export function getRoomCount(roomID) {
+    return roomIDToWSIDs.get(roomID)?.size ?? 0;
+}
+
 (await getAllRoomIDs()).forEach(room=>addRoom(room._id));

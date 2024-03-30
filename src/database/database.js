@@ -213,6 +213,14 @@ export async function getMessageThreadByRoomID(roomID) {
                     }
                 ]
             }    
+        },
+        {
+            $project: {
+                owner: { $arrayElemAt: ["$owner", 0]},
+                content: 1,
+                threadID: 1,
+                timeStamp: 1,
+            }  
         }
     ])
         .sort({timeStamp: 1});
@@ -222,6 +230,11 @@ export async function getMessageThreadByRoomID(roomID) {
     } finally {
         cursor.close();
     }
+}
+
+export async function addMessage(message) {
+    const result = await messageCollection.insertOne(message);
+    return result;
 }
 
 export async function addToken(token) {
