@@ -1,11 +1,12 @@
 import { WebSocketServer } from 'ws';
 import { checkToken, findToken } from '../services/service-utils.js';
-import { addWS, broadcast, getConnections, getRoomCount, removeWS } from './socket-pool.js';
+import { addRoom, addWS, broadcast, getConnections, getRoomCount, removeWS } from './socket-pool.js';
 import EventHandler, { ReceiveEventType, SendMessageType } from './event-handler.js';
+import { getAllRoomIDs } from '../database/database.js';
 
 const wss = new WebSocketServer({ noServer: true });
 
-export function setupWebsockets(server) {
+export async function setupWebsockets(server) {
   server.on('upgrade', async (request, socket, head) => {
     try {
       const token = getToken(request);
@@ -38,6 +39,7 @@ export function setupWebsockets(server) {
     }
   }, 10000);
 
+  (await getAllRoomIDs()).forEach(room=>addRoom(room._id));
 }
 
 async function onMessage(connection, message) {

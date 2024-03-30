@@ -36,7 +36,7 @@ setupExpress();
 setupRoutes();
 
 const server = app.listen(4000);
-setupWebsockets(server);
+await setupWebsockets(server);
 
 
 function setupExpress() {

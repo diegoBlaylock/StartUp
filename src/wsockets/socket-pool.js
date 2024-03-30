@@ -1,4 +1,3 @@
-import { getAllRoomIDs } from "../database/database.js";
 import { findRoomByID } from "../services/service-utils.js";
 
 const idToWS = new Map();
@@ -67,5 +66,3 @@ export function isRoomIDActive(roomID) {
 export function getRoomCount(roomID) {
     return roomIDToWSIDs.get(roomID)?.size ?? 0;
 }
-
-(await getAllRoomIDs()).forEach(room=>addRoom(room._id));
