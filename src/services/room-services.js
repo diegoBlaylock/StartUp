@@ -1,8 +1,8 @@
 import { Page, Room } from "../models/models.js";
 import { BadParameterError, ResourceNotFoundError } from "./errors.js";
-import { checkToken, filterUserObj, findRoomByID, inflateWithOwner } from "./service-utils.js";
+import { checkToken, findRoomByID, inflateWithOwner } from "./service-utils.js";
 import * as database from '../database/database.js'
-import { application } from "express";
+import { addRoom } from "../wsockets/socket-pool.js";
 
 
 export async function getRoomInfo(req) {
@@ -22,6 +22,7 @@ export async function createRoom(req) {
     );
     
     await database.addRoom(room);
+    addRoom(room._id);
 
     return room._id;
 }
