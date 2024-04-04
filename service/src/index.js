@@ -51,7 +51,6 @@ function setupRoutes() {
     const dlt = app.delete.bind(app);
     const patch = app.patch.bind(app);
 
-    app.get('/', (_req, res)=>res.sendFile("public/html/discovery.html"));
     pluginService(post, '/users/create/', parseCreateUser, createUser, 201);
     pluginService(post, '/users/login/', parseLogin, loginUser, 201);
     pluginService(dlt, '/users/logout/', parseLogout, logoutUser, 204);
