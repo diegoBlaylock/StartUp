@@ -1,5 +1,5 @@
-import {Store, save, get} from "/js/local-store.js"
-import {Filter, Search, GetUserRequest} from "/js/endpoints/request.js";
+import {Store, save, get} from "../utils/local-store.js"
+import {Filter, Search, GetUserRequest} from "./request.js";
 
 export async function login(credentials) {
 
