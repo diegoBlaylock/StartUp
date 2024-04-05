@@ -3,8 +3,8 @@ import { Header, HeaderActionType } from '../frame/header'
 import { Footer } from '../frame/footer'
 import './discover.css'
 
-import {Search, Filter, RoomRequest} from "/js/endpoints/request.js"
-import {discoverRooms} from "/js/endpoints/api.js"
+import {Search, Filter, RoomRequest} from "../endpoints/request.js"
+import {discoverRooms} from "../endpoints/api.js"
 
 export function DiscoverPage () {
     const [rooms, setRooms] = useState();
@@ -41,9 +41,9 @@ export function DiscoverPage () {
             </nav>
             <main>
                 <div id="roomspage">
-                    {rooms.rooms.map(room=><RoomCard room={room}/>)}
+                    {rooms?.rooms?.map((room, i)=><RoomCard room={room} key={i}/>)}
                 </div>
-                <PageBar num={rooms.num} total={rooms.total} />
+                <PageBar num={rooms?.num??0} total={rooms?.total??0} />
             </main>
             <div id="search_bar">
                 <div id="search">
@@ -54,14 +54,14 @@ export function DiscoverPage () {
                         <option>user</option>
                         <option>room</option>
                     </select>
-                    <input id="search_param" type="text" placeholder="Type and press Enter" autocomplete="off" onKeyUp={(event)=> {
+                    <input id="search_param" type="text" placeholder="Type and press Enter" autoComplete="off" onKeyUp={(event)=> {
                         if(event.key === "Enter") loadRooms();    
                     }}/>
                 </div>    
                 <div id="filter">
                     <label>Filter by:</label>
                     <select id="filter_type" title="Choose how to Filter." onChange={()=> loadRooms()}>
-                        <option selected>time playing</option>
+                        <option defaultValue={true}>time playing</option>
                         <option>popularity</option>
                     </select>
                 </div>    
@@ -74,7 +74,7 @@ export function DiscoverPage () {
 function RoomCard({room}) {
     const url = new URL("/room",window.location.origin);
     url.searchParams.append("roomID", room._id);
-    const path = card.href = url.pathname;   
+    const path = url.pathname;   
     
     return (
         <a href={path} className='room-desc' data-id={room._id}>
@@ -99,6 +99,7 @@ function PageBar({num, total}) {
     for(let i = range[0]; i <= range[1]; i++) {
         links.push(
             <a 
+                key={i}
                 data-page={i.toString()} 
                 className={i-1 === num? 'selected-page disabled':null}
                 onClick={i-1 !== num? changePage: null}
