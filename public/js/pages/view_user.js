@@ -49,20 +49,11 @@ function cancel_url() {
     document.getElementById("popup_backdrop").style.display = "none";
 }
 
-async function isImgUrl(url) {
-    // TODO: Cors prevents me from doing this here, but a serverside request could work
-    return true;
-}
-
 function onUrlChange() {
     const url = document.getElementById("image_url").value;
     
     const preview = document.querySelector("#preview_url img");
-    if(true) {
-        preview.src = url;
-    } else if(preview.src !== current_url) {
-        preview.src = current_url;
-    }
+    preview.src = url;
 }
 
 function onUrlSave(event) {

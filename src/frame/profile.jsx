@@ -25,7 +25,7 @@ export default function Profile() {
             <img className="profile-pic my-profile" src={user?.profile ?? "/resources/default_profile.png"} draggable="false"/>
             <div className="dropdown-menu">
                 <label>{user?.username}</label>
-                <NavLink to="/view/user">View/Edit Profile</NavLink>
+                <NavLink to="/my/profile">View/Edit Profile</NavLink>
                 <NavLink to="discover">Discover Rooms</NavLink>
                 <NavLink to="/create/room">Create Room</NavLink>
                 <NavLink id="sign_out" to="/login" onClick={(ev)=>trySignOut(ev)}>Sign Out</NavLink>

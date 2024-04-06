@@ -1,5 +1,5 @@
 /* NAVIGATION */
-nav {
+#discover_nav {
     align-content: center;
     background-color: rgb(197, 197, 197);
     margin: 0;
@@ -7,21 +7,21 @@ nav {
     user-select: none;
 }
 
-nav menu {
+#discover_nav menu {
     display: flex;
     flex-direction: row;
     width: 100%;
     height: 100%;
 }
 
-nav menu li {
+#discover_nav menu li {
     flex:1;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-nav menu a {
+#discover_nav menu a {
     flex:1;
     display: flex;
     justify-content: center;
@@ -35,24 +35,24 @@ nav menu a {
 
 }
 
-nav menu li:hover {
+#discover_nav menu li:hover {
     background-color: #909090;
 
 }
 
-nav li {
+#discover_nav li {
     list-style: none;
 }
-nav .selected {
+#discover_nav .selected {
     cursor: default;
     background-color: #a0a0a0;
 }
-nav .selected:hover {
+#discover_nav .selected:hover {
     cursor: default;
     background-color: #a0a0a0;
 }
 
-nav .selected::before {
+#discover_nav .selected::before {
     content: "•";
     font-size: 2em;
     margin-right: 0.5em;
@@ -206,15 +206,15 @@ nav .selected::before {
 }
 
 @media (width < 600px), (height < 400px) {
-    nav .selected::before {
+    #discover_nav .selected::before {
         content: none;
     }
 
-    nav {
+    #discover_nav {
         height: 36px;
     }
 
-    nav menu a {
+    #discover_nav menu a {
         font-size: 1.2em;
     }
 }

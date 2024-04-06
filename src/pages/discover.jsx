@@ -29,7 +29,7 @@ export function DiscoverPage () {
     return (
         <div id="body">
             <Header headerType={HeaderActionType.PROFILE}/>
-            <nav>
+            <nav id="discover_nav">
                 <menu>
                     <li><NavLink className="selected">Discover Rooms</NavLink></li>
                     <li><NavLink to="/create/room">Create a Room</NavLink></li>

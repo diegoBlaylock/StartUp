@@ -30,7 +30,7 @@ export function CreateRoomPage() {
     return (
         <div id="body">
             <Header headerType={HeaderActionType.PROFILE}/>
-            <nav>
+            <nav id="create_room_nav">
                 <menu>
                     <li><NavLink to="/discover">Discover Rooms</NavLink></li>
                     <li><NavLink className="selected">Create a Room</NavLink></li>
