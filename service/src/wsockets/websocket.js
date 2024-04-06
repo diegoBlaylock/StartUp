@@ -10,22 +10,25 @@ export async function setupWebsockets(server) {
   server.on('upgrade', async (request, socket, head) => {
     try {
       const token = getToken(request);
-      await checkToken(token);
+      const fullToken = await checkToken(token);
       wss.handleUpgrade(request, socket, head, function done(ws) {
+        setupConnection(ws, fullToken);
         wss.emit('connection', ws, request);
       });
     } catch(e) {
     }
   });
   
-  wss.on("connection", async (ws, request)=>{
-    const auth = getToken(request);
-    const token = await findToken(auth);    
+  function setupConnection(ws, token) {
     const connection = {token: token, alive: true, ws: ws, room: null, player: false}
     addWS(connection);
     ws.on('message', async (data) => onMessage(connection, data));
     ws.on('close', () => onClose(connection));
     ws.on('pong', () => onPong(connection));
+  }
+
+  wss.on("connection", async (ws, request)=>{
+    
   });
 
   setInterval(() => {

@@ -56,7 +56,9 @@ export class MusicSocket {
     }
 
     close(code, reason) {
-        this.#socket.close(code, reason);
+        if (this.#socket.readyState !== WebSocket.CLOSED) {
+            this.#socket.close(code, reason);
+        }
     }
 
     #interceptMessage(message) {
@@ -65,6 +67,9 @@ export class MusicSocket {
             case ServerMessageType.NOTE:
                 if(this.#noteEventCallback)
                     this.#noteEventCallback(this, obj.data);
+                break;
+            case ServerMessageType.MESSAGE:
+            case ServerMessageType.VIEWER_COUNT:
                 break;
             case ServerMessageType.ERROR:
                 if(this.#errorCallback)
@@ -124,7 +129,7 @@ export class ChatSocket {
         );
     }
 
-    sendJoinRoomEvent(roomID) {
+    async sendJoinRoomEvent(roomID) {
         this.#socket.send(
             JSON.stringify(
                 {
@@ -136,7 +141,9 @@ export class ChatSocket {
     }
 
     close(code, reason) {
-        this.#socket.close(code, reason);
+        if (this.#socket.readyState !== WebSocket.CLOSED) {
+            this.#socket.close(code, reason);
+        }
     }
 
     #interceptMessage(message) {
@@ -149,6 +156,8 @@ export class ChatSocket {
             case ServerMessageType.VIEWER_COUNT:
                 if(this.#viewerCountCallback)
                     this.#viewerCountCallback(this, obj.data);
+                break;
+            case ServerMessageType.NOTE:
                 break;
             case ServerMessageType.ERROR:
                 if(this.#errorCallback)

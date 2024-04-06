@@ -31,9 +31,9 @@ export function LoginPage () {
     useEffect(()=>{
         async function setup() {
             try {
-                await validateToken(token);
-                window.location.replace(home_page);
-            } catch {
+                await validateToken();
+                navigate('/discover');
+            } catch(e) {
                 console.log("Token Invalid");
             }
             setLoad(true);

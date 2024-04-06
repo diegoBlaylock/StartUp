@@ -6,10 +6,12 @@ import { addRoom } from "../wsockets/socket-pool.js";
 
 
 export async function getRoomInfo(req) {
-    await checkToken(req.auth);
+    const token = await checkToken(req.auth);
     const room = await findRoomByID(req.roomID);
     if(room == null) throw new ResourceNotFoundError("Couldn't find room!")
-    return await inflateWithOwner(room);
+    const inflated = await inflateWithOwner(room);
+    if (inflated.owner._id !== token.userID) delete inflated.owner._id;
+    return inflated;
 }
 
 export async function createRoom(req) {
