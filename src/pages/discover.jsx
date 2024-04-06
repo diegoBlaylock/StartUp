@@ -5,6 +5,7 @@ import './discover.css'
 
 import {Search, Filter, RoomRequest} from "../endpoints/request.js"
 import {discoverRooms} from "../endpoints/api.js"
+import { NavLink} from 'react-router-dom'
 
 export function DiscoverPage () {
     const [rooms, setRooms] = useState();
@@ -15,11 +16,6 @@ export function DiscoverPage () {
     
         try {
             const response = await discoverRooms(request);
-            const room_div = document.getElementById("roomspage");
-            while (room_div.firstChild) {
-                room_div.removeChild(room_div.firstChild);
-            }
-
             setRooms(response);
         } catch(e) {
             console.log(e);
@@ -35,8 +31,8 @@ export function DiscoverPage () {
             <Header headerType={HeaderActionType.PROFILE}/>
             <nav>
                 <menu>
-                    <li><a className="selected">Discover Rooms</a></li>
-                    <li><a href="create_room.html">Create a Room</a></li>
+                    <li><NavLink className="selected">Discover Rooms</NavLink></li>
+                    <li><NavLink to="/create/room">Create a Room</NavLink></li>
                 </menu>
             </nav>
             <main id="discover_main">
@@ -74,14 +70,14 @@ export function DiscoverPage () {
 function RoomCard({room}) {
     const url = new URL("/room",window.location.origin);
     url.searchParams.append("roomID", room._id);
-    const path = url.pathname;   
+    const path = url.pathname+url.search;   
     
     return (
-        <a href={path} className='room-desc' data-id={room._id}>
+        <NavLink to={path} className='room-desc' data-id={room._id}>
             <h2 title={room.description}>{room.title}</h2>
             <img className='profile-pic profile-inv' src={room.owner.profile} draggable="false"/>
             <label title={room.owner.description}>by <span className='username'>{room.owner.username}</span></label>
-        </a>
+        </NavLink>
     );
 }
 

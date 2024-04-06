@@ -1,11 +1,12 @@
 import React from 'react';
+import {useNavigate} from 'react-router-dom'
 
 import { Header, HeaderActionType } from '../frame/header'
 import { Footer } from '../frame/footer'
 import './create-user.css'
 
 export function CreateUserPage() {
-
+    const navigate = useNavigate();
     function tryCreateUser(event) {
         event.target.disabled=true;
         event.preventDefault();
@@ -20,7 +21,7 @@ export function CreateUserPage() {
         }
     
         createUser(new CreateUserRequest(username, email, password))
-        .then(()=>window.location.replace(home_page))
+        .then(()=>navigate('/discover'))
         .catch((err)=>alert(err.message))
         .finally(()=>event.target.disabled=false);
         return false;

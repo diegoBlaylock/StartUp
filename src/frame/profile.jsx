@@ -3,9 +3,11 @@ import React from "react";
 import {logout} from "../endpoints/api.js"
 import {get, Store} from "../utils/local-store.js"
 import '../css/profile.css'
+import { NavLink, useNavigate } from "react-router-dom";
 
 export default function Profile() {
     const user = get(Store.USER);
+    const navigate = useNavigate();
 
     function trySignOut(event) {
         event.target.disabled = true;
@@ -13,20 +15,20 @@ export default function Profile() {
         if (window.getComputedStyle(event.target).display === "none") return;
     
         logout()
-        .then(()=>window.location.replace(home_page))
+        .then(()=>navigate('/login'))
         .catch((e)=>alert(e.message))
         .finally(()=>event.target.disabled = false);
     }
 
     return (
         <div id="header_profile">
-            <img className="profile-pic my-profile" src={user.profile ?? "/resources/default_profile.png"} draggable="false"/>
+            <img className="profile-pic my-profile" src={user?.profile ?? "/resources/default_profile.png"} draggable="false"/>
             <div className="dropdown-menu">
-                <label>{user.username}</label>
-                <a href="view_user.html">View/Edit Profile</a>
-                <a href="discovery.html">Discover Rooms</a>
-                <a href="create_room.html">Create Room</a>
-                <a id="sign_out" href="/index.html" onClick={(ev)=>trySignOut(ev)}>Sign Out</a>
+                <label>{user?.username}</label>
+                <NavLink to="/view/user">View/Edit Profile</NavLink>
+                <NavLink to="discover">Discover Rooms</NavLink>
+                <NavLink to="/create/room">Create Room</NavLink>
+                <NavLink id="sign_out" to="/login" onClick={(ev)=>trySignOut(ev)}>Sign Out</NavLink>
             </div>
         </div>
     );
