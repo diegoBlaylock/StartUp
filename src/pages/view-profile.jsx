@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import {NavLink, useNavigate} from "react-router-dom";
-import { Header, HeaderActionType } from "../frame/header";
-import { Footer } from "../frame/footer";
+import { Header, HeaderActionType } from "./frame/header";
+import { Footer } from "./frame/footer";
 import './view-profile.css'
 
 import {get, Store} from "../utils/local-store.js"
 import {editUserBio, editUserPicture} from "../endpoints/api.js"
+import { Authenticator } from "./shared/validate-token.js";
 
 function PopUp({url, updateUrl, changeVisibility}){
     
@@ -109,6 +110,7 @@ export function ViewProfilePage() {
     
     return (
         <div id="body">
+            <Authenticator />
             <Header headerType={HeaderActionType.PROFILE}/>
             <nav id="view_profile_nav">
                 <menu>

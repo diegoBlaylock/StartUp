@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Header, HeaderActionType } from '../frame/header'
-import { Footer } from '../frame/footer'
+import { Header, HeaderActionType } from './frame/header'
+import { Footer } from './frame/footer'
+import { Authenticator } from './shared/validate-token.js'
 import './discover.css'
 
 import {Search, Filter, RoomRequest} from "../endpoints/request.js"
@@ -28,6 +29,7 @@ export function DiscoverPage () {
 
     return (
         <div id="body">
+            <Authenticator/>
             <Header headerType={HeaderActionType.PROFILE}/>
             <nav id="discover_nav">
                 <menu>

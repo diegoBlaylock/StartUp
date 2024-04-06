@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import {useNavigate} from 'react-router-dom'
 
-import { Header, HeaderActionType } from '../frame/header'
-import { Footer } from '../frame/footer'
+import { Header, HeaderActionType } from './frame/header'
+import { Footer } from './frame/footer'
 import './login.css'
 
 import {login, validateToken} from "../endpoints/api.js"

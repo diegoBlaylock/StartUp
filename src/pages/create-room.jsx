@@ -3,8 +3,9 @@ import React from "react"
 import { NavLink, useNavigate } from "react-router-dom";
 import {createRoom} from "../endpoints/api.js"
 import {CreateRoomRequest} from "../endpoints/request.js"
-import { Header, HeaderActionType } from "../frame/header";
-import { Footer } from "../frame/footer.jsx";
+import { Header, HeaderActionType } from "./frame/header";
+import { Footer } from "./frame/footer.jsx";
+import {Authenticator} from "./shared/validate-token.js"
 import './create-room.css'
 
 export function CreateRoomPage() {
@@ -29,6 +30,7 @@ export function CreateRoomPage() {
 
     return (
         <div id="body">
+            <Authenticator/>
             <Header headerType={HeaderActionType.PROFILE}/>
             <nav id="create_room_nav">
                 <menu>

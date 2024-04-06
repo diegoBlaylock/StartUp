@@ -1,8 +1,8 @@
 import React from "react";
 
-import {logout} from "../endpoints/api.js"
-import {get, Store} from "../utils/local-store.js"
-import '../css/profile.css'
+import {logout} from "../../endpoints/api.js"
+import {get, Store} from "../../utils/local-store.js"
+import '../../css/profile.css'
 import { NavLink, useNavigate } from "react-router-dom";
 
 export default function Profile() {
