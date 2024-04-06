@@ -44,15 +44,16 @@ export class MusicSocket {
         this.#errorCallback = callback;
     }
 
-    sendNoteEvent(noteEvent) {
-        this.#socket.send(
-            JSON.stringify(
-                {
-                    type: ClientMessageType.NOTE,
-                    data: noteEvent 
-                }
-            )
-        );
+    async sendNoteEvent(noteEvent) {
+        if (this.#socket.readyState === WebSocket.OPEN)
+            this.#socket.send(
+                JSON.stringify(
+                    {
+                        type: ClientMessageType.NOTE,
+                        data: noteEvent 
+                    }
+                )
+            );
     }
 
     close(code, reason) {
@@ -118,26 +119,29 @@ export class ChatSocket {
         this.#errorCallback = callback;
     }
 
-    sendChatEvent(chatEvent) {
-        this.#socket.send(
-            JSON.stringify(
-                {
-                    type: ClientMessageType.MESSAGE,
-                    data: chatEvent 
-                }
-            )
-        );
+    async sendChatEvent(chatEvent) {
+        if (this.#socket.readyState === WebSocket.OPEN)
+            this.#socket.send(
+                JSON.stringify(
+                    {
+                        type: ClientMessageType.MESSAGE,
+                        data: chatEvent 
+                    }
+                )
+            );
     }
 
     async sendJoinRoomEvent(roomID) {
-        this.#socket.send(
-            JSON.stringify(
-                {
-                    type: ClientMessageType.JOIN_ROOM,
-                    data: {roomID: roomID} 
-                }
-            )
-        );
+        if (this.#socket.readyState === WebSocket.OPEN)
+
+            this.#socket.send(
+                JSON.stringify(
+                    {
+                        type: ClientMessageType.JOIN_ROOM,
+                        data: {roomID: roomID} 
+                    }
+                )
+            );
     }
 
     close(code, reason) {

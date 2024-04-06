@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
-import {createNote, playNote, stopNote} from "../../utils/music.js"
+import AudioPlayer from "../../utils/music"
 import { EventType, NoteEvent } from "../../models/music.js";
 
-function Scale({order, notesOn, noteCallback, playable}) {
+function Scale({order, notesOn, noteCallback, playable, audioPlayer}) {
 
     function play(note) {
         if(playable)
@@ -21,9 +21,7 @@ function Scale({order, notesOn, noteCallback, playable}) {
     const strOrder = order.toString();
 
     useEffect(()=>{
-        for(let i=0; i<12; i++) {
-            createNote(start+i);
-        }
+        return ()=>audioPlayer.current.destroy();
     },[]);
 
     return (
@@ -52,14 +50,15 @@ function Scale({order, notesOn, noteCallback, playable}) {
 
 export default function Keyboard({playable=false, musicSocket}) {
     const [notesOn, updateNotesOn] = useState(()=>new Map()); 
-    
+    const audioPlayer = useRef(new AudioPlayer());
+
     function onNoteEvent(noteEvent) {
         switch (noteEvent.event_type) {
             case EventType.NOTE_ON:
-                playNote(noteEvent.note);
+                audioPlayer.current.playNote(noteEvent.note);
                 break;
             case EventType.NOTE_OFF:
-                stopNote(noteEvent.note);
+                audioPlayer.current.stopNote(noteEvent.note);
                 break;
         }
         musicSocket.sendNoteEvent(noteEvent);
@@ -71,6 +70,15 @@ export default function Keyboard({playable=false, musicSocket}) {
     }
 
     useEffect(()=>{
+        async function loadAudioPlayer() {
+            const availableNotes = [36, 43, 48, 55, 60, 67, 72, 79, 84];
+            for(const note of availableNotes) {
+                const mp3 = await fetch(`/resources/notes/${note}.mp3`);
+                const buffer = await mp3.arrayBuffer();
+                await audioPlayer.current.seed(note, buffer);
+            }
+        }
+        loadAudioPlayer();
         if (!playable)
             musicSocket.addNoteEventListener((_, note) => onNoteEvent(note));
     }, []);
@@ -78,12 +86,12 @@ export default function Keyboard({playable=false, musicSocket}) {
     return (
         <div className={"keyboard" + (playable?" playable":"")}>
             <div className="upper-keys keys-half">
-                <Scale order={2} notesOn={notesOn} noteCallback={(ev)=>onNoteEvent(ev)} playable={playable} />
-                <Scale order={3} notesOn={notesOn} noteCallback={(ev)=>onNoteEvent(ev)} playable={playable} />
+                <Scale order={2} notesOn={notesOn} noteCallback={(ev)=>onNoteEvent(ev)} playable={playable} audioPlayer={audioPlayer}/>
+                <Scale order={3} notesOn={notesOn} noteCallback={(ev)=>onNoteEvent(ev)} playable={playable} audioPlayer={audioPlayer}/>
             </div>
             <div className="lower-keys keys-half">
-                <Scale order={4} notesOn={notesOn} noteCallback={(ev)=>onNoteEvent(ev)} playable={playable} />
-                <Scale order={5} notesOn={notesOn} noteCallback={(ev)=>onNoteEvent(ev)} playable={playable} />
+                <Scale order={4} notesOn={notesOn} noteCallback={(ev)=>onNoteEvent(ev)} playable={playable} audioPlayer={audioPlayer}/>
+                <Scale order={5} notesOn={notesOn} noteCallback={(ev)=>onNoteEvent(ev)} playable={playable} audioPlayer={audioPlayer}/>
             </div>
         </div>
     );

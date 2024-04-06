@@ -1,48 +1,142 @@
-const AudioContext = window.AudioContext || window.webkitAudioContext;
-const audioContext = new AudioContext();
-
-const oscillators = new Map;
-const compressor = new DynamicsCompressorNode(audioContext, {ratio: 12, threshold: -100, knee: 1});
-const gain = audioContext.createGain();
-gain.gain.value = 5;
-compressor.connect(gain).connect(audioContext.destination); 
-
-function midiToFreq(note){
-    return 440 * Math.pow(2, (note-69)/12)
+class StoredBuffer {
+    constructor(note, buffer) {
+        this.note = note;
+        this.buffer = buffer;
+    }
 }
 
+export default class AudioPlayer {
+    constructor() {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        this.audioContext = new AudioContext();
+        this.oscillators = new Map();
+        this.compressor = new DynamicsCompressorNode(this.audioContext, {ratio: 12, threshold: 0, knee: 20});
+        this.gain = this.audioContext.createGain();
+        this.gain.gain.value = 5;
+        this.compressor.connect(this.gain).connect(this.audioContext.destination);
+        this.sources = [];
+        this.sustain = false;
+    }
 
-export function createNote(note) {
-    const freq = midiToFreq(note);
-    const oscillator = audioContext.createOscillator();
-    oscillator.type = "sine";
-    oscillator.frequency.setValueAtTime(freq, audioContext.currentTime); // value in hertz
-    const gain = audioContext.createGain();
-    gain.gain.setValueAtTime(0, audioContext.currentTime);
-    gain.connect(compressor);
-    oscillator.connect(gain);
-    oscillators.set(note, {
-        oscillator: oscillator,
-        gain: gain,
-        note: note
-    });
-    oscillator.start();
+    #midiToFreq(note){
+        return 440 * Math.pow(2, (note-69)/12)
+    }
+
+    #calcGain(note) {
+        const a=1
+        const b=0.995
+        const r=36
+        return a * Math.pow(b, note-r)
+    }
+
+    #getWaveForm(note) {
+        const freq = this.#midiToFreq(note);
+        const real = new Float32Array(2);
+        const imag = new Float32Array(2);
+    }
+
+    #getShiftedSource(note) {
+
+    }
+
+    #findIndex(arr, note, lo=0, hi=arr.length) {
+        while (lo < hi) {
+          const mid = (lo + hi) >> 1;
+          const midNote = arr[mid].note;
+          if (midNote < note) lo = mid + 1;
+          else if (midNote > note) hi = mid;
+          else return mid;
+        }
+        return lo;
+      }
+
+    async seed(note, buffer) {
+        const sample = await this.audioContext.decodeAudioData(buffer);
+        const source = new StoredBuffer(note, sample);
+        const index = this.#findIndex(this.sources, note);
+        this.sources.splice(index, 0, source);
+    }
+
+    sustain(val) {
+        this.sustain = val;
+    }
+
+    createNote(note) {
+        const index = this.#findIndex(this.sources, note);
+        let sample;
+        if (index === 0) {
+            sample = this.sources[0];
+        } else if (index >= this.sources.length-1) {
+            sample = this.sources[index-1];
+        } else {
+            const prev = this.sources[index-1]; 
+            const next = this.sources[index];
+            sample = (note - prev.note < next.note-note+3)? prev:next;
+        }
+
+
+        const offset = note-sample.note;
+        
+        const source = this.audioContext.createBufferSource();
+        source.buffer = sample.buffer;
+        source.detune.value = offset * 100;
+        
+        const gain = this.audioContext.createGain();
+        gain.gain.setValueAtTime(this.#calcGain(note), this.audioContext.currentTime);
+        gain.gain.linearRampToValueAtTime(0, this.audioContext.currentTime + 4);
+        gain.connect(this.compressor);
+        source.connect(gain);
+        
+        this.oscillators.set(note, {
+            oscillator: source,
+            gain: gain,
+            note: note,
+            gVal: this.#calcGain(note)
+        });
+
+        source.start(0);
+    }
+
+    oldMethod(note) {
+        const freq = this.#midiToFreq(note);
+        const oscillator = this.audioContext.createOscillator();
+        oscillator.type = "sine";
+        oscillator.frequency.setValueAtTime(freq, this.audioContext.currentTime); // value in hertz
+        const gain = this.audioContext.createGain();
+        gain.gain.setValueAtTime(0, this.audioContext.currentTime);
+        gain.connect(this.compressor);
+        oscillator.connect(gain);
+        this.oscillators.set(note, {
+            oscillator: oscillator,
+            gain: gain,
+            note: note,
+            gVal: this.#calcGain(note)
+        });
+        oscillator.start();
+    }
+
+    playNote(midiNote) {
+        this.audioContext.resume();
+        const note = this.oscillators.get(midiNote);
+
+        note?.gain.gain.cancelAndHoldAtTime(this.audioContext.currentTime);
+        note?.gain.gain.linearRampToValueAtTime(0, this.audioContext.currentTime + 0.01);
+        // if(note)
+        //     note.oscillator.buffer = null;
+
+        this.createNote(midiNote);
+    }
+
+    stopNote(midiNote) {
+        if (!this.sustain) {
+            const note = this.oscillators.get(midiNote);
+            note?.gain.gain.cancelAndHoldAtTime(this.audioContext.currentTime);
+            note?.gain.gain.linearRampToValueAtTime(0, this.audioContext.currentTime + 0.05);
+        }
+    }
+
+    destroy() {
+        if(this.audioContext.state !== "closed")
+        this.audioContext.close();
+    }
 }
-
-export function playNote(midiNote) {
-    audioContext.resume();
-    const note = oscillators.get(midiNote);
-    note.gain.gain.cancelAndHoldAtTime(audioContext.currentTime);
-    note.gain.gain.setValueAtTime(1, audioContext.currentTime);
-    note.gain.gain.linearRampToValueAtTime(0, audioContext.currentTime+5);
-}
-
-export function stopNote(midiNote) {
-    const note = oscillators.get(midiNote);
-    note.gain.gain.cancelAndHoldAtTime(audioContext.currentTime);
-    note.gain.gain.linearRampToValueAtTime(0, audioContext.currentTime+0.1);
-}
-
-
-
-

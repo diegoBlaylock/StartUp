@@ -10,6 +10,7 @@ import { ChatSocket, MusicSocket } from "../endpoints/websockets.js"
 import { openWebsocket } from "../endpoints/api.js"
 
 import './view-room.css'
+import { Authenticator } from "./shared/validate-token.js";
 
 export function ViewRoomPage() {
     const [room, updateRoom] = useState(null);
@@ -47,13 +48,14 @@ export function ViewRoomPage() {
     }, [])
 
     if (room == null) {
-
+        return <Authenticator/>
     } else if(!room) {
         return <NotFoundPage/>
     } else {
         const playable = get(Store.USER)._id === room.owner?._id;
         return (
             <div id="body">
+                <Authenticator/>
                 <Header className="room-comp" headerType={HeaderActionType.PROFILE}/>   
                 <nav id="room_nav">
                     <menu>
