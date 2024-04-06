@@ -1,4 +1,4 @@
-import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, NavLink, Route, Routes, Navigate } from 'react-router-dom';
 import React from 'react';
 
 import { LoginPage } from './pages/login';
@@ -13,6 +13,7 @@ import { CreateRoomPage } from './pages/create-room';
 export default function App() {
   return <BrowserRouter>
     <Routes>
+      <Route path='/' exact element={<Navigate to="/login" />} />
       <Route path='/login' exact element={<LoginPage/>} />
       <Route path='/discover' exact element={<DiscoverPage/>}/>
       <Route path='/create/user' exact element={<CreateUserPage/>}/>

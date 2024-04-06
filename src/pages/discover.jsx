@@ -32,7 +32,7 @@ export function DiscoverPage () {
 
     return (
         <div id="body">
-            <Header headerType={HeaderActionType.CREATE_USER}/>
+            <Header headerType={HeaderActionType.PROFILE}/>
             <nav>
                 <menu>
                     <li><a className="selected">Discover Rooms</a></li>

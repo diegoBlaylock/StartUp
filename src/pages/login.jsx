@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import {useNavigate} from 'react-router-dom'
+
 import { Header, HeaderActionType } from '../frame/header'
 import { Footer } from '../frame/footer'
 import './login.css'
@@ -9,6 +11,7 @@ import {LoginRequest} from "../endpoints/request.js"
 
 export function LoginPage () {
     const [loaded, setLoad] = useState(false);
+    const navigate = useNavigate();
 
     async function tryLogin(event) {
         event.target.disabled = true;
@@ -19,7 +22,7 @@ export function LoginPage () {
         login(
             new LoginRequest(username, password)
         )
-            .then(()=>window.location.replace(home_page))
+            .then(()=>navigate('/discover'))
             .catch((err)=>alert(err.message))
             .finally(()=>(event.target.disabled = false)); 
         return false;       

@@ -1,3 +1,5 @@
+import React from "react";
+
 import {logout} from "../endpoints/api.js"
 import {get, Store} from "../utils/local-store.js"
 import '../css/profile.css'
