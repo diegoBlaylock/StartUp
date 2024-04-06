@@ -59,7 +59,7 @@ nav .selected::before {
 }
 
 /* CENTRAL PORTION */
-main {
+#discover_main {
     display: flex;
     flex-direction: column;
     min-width: 60vw;
@@ -220,7 +220,7 @@ main {
 }
 
 @media (width < 1100px) {
-    main {
+    #discover_main {
         min-width: 100vw;
     }
 }

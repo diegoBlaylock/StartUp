@@ -1,4 +1,4 @@
-main {
+#create_user_main {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -6,7 +6,7 @@ main {
     padding: 20px;
 }
 
-main h1 {
+#create_user_main h1 {
     font-size: 3.6em;
     font-weight: 100;
     margin-bottom: 0.5%;
@@ -15,7 +15,7 @@ main h1 {
     user-select:none;
 }
 
-form {
+#create_user_form {
     /* border-top: 3px solid black;
     border-bottom: 3px solid black; */
     display: flex;
@@ -23,14 +23,14 @@ form {
     padding: 1% 1%;
 }
 
-form label {
+#create_user_form label {
     font-size: 1.4em;
     font-weight: bold;
     margin-bottom: 0.2%;
     user-select: none;
 }
 
-form input{
+#create_user_form input{
     font-size: 1.4em;
     font-weight: lighter;
     padding: 2px;
@@ -41,7 +41,7 @@ form input{
 
 
 
-form input[type=submit] {
+#create_user_form input[type=submit] {
     margin-top: 20px;
     color: wheat;
     background-color: #202020;
@@ -52,23 +52,23 @@ form input[type=submit] {
     cursor: pointer;
 }
 
-form input[type=submit]:hover {
+#create_user_form input[type=submit]:hover {
     background-color: rgb(62, 62, 62);
     
 }
 
-form input[type=submit]:focus {
+#create_user_form input[type=submit]:focus {
     outline: 1.5px solid white;
     outline-offset: -2px;
 }
 
-form input[type=submit]:active {
+#create_user_form input[type=submit]:active {
     background-color: rgb(40, 40, 40);
     outline-style: dotted;
 }
 
 @media (width < 600px), (height < 600px) {
-    main h1 {
+    #create_user_main h1 {
         font-size: 2em;
         margin-bottom: 0.5%;
         width: 10em;
@@ -77,20 +77,20 @@ form input[type=submit]:active {
     }
 
 
-    form {
+    #create_user_form {
         /* border-top: 3px solid black;
         border-bottom: 3px solid black; */
         padding: 0.1% 0.1%;
     }
     
-    form label {
+    #create_user_form label {
         font-size: 1em;
         font-weight: bold;
         margin-bottom: 0.1%;
         user-select: none;
     }
     
-    form input {
+    #create_user_form input {
         font-size: 1em;
         font-weight: lighter;
         padding: 2px;

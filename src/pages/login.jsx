@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Header, HeaderActionType } from '../frame/header'
 import { Footer } from '../frame/footer'
-import './login.module.css'
+import './login.css'
 
 import {login, validateToken} from "../endpoints/api.js"
 import {LoginRequest} from "../endpoints/request.js"
@@ -42,9 +42,9 @@ export function LoginPage () {
         return (
             <div id="body">
                 <Header headerType={HeaderActionType.CREATE_USER}/>
-                <main>
+                <main id="login_main">
                     <h1>Log In</h1>
-                    <form onSubmit={event=>tryLogin(event)}>
+                    <form id="login_form" onSubmit={event=>tryLogin(event)}>
                             <label htmlFor="username_input">Enter username:</label>
                             <input type="text" id="username_input" name="username" placeholder="username" required/>
                             <label htmlFor="password_input">Enter password:</label>

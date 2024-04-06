@@ -1,6 +1,7 @@
 import React from 'react'
 import Profile from './profile'
 import './header.css'
+import { NavLink } from 'react-router-dom';
 
 export const HeaderActionType = Object.freeze({
     NONE: 0,
@@ -13,7 +14,7 @@ function HeaderAction({headerType}) {
         case HeaderActionType.CREATE_USER:
             return (
                 <div id="header_createUser">
-                    <a href="html/create_user.html">Create User</a>
+                    <NavLink to="/create/user">Create User</NavLink>
                 </div>
             );
         case HeaderActionType.PROFILE:
@@ -35,7 +36,7 @@ export function Header({headerType}) {
                     <h1 id="app_name_label">Cristofori's Café</h1>
                 </div>
                 <div id="header_logo">
-                    <img src="resources/piano_logo.png" alt="logo" draggable="false"/>
+                    <img src="/resources/piano_logo.png" alt="logo" draggable="false"/>
                 </div>
                 < HeaderAction headerType={headerType}/>
             </div>

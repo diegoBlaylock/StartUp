@@ -1,3 +1,4 @@
+import React from 'react';
 
 import { Header, HeaderActionType } from '../frame/header'
 import { Footer } from '../frame/footer'
@@ -28,9 +29,9 @@ export function CreateUserPage() {
     return (
         <div id="body">
             <Header headerType={HeaderActionType.None}/>
-            <main>
+            <main id="create_user_main">
                 <h1>Create User:</h1>
-                <form onSubmit={tryCreateUser}>
+                <form id="create_user_form" onSubmit={tryCreateUser}>
                     <label htmlFor="username_input">Enter username:</label>
                     <input type="text" id="username_input" name="username" placeholder="username" required />
                     <label htmlFor="email_input">Enter email:</label>

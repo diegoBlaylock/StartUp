@@ -18,14 +18,14 @@
     background-color: white;
 }
 
-main {
+#login_main {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-main h1 {
+#login_main h1 {
     font-size: 3.6em;
     font-weight: 100;
     margin-bottom: 0.5%;
@@ -34,7 +34,7 @@ main h1 {
     user-select:none;
 }
 
-form {
+#login_form {
     /* border-top: 3px solid black;
     border-bottom: 3px solid black; */
     display: flex;
@@ -42,14 +42,14 @@ form {
     padding: 1% 1%;
 }
 
-form label {
+#login_form label {
     font-size: 1.4em;
     font-weight: bold;
     margin-bottom: 1%;
     user-select: none;
 }
 
-form input {
+#login_form input {
     font-size: 1.4em;
     font-weight: lighter;
     padding: 2px;
@@ -58,7 +58,7 @@ form input {
     margin-bottom: 5%;
 }
 
-form input[type=submit] {
+#login_form input[type=submit] {
     margin-top: 20px;
     color: wheat;
     background-color: #202020;
@@ -69,17 +69,17 @@ form input[type=submit] {
     cursor: pointer;
 }
 
-form input[type=submit]:hover {
+#login_form input[type=submit]:hover {
     background-color: rgb(62, 62, 62);
     
 }
 
-form input[type=submit]:focus {
+#login_form input[type=submit]:focus {
     outline: 1.5px solid white;
     outline-offset: -2px;
 }
 
-form input[type=submit]:active {
+#login_form input[type=submit]:active {
     background-color: rgb(40, 40, 40);
     outline-style: dotted;
 }

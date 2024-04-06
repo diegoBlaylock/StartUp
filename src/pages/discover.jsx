@@ -39,7 +39,7 @@ export function DiscoverPage () {
                     <li><a href="create_room.html">Create a Room</a></li>
                 </menu>
             </nav>
-            <main>
+            <main id="discover_main">
                 <div id="roomspage">
                     {rooms?.rooms?.map((room, i)=><RoomCard room={room} key={i}/>)}
                 </div>
