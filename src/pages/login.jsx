@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Header, HeaderActionType } from '../frame/header'
 import { Footer } from '../frame/footer'
-import './login.css'
+import './login.module.css'
 
 import {login, validateToken} from "../endpoints/api.js"
 import {LoginRequest} from "../endpoints/request.js"
