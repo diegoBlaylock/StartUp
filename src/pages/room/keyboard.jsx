@@ -11,7 +11,7 @@ function Scale({order, notesOn, noteCallback, playable, audioPlayer}) {
     }
 
     function stop(note) {
-        if(playable)
+        if(playable && notesOn[note])
             noteCallback(new NoteEvent(note, EventType.NOTE_OFF));
     }
 
@@ -21,7 +21,7 @@ function Scale({order, notesOn, noteCallback, playable, audioPlayer}) {
     const strOrder = order.toString();
 
     useEffect(()=>{
-        return ()=>audioPlayer.current.destroy();
+        return ()=>audioPlayer?.current?.destroy();
     },[]);
 
     return (
@@ -61,7 +61,7 @@ export default function Keyboard({playable=false, musicSocket}) {
                 audioPlayer.current.stopNote(noteEvent.note);
                 break;
         }
-        musicSocket.sendNoteEvent(noteEvent);
+        musicSocket.current.sendNoteEvent(noteEvent);
         updateNotesOn(previous=>{
             const newMap = new Map(previous);
             newMap[noteEvent.note] = (noteEvent.event_type === EventType.NOTE_ON);
@@ -72,15 +72,15 @@ export default function Keyboard({playable=false, musicSocket}) {
     useEffect(()=>{
         async function loadAudioPlayer() {
             const availableNotes = [36, 43, 48, 55, 60, 67, 72, 79, 84];
-            for(const note of availableNotes) {
+            availableNotes.forEach(async (note)=>{
                 const mp3 = await fetch(`/resources/notes/${note}.mp3`);
                 const buffer = await mp3.arrayBuffer();
                 await audioPlayer.current.seed(note, buffer);
-            }
+            });
         }
         loadAudioPlayer();
         if (!playable)
-            musicSocket.addNoteEventListener((_, note) => onNoteEvent(note));
+            musicSocket.current.addNoteEventListener((_, note) => onNoteEvent(note));
     }, []);
 
     return (

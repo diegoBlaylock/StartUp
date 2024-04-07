@@ -10,22 +10,31 @@ import { NavLink} from 'react-router-dom'
 
 export function DiscoverPage () {
     const [rooms, setRooms] = useState();
+    const [currentPage, setCurrentPage] = useState(0);
+    const [searchType, setSearchType] = useState("user");
+    const [searchParam, setSearchParam] = useState("");
+    const [sortType, setSortType] = useState();
 
     async function loadRooms(page) {
-        const [search_type, search_param, filter_type] = getSearchFilterParameters();
+        const [search_type, search_param, filter_type] = getSearchFilterParameters(sortType, searchType, searchParam);
         const request = new RoomRequest(page, filter_type, search_type, search_param);
     
         try {
             const response = await discoverRooms(request);
-            setRooms(response);
+            setCurrentPage(()=>response.num);
+            setRooms(()=>response);
         } catch(e) {
             console.log(e);
         }
     }
 
     useEffect(()=>{
-        loadRooms();
-    }, []);
+        loadRooms(currentPage);
+    }, [currentPage, sortType]);
+
+    useEffect(()=>{
+        if (searchParam) loadRooms();
+    }, [searchType]);
 
     return (
         <div id="body">
@@ -41,24 +50,23 @@ export function DiscoverPage () {
                 <div id="roomspage">
                     {rooms?.rooms?.map((room, i)=><RoomCard room={room} key={i}/>)}
                 </div>
-                <PageBar num={rooms?.num??0} total={rooms?.total??0} />
+                <PageBar num={rooms?.num??0} total={rooms?.total??0} setCurrentPage={setCurrentPage} />
             </main>
             <div id="search_bar">
                 <div id="search">
                     <label>Search by:</label>
-                    <select id="search_type" title="How to search by." onChange={()=> {
-                        if(document.getElementById("search_param").value) loadRooms()
-                    }}>
+                    <select id="search_type" title="How to search by." onChange={(ev)=>setSearchType(ev.target.value)}>
                         <option>user</option>
                         <option>room</option>
                     </select>
-                    <input id="search_param" type="text" placeholder="Type and press Enter" autoComplete="off" onKeyUp={(event)=> {
+                    <input id="search_param" type="text" placeholder="Type and press Enter" autoComplete="off" value={searchParam} onInput={(ev)=>setSearchParam(ev.target.value)} 
+                    onKeyUp={(event)=> {
                         if(event.key === "Enter") loadRooms();    
                     }}/>
                 </div>    
                 <div id="filter">
                     <label>Filter by:</label>
-                    <select id="filter_type" title="Choose how to Filter." onChange={()=> loadRooms()}>
+                    <select id="filter_type" title="Choose how to Filter." onChange={ev=> setSortType(ev.target.value)}>
                         <option defaultValue={true}>time playing</option>
                         <option>popularity</option>
                     </select>
@@ -83,7 +91,7 @@ function RoomCard({room}) {
     );
 }
 
-function PageBar({num, total}) {
+function PageBar({num, total, setCurrentPage}) {
     let range;
     if(total <= 5 || num < 2) {
         range = [1, Math.min(5, total)];
@@ -100,7 +108,7 @@ function PageBar({num, total}) {
                 key={i}
                 data-page={i.toString()} 
                 className={i-1 === num? 'selected-page disabled':null}
-                onClick={i-1 !== num? changePage: null}
+                onClick={i-1 !== num? (ev)=>changePage(ev, setCurrentPage): null}
             >{i.toString()}</a>
         );
     }
@@ -109,16 +117,12 @@ function PageBar({num, total}) {
     return <div className="pagebar">{links}</div>
 }
 
-function changePage(el) {
-    const page = parseInt(this.dataset.page??"1") - 1;
-    loadRooms(page);
+function changePage(el, setCurrentPage) {
+    const page = parseInt(el.target.dataset.page??"1") - 1;
+    setCurrentPage(page);
 }
 
-function getSearchFilterParameters() {
-    let search_type = document.getElementById("search_type").value;
-    let search_param = document.getElementById("search_param").value;
-    let filter_type = document.getElementById("filter_type").value;
-
+function getSearchFilterParameters(filter_type, search_type, search_param) {
     search_type = (search_type === "user")? Search.USER : Search.ROOM;
     filter_type = (filter_type === "popularity")? Filter.POPULARITY : Filter.TIME_STAMP;
 

@@ -9,7 +9,7 @@ export default function ChatBox({chatSocket}){
         const roomID = new URL(document.location).searchParams.get("roomID");
         const messageHistory = await getChatHistory(roomID);
         updateMessages(messageHistory);
-        chatSocket.addMessageListener((_, message) => {
+        chatSocket.current.addMessageListener((_, message) => {
             updateMessages(ls=>{
                 return [...ls, message];
             });
@@ -29,7 +29,7 @@ export default function ChatBox({chatSocket}){
     } else {
 
         function sendMessage(text) {
-            chatSocket.sendChatEvent({message: text});
+            chatSocket.current.sendChatEvent({message: text});
             scrollInfo.locked = true;
             updateScrollInfo(()=>scrollInfo);
         }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import {Header, HeaderActionType} from './frame/header'
 import { NavLink } from "react-router-dom";
 import { get, Store } from "../utils/local-store";
@@ -14,7 +14,9 @@ import { Authenticator } from "./shared/validate-token.js";
 
 export function ViewRoomPage() {
     const [room, updateRoom] = useState(null);
-    const [{chatSocket, musicSocket}, updateSockets] = useState({});
+    // const [{chatSocket, musicSocket}, updateSockets] = useState({});
+    const chatSocket = useRef();
+    const musicSocket = useRef();
 
     
     useEffect(()=>{
@@ -29,12 +31,9 @@ export function ViewRoomPage() {
         
                 cchatSocket.addOpenListener(()=>cchatSocket.sendJoinRoomEvent(roomID));
                 cchatSocket.addErrorListener((_, error) => console.log(error));
-        
-                updateSockets(()=>({
-                    socket: socket,
-                    chatSocket: cchatSocket,
-                    musicSocket: mmusicSocket
-                }));
+                
+                chatSocket.current = cchatSocket;
+                musicSocket.current = mmusicSocket;
             }
             updateRoom(()=>((!room)?false:room));
         }        
@@ -42,8 +41,8 @@ export function ViewRoomPage() {
         onLoad();
         
         return ()=>{
-            chatSocket?.close();
-            musicSocket?.close();
+            chatSocket?.current?.close();
+            musicSocket?.current?.close();
         }
     }, [])
 
@@ -79,7 +78,7 @@ function RoomStats({room, chatSocket}) {
     const [count, updateCount] = useState();
 
     useEffect(()=>{
-        chatSocket.addViewerCountListener((_, {count})=>updateCount(count));
+        chatSocket.current.addViewerCountListener((_, {count})=>updateCount(count));
     },[]);
 
     function getStringTime(timeStamp) {

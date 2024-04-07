@@ -9,6 +9,9 @@ import { ViewRoomPage } from './pages/view-room';
 import { ViewProfilePage } from './pages/view-profile';
 import { CreateRoomPage } from './pages/create-room';
 
+import './app.css'
+
+
 
 export default function App() {
   return <BrowserRouter>

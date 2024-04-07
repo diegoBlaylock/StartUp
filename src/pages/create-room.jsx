@@ -19,10 +19,10 @@ export function CreateRoomPage() {
 
         createRoom(new CreateRoomRequest(title, description))
         .then((roomID)=>{
-            const url = new URL("/view/room", window.location.origin);
+            const url = new URL("/room", window.location.origin);
             url.searchParams.append("roomID", roomID);
             const path = url.pathname + url.search;
-            navigate(to=path);
+            navigate(path);
         })
         .catch((e)=>console.log(e))
         .finally(()=>event.target.disabled = false);
