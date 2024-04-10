@@ -9,6 +9,7 @@ footer {
     align-items: center;
     width: auto;
     user-select: none;
+    position: relative;
 }
 
 #author {

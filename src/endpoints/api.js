@@ -1,7 +1,4 @@
-import { useContext } from "react";
-import {Store, save, get} from "../utils/local-store.js"
-import {Filter, Search, GetUserRequest} from "./request.js";
-import { UserContext } from "../app.jsx";
+import {Search, GetUserRequest} from "./request.js";
 
 export async function login(credentials) {
 
@@ -15,9 +12,7 @@ export async function login(credentials) {
     if(response.status != 201) handleError(json, response); 
 
     const user = await getUser(new GetUserRequest(json.userID));
-
-    const {setUser} = useContext(UserContext);
-    setUser(user);
+    return user;
 }
 
 export async function getUser(request) {
@@ -57,8 +52,7 @@ export async function createUser(userDetails) {
     if(response.status != 201) handleError(json, response); 
 
     const user = await getUser(new GetUserRequest(json.userID));
-    const {setUser} = useContext(UserContext);
-    setUser(user);
+    return user;
 }
 
 export async function logout() {
@@ -71,8 +65,6 @@ export async function logout() {
         const json = await response.json();
         handleError(json, response); 
     }
-    const {setUser} = useContext(UserContext);
-    setUser(undefined);
 }
 
 export async function editUserPicture(url) {
@@ -87,8 +79,7 @@ export async function editUserPicture(url) {
         handleError(json, response); 
     }
     
-    const {setUser} = useContext(UserContext);
-    setUser(json);
+    return json;
 }
 
 export async function editUserBio(bio) {
@@ -103,8 +94,7 @@ export async function editUserBio(bio) {
         handleError(json, response); 
     }
     
-    const {setUser} = useContext(UserContext);
-    setUser(json);
+    return json;
 }
 
 export async function getRoomStats(roomID) {

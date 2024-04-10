@@ -1,13 +1,17 @@
 import React, { useContext } from "react";
 
 import {logout} from "../../endpoints/api.js"
-import {get, Store} from "../../utils/local-store.js"
 import './profile.css'
 import { NavLink, useNavigate } from "react-router-dom";
 import { UserContext } from "../../app.jsx";
 
 export default function Profile() {
     const {user} = useContext(UserContext);
+
+    if(user == null) {
+        return (null);
+    }
+
     const navigate = useNavigate();
 
     function trySignOut(event) {

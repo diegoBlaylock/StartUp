@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import {useNavigate} from "react-router-dom";
 
-import {Store, save, get, remove} from "../../utils/local-store.js"
 import {validateToken, getUser} from "../../endpoints/api.js"
 import {GetUserRequest} from "../../endpoints/request.js";
 import { UserContext } from "../../app.jsx";

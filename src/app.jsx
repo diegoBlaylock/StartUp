@@ -22,39 +22,43 @@ export const UserContext = createContext();
 export default function App() {
   const [frame, setFrame] = useState({
     header: HeaderActionType.NONE,
-    footer: true
+    footer: true,
+    headerClassName: {},
+    footerClassName: {}
   });
 
   const [user, setUser] = useState(null);
 
-  function updateFrame(headType, footVisible=true) {
-    if(headType !== frame.header || footVisible !== frame.footer) 
+  function updateFrame(headType, footVisible=true, headerClassName="", footerClassName="") {
+    if(headType !== frame.header || footVisible !== frame.footer || headerClassName !== frame.headerClassName || footerClassName.length !== frame.footerClassName) 
       setFrame(()=>({
         header: headType,
-        footer: footVisible
+        footer: footVisible,
+        headerClassName: headerClassName,
+        footerClassName: footerClassName
       }));
   }
 
   return (
-    <>
+    <div id="body">
       <BrowserRouter>
-        <Header headerType={frame.header}/>
-        <FrameContext.Provider value={updateFrame}>
-          <UserContext.Provider value={{user: user, setUser: setUser}}>
-            <Routes>
-              <Route path='/' exact element={<Navigate to="/login" />} />
-              <Route path='/login' exact element={<LoginPage />} />
-              <Route path='/discover' exact element={<Authenticator child={<DiscoverPage />}/>}/>
-              <Route path='/create/user' exact element={<CreateUserPage />}/>
-              <Route path='/create/room' exact element={<Authenticator child={<CreateRoomPage />}/>}/>
-              <Route path='/my/profile' exact element={<Authenticator child={<ViewProfilePage />}/>}/>
-              <Route path='/room' element={<Authenticator child={<ViewRoomPage />}/>}/>
-              <Route path='*' element={<NotFoundPage/>}/> 
-            </Routes>
-          </UserContext.Provider>
-        </FrameContext.Provider>
-        <Footer visible={frame.footer} />
+        <UserContext.Provider value={{user: user, setUser: setUser}}>
+          <Header className={frame.headerClassName} headerType={frame.header} />
+            <FrameContext.Provider value={updateFrame}>
+              <Routes>
+                <Route path='/' exact element={<Navigate to="/login" />} />
+                <Route path='/login' exact element={<LoginPage />} />
+                <Route path='/discover' exact element={<Authenticator child={<DiscoverPage />}/>}/>
+                <Route path='/create/user' exact element={<CreateUserPage />}/>
+                <Route path='/create/room' exact element={<Authenticator child={<CreateRoomPage />}/>}/>
+                <Route path='/my/profile' exact element={<Authenticator child={<ViewProfilePage />}/>}/>
+                <Route path='/room' element={<Authenticator child={<ViewRoomPage />}/>}/>
+                <Route path='*' element={<NotFoundPage/>}/> 
+              </Routes>
+            </FrameContext.Provider>
+          <Footer className={frame.footerClassName} visible={frame.footer} />
+        </UserContext.Provider>
       </BrowserRouter>
-    </>
+    </div>
   );
 }

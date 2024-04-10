@@ -1,22 +1,20 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 
 import { NavLink, useNavigate } from "react-router-dom";
 import {createRoom} from "../endpoints/api.js"
 import {CreateRoomRequest} from "../endpoints/request.js"
-import { Header, HeaderActionType } from "./frame/header";
-import { Footer } from "./frame/footer.jsx";
+import { HeaderActionType } from "./frame/header";
 import './create-room.css'
+import { FrameContext } from "../app.jsx";
 
-export function CreateRoomPage({setHeader, setFooterVis}) {
+export function CreateRoomPage() {
     const navigate = useNavigate();
 
     const [roomTitle, setRoomTitle] = useState("");
     const [roomDescription, setRoomDescription] = useState("");
+    const setFrame = useContext(FrameContext);
 
-    useEffect(()=>{
-        setHeader(HeaderActionType.PROFILE);
-        setFooterVis(true);
-    }, []);
+    useEffect(()=>setFrame(HeaderActionType.PROFILE), []);
 
     function handleSubmit(event) {
         event.target.disabled = true;
@@ -34,7 +32,7 @@ export function CreateRoomPage({setHeader, setFooterVis}) {
     }
 
     return (
-        <div id="body">
+        <>
             <nav id="create_room_nav">
                 <menu>
                     <li><NavLink to="/discover">Discover Rooms</NavLink></li>
@@ -59,6 +57,6 @@ export function CreateRoomPage({setHeader, setFooterVis}) {
                     <input type="submit" value="Create"/>
                 </form>
             </main>
-        </div>
+        </>
     );
 }

@@ -4,11 +4,11 @@ import { Header, HeaderActionType } from "./frame/header";
 import { Footer } from "./frame/footer";
 import './view-profile.css'
 
-import {get, Store} from "../utils/local-store.js"
 import {editUserBio, editUserPicture} from "../endpoints/api.js"
-import { UserContext } from "../app.jsx";
+import { FrameContext, UserContext } from "../app.jsx";
 
 function PopUp({url, updateUrl, changeVisibility}){
+    const {setUser} = useContext(UserContext);
     
     function cancel_url() {
         changeVisibility(false);
@@ -24,7 +24,8 @@ function PopUp({url, updateUrl, changeVisibility}){
         event.target.disabled = true;
         const url = document.getElementById("image_url").value;
         editUserPicture(url)
-        .then(()=>{
+        .then((user)=>{
+            setUser(()=>user);
             updateUrl(_=>url);
             changeVisibility(_=>false);
         })
@@ -74,15 +75,13 @@ function Bio({changeFn, description, changeBio, saveBio}) {
 export function ViewProfilePage() {
     const navigate = useNavigate();
     const setFrame = useContext(FrameContext);    
-    const {user} = useContext(UserContext);
+    const {user, setUser} = useContext(UserContext);
 
     const [changeFn, updateChangeFn] = useState(()=>changeBio);
     const [currentUrl, updateUrl] = useState(user.profile);
     const [showPopup, changeVisibility] = useState(false);
 
-    useEffect(()=>{
-        setFrame(HeaderActionType.PROFILE);
-    },[]);
+    useEffect(()=>setFrame(HeaderActionType.PROFILE),[]);
 
     function changeBio() {
         updateChangeFn(()=>saveBio);
@@ -93,7 +92,8 @@ export function ViewProfilePage() {
         const bio = document.getElementById("bio_content");
     
         editUserBio(bio.value)
-        .then(()=>{
+        .then((user)=>{
+            setUser(()=>user);
             updateChangeFn(()=>changeBio);
         })
         .catch((e)=>alert(e.message))
@@ -109,13 +109,15 @@ export function ViewProfilePage() {
     }
 
     const description = (changeFn===changeBio && (user.description == null || user.description === ''))? 
-                        'None': user.description;
+                        'None':
+                         user.description;
 
-    const popup = showPopup? <PopUp url={currentUrl} updateUrl={updateUrl} changeVisibility={changeVisibility} /> : (null);
+    const popup = showPopup? 
+        <PopUp url={currentUrl} updateUrl={updateUrl} changeVisibility={changeVisibility} /> : 
+        (null);
     
     return (
-        <div id="body">
-            <Header headerType={HeaderActionType.PROFILE}/>
+        <>
             <nav id="view_profile_nav">
                 <menu>
                     <li><NavLink onClick={()=>goBack()}>❮ Back</NavLink></li>
@@ -134,8 +136,7 @@ export function ViewProfilePage() {
                 </div>
                 {popup}
             </main>
-            <Footer />
-        </div>
+        </>
     );
 }
 

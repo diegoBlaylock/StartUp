@@ -1,51 +1,57 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {useNavigate} from 'react-router-dom'
 
-import { Header, HeaderActionType } from './frame/header'
-import { Footer } from './frame/footer'
 import './create-user.css'
+import { FrameContext, UserContext } from '../app';
+import { HeaderActionType } from './frame/header';
 
-export function CreateUserPage({setHeader, setFooterVis}) {
+export function CreateUserPage() {
+    const setFrame = useContext(FrameContext);
+    const {setUser} = useContext(UserContext);
+    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const navigate = useNavigate();
+
+    useEffect(()=> setFrame(HeaderActionType.NONE), []);
+
     function tryCreateUser(event) {
         event.target.disabled=true;
         event.preventDefault();
-        const username = document.getElementById("username_input").value;
-        const email = document.getElementById("email_input").value;
-        const password = document.getElementById("password_input").value;
-        const confirm_password = document.getElementById("confirm_password_input").value;
     
-        if(password !== confirm_password) {
+        if(password !== confirmPassword) {
             alert("Passwords don't match!");
             return;
+        } else if (password.length < 8) {
+            alert("Password needs to be longer (8 characters)")
+            return
         }
     
         createUser(new CreateUserRequest(username, email, password))
-        .then(()=>navigate('/discover'))
-        .catch((err)=>alert(err.message))
-        .finally(()=>event.target.disabled=false);
+            .then((user)=>{
+                setUser(()=>user);
+                navigate('/discover');
+            })
+            .catch((err)=>alert(err.message))
+            .finally(()=>event.target.disabled=false);
         return false;
     }
 
     return (
-        <div id="body">
-            <Header headerType={HeaderActionType.None}/>
-            <main id="create_user_main">
-                <h1>Create User:</h1>
-                <form id="create_user_form" onSubmit={tryCreateUser}>
-                    <label htmlFor="username_input">Enter username:</label>
-                    <input type="text" id="username_input" name="username" placeholder="username" required />
-                    <label htmlFor="email_input">Enter email:</label>
-                    <input type="email" id="email_input" name="email" placeholder="email" required />
-                    <label htmlFor="password_input">Enter password:</label>
-                    <input type="password" id="password_input" name="password" placeholder="password" required />
-                    <label htmlFor="confirm_password_input">Confirm password:</label>
-                    <input type="password" id="confirm_password_input" placeholder="retype password" required />
-                    <input type="submit" value="Create"/>
-                </form>
-            
-            </main>
-            <Footer />
-        </div>
+        <main id="create_user_main">
+            <h1>Create User:</h1>
+            <form id="create_user_form" onSubmit={tryCreateUser}>
+                <label htmlFor="username_input">Enter username:</label>
+                <input type="text" id="username_input" name="username" placeholder="username" required value={username} onInput={(ev)=>setUsername(ev.target.value)}/>
+                <label htmlFor="email_input">Enter email:</label>
+                <input type="email" id="email_input" name="email" placeholder="email" required value={email} onInput={(ev)=>setEmail(ev.target.value)} />
+                <label htmlFor="password_input">Enter password:</label>
+                <input type="password" id="password_input" name="password" placeholder="password" required value={password} onInput={(ev)=>setPassword(ev.target.value)} />
+                <label htmlFor="confirm_password_input">Confirm password:</label>
+                <input type="password" id="confirm_password_input" placeholder="retype password" required value={confirmPassword} onInput={(ev)=>setConfirmPassword(ev.target.value)} />
+                <input type="submit" value="Create"/>
+            </form>
+        </main>
     );
 }

@@ -1,18 +1,19 @@
-import React, { useEffect, useState } from 'react'
-import { Header, HeaderActionType } from './frame/header'
-import { Footer } from './frame/footer'
+import React, { useContext, useEffect, useState } from 'react'
+import { HeaderActionType } from './frame/header'
 import './discover.css'
 
 import {Search, Filter, RoomRequest} from "../endpoints/request.js"
 import {discoverRooms} from "../endpoints/api.js"
 import { NavLink} from 'react-router-dom'
+import { FrameContext } from '../app.jsx'
 
-export function DiscoverPage ({setHeader, setFooterVis}) {
+export function DiscoverPage () {
     const [rooms, setRooms] = useState();
     const [currentPage, setCurrentPage] = useState(0);
     const [searchType, setSearchType] = useState("user");
     const [searchParam, setSearchParam] = useState("");
     const [sortType, setSortType] = useState();
+    const setFrame = useContext(FrameContext);
 
     async function loadRooms(page) {
         const [search_type, search_param, filter_type] = getSearchFilterParameters(sortType, searchType, searchParam);
@@ -35,9 +36,10 @@ export function DiscoverPage ({setHeader, setFooterVis}) {
         if (searchParam) loadRooms();
     }, [searchType]);
 
+    useEffect(()=>setFrame(HeaderActionType.PROFILE), []);
+
     return (
-        <div id="body">
-            <Header headerType={HeaderActionType.PROFILE}/>
+        <>
             <nav id="discover_nav">
                 <menu>
                     <li><NavLink className="selected">Discover Rooms</NavLink></li>
@@ -70,8 +72,7 @@ export function DiscoverPage ({setHeader, setFooterVis}) {
                     </select>
                 </div>    
             </div>
-            <Footer />
-        </div>
+        </>
     )
 }
 

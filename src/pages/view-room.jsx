@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react"
-import {Header, HeaderActionType} from './frame/header'
+import {HeaderActionType} from './frame/header'
 import { NavLink } from "react-router-dom";
-import { get, Store } from "../utils/local-store";
 import {getRoomStats} from "../endpoints/api.js"
 import { NotFoundPage } from "./not-found";
 import Keyboard from "./room/keyboard.jsx";
@@ -17,13 +16,12 @@ export function ViewRoomPage() {
     const {user} = useContext(UserContext)
 
     const [room, updateRoom] = useState(null);
-    // const [{chatSocket, musicSocket}, updateSockets] = useState({});
     const chatSocket = useRef();
     const musicSocket = useRef();
 
-    
     useEffect(()=>{
-        setFrame(HeaderActionType.PROFILE, false);
+        setFrame(HeaderActionType.PROFILE, false, {"className": "room-comp"});
+
         async function onLoad() {
             const roomID = new URL(document.location).searchParams.get("roomID");
             const room = await getRoomStats(roomID);
@@ -56,8 +54,8 @@ export function ViewRoomPage() {
     } else {
         const playable = user?._id === room.owner?._id;
         return (
-            <div id="body">
-                <Header className="room-comp" headerType={HeaderActionType.PROFILE}/>   
+            <>
+                {/* Set classname to room-comp */}   
                 <nav id="room_nav">
                     <menu>
                         <li><NavLink to='/discover'>❮ Back</NavLink></li>
@@ -71,7 +69,7 @@ export function ViewRoomPage() {
                     </div>
                     <ChatBox chatSocket={chatSocket}/>
                 </main>
-            </div>
+            </>
         );  
     }
 }
