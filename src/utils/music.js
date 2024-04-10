@@ -6,16 +6,19 @@ class StoredBuffer {
 }
 
 export default class AudioPlayer {
+    #sustain
+    #activeNotes
     constructor() {
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         this.audioContext = new AudioContext();
         this.oscillators = new Map();
-        this.compressor = new DynamicsCompressorNode(this.audioContext, {ratio: 12, threshold: 0, knee: 20});
+        this.compressor = new DynamicsCompressorNode(this.audioContext, {ratio: 6, threshold: 0, knee: 12});
         this.gain = this.audioContext.createGain();
-        this.gain.gain.value = 5;
+        this.gain.gain.value = 3;
         this.compressor.connect(this.gain).connect(this.audioContext.destination);
         this.sources = [];
-        this.sustain = false;
+        this.#sustain = false;
+        this.#activeNotes = new Set();
     }
 
     #midiToFreq(note){
@@ -24,19 +27,9 @@ export default class AudioPlayer {
 
     #calcGain(note) {
         const a=1
-        const b=0.995
+        const b=0.99
         const r=36
         return a * Math.pow(b, note-r)
-    }
-
-    #getWaveForm(note) {
-        const freq = this.#midiToFreq(note);
-        const real = new Float32Array(2);
-        const imag = new Float32Array(2);
-    }
-
-    #getShiftedSource(note) {
-
     }
 
     #findIndex(arr, note, lo=0, hi=arr.length) {
@@ -58,7 +51,11 @@ export default class AudioPlayer {
     }
 
     sustain(val) {
-        this.sustain = val;
+        this.#sustain = val;
+        if(!val)
+            this.oscillators.keys().forEach((note)=>{
+                if(!this.#activeNotes.has(note)) this.stopNote(note)
+        });
     }
 
     createNote(note) {
@@ -83,7 +80,6 @@ export default class AudioPlayer {
         
         const gain = this.audioContext.createGain();
         gain.gain.setValueAtTime(this.#calcGain(note), this.audioContext.currentTime);
-        gain.gain.linearRampToValueAtTime(0, this.audioContext.currentTime + 4);
         gain.connect(this.compressor);
         source.connect(gain);
         
@@ -97,24 +93,6 @@ export default class AudioPlayer {
         source.start(0);
     }
 
-    oldMethod(note) {
-        const freq = this.#midiToFreq(note);
-        const oscillator = this.audioContext.createOscillator();
-        oscillator.type = "sine";
-        oscillator.frequency.setValueAtTime(freq, this.audioContext.currentTime); // value in hertz
-        const gain = this.audioContext.createGain();
-        gain.gain.setValueAtTime(0, this.audioContext.currentTime);
-        gain.connect(this.compressor);
-        oscillator.connect(gain);
-        this.oscillators.set(note, {
-            oscillator: oscillator,
-            gain: gain,
-            note: note,
-            gVal: this.#calcGain(note)
-        });
-        oscillator.start();
-    }
-
     playNote(midiNote) {
         this.audioContext.resume();
         const note = this.oscillators.get(midiNote);
@@ -125,14 +103,16 @@ export default class AudioPlayer {
         //     note.oscillator.buffer = null;
 
         this.createNote(midiNote);
+        this.#activeNotes.add(midiNote);
     }
 
     stopNote(midiNote) {
-        if (!this.sustain) {
+        if (!this.#sustain) {
             const note = this.oscillators.get(midiNote);
             note?.gain.gain.cancelAndHoldAtTime(this.audioContext.currentTime);
-            note?.gain.gain.linearRampToValueAtTime(0, this.audioContext.currentTime + 0.05);
+            note?.gain.gain.linearRampToValueAtTime(0, this.audioContext.currentTime + 0.2);
         }
+        this.#activeNotes.delete(midiNote);
     }
 
     destroy() {

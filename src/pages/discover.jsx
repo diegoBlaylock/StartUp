@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Header, HeaderActionType } from './frame/header'
 import { Footer } from './frame/footer'
-import { Authenticator } from './shared/validate-token.js'
 import './discover.css'
 
 import {Search, Filter, RoomRequest} from "../endpoints/request.js"
 import {discoverRooms} from "../endpoints/api.js"
 import { NavLink} from 'react-router-dom'
 
-export function DiscoverPage () {
+export function DiscoverPage ({setHeader, setFooterVis}) {
     const [rooms, setRooms] = useState();
     const [currentPage, setCurrentPage] = useState(0);
     const [searchType, setSearchType] = useState("user");
@@ -38,7 +37,6 @@ export function DiscoverPage () {
 
     return (
         <div id="body">
-            <Authenticator/>
             <Header headerType={HeaderActionType.PROFILE}/>
             <nav id="discover_nav">
                 <menu>

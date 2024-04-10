@@ -1,4 +1,4 @@
 
-export function NotFoundPage() {
+export function NotFoundPage({setHeader, setFooterVis}) {
     return "BACK"
 }

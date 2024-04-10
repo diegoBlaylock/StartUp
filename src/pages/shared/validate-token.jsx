@@ -1,27 +1,29 @@
-import { useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {useNavigate} from "react-router-dom";
 
 import {Store, save, get, remove} from "../../utils/local-store.js"
 import {validateToken, getUser} from "../../endpoints/api.js"
 import {GetUserRequest} from "../../endpoints/request.js";
+import { UserContext } from "../../app.jsx";
 
-export function Authenticator({setLoaded}) {
+export function Authenticator({child}) {
     const navigate = useNavigate();
+    const [finished, setFinished] = useState(false);
+    const {user, setUser} = useContext(UserContext);
 
     function forceLogOut() {
-        remove(Store.USER);
+        setUser(()=>undefined);
         navigate('/login');
     }
 
     async function checkPassports() {
         try {
             const auth = await validateToken()
-            if (get(Store.USER) == null) {
+            if (user == null) {
                 const user = await getUser(new GetUserRequest(auth.userID));
-                if(user) save(Store.USER, user);
-            }    
-
-            if(setLoaded != null) setLoaded(true);
+                if(user) setUser(()=>user);
+            }
+            setFinished(true);
         } catch {
             forceLogOut()
         }
@@ -31,5 +33,7 @@ export function Authenticator({setLoaded}) {
         checkPassports()
     }, []);
     
-    return (null);
+    if(!finished) return (null);
+    
+    return (<>{child}</>);
 }

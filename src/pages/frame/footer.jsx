@@ -2,7 +2,8 @@ import React from 'react'
 import './footer.css'
 
 
-export function Footer(){
+export function Footer({visible}){
+    if(!visible) return (null);
     return (
         <footer>
             <div id="author">Author: Diego Blaylock</div>

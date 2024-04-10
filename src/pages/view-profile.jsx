@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {NavLink, useNavigate} from "react-router-dom";
 import { Header, HeaderActionType } from "./frame/header";
 import { Footer } from "./frame/footer";
@@ -6,7 +6,7 @@ import './view-profile.css'
 
 import {get, Store} from "../utils/local-store.js"
 import {editUserBio, editUserPicture} from "../endpoints/api.js"
-import { Authenticator } from "./shared/validate-token.js";
+import { UserContext } from "../app.jsx";
 
 function PopUp({url, updateUrl, changeVisibility}){
     
@@ -72,12 +72,17 @@ function Bio({changeFn, description, changeBio, saveBio}) {
 }
 
 export function ViewProfilePage() {
-    const navigate = useNavigate();    
-    const user = get(Store.USER);
+    const navigate = useNavigate();
+    const setFrame = useContext(FrameContext);    
+    const {user} = useContext(UserContext);
 
     const [changeFn, updateChangeFn] = useState(()=>changeBio);
     const [currentUrl, updateUrl] = useState(user.profile);
     const [showPopup, changeVisibility] = useState(false);
+
+    useEffect(()=>{
+        setFrame(HeaderActionType.PROFILE);
+    },[]);
 
     function changeBio() {
         updateChangeFn(()=>saveBio);
@@ -110,7 +115,6 @@ export function ViewProfilePage() {
     
     return (
         <div id="body">
-            <Authenticator />
             <Header headerType={HeaderActionType.PROFILE}/>
             <nav id="view_profile_nav">
                 <menu>

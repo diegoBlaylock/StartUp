@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useContext, useEffect, useRef, useState } from "react"
 import {Header, HeaderActionType} from './frame/header'
 import { NavLink } from "react-router-dom";
 import { get, Store } from "../utils/local-store";
@@ -10,9 +10,12 @@ import { ChatSocket, MusicSocket } from "../endpoints/websockets.js"
 import { openWebsocket } from "../endpoints/api.js"
 
 import './view-room.css'
-import { Authenticator } from "./shared/validate-token.js";
+import { FrameContext, UserContext } from "../app.jsx";
 
 export function ViewRoomPage() {
+    const setFrame = useContext(FrameContext);
+    const {user} = useContext(UserContext)
+
     const [room, updateRoom] = useState(null);
     // const [{chatSocket, musicSocket}, updateSockets] = useState({});
     const chatSocket = useRef();
@@ -20,7 +23,7 @@ export function ViewRoomPage() {
 
     
     useEffect(()=>{
-        
+        setFrame(HeaderActionType.PROFILE, false);
         async function onLoad() {
             const roomID = new URL(document.location).searchParams.get("roomID");
             const room = await getRoomStats(roomID);
@@ -47,14 +50,13 @@ export function ViewRoomPage() {
     }, [])
 
     if (room == null) {
-        return <Authenticator/>
+        return (null);
     } else if(!room) {
         return <NotFoundPage/>
     } else {
-        const playable = get(Store.USER)._id === room.owner?._id;
+        const playable = user?._id === room.owner?._id;
         return (
             <div id="body">
-                <Authenticator/>
                 <Header className="room-comp" headerType={HeaderActionType.PROFILE}/>   
                 <nav id="room_nav">
                     <menu>
@@ -62,7 +64,7 @@ export function ViewRoomPage() {
                     </menu>
                 </nav>
                 <main id="room_main">
-                    <div id="room_main_content">
+                    <div id="room_main_content" tabIndex="0">
                         <h3 id="room_title">{room.title}</h3>
                         <Keyboard playable={playable} musicSocket={musicSocket}/>
                         <RoomStats room={room} chatSocket={chatSocket}/>

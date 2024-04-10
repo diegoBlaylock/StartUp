@@ -1,6 +1,8 @@
 export const EventType = Object.freeze({
     NOTE_OFF: 0,
-    NOTE_ON: 1
+    NOTE_ON: 1,
+    SUSTAIN_ON: 2,
+    SUSTAIN_OFF: 3,
 });
 
 

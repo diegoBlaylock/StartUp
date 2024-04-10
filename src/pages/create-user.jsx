@@ -5,7 +5,7 @@ import { Header, HeaderActionType } from './frame/header'
 import { Footer } from './frame/footer'
 import './create-user.css'
 
-export function CreateUserPage() {
+export function CreateUserPage({setHeader, setFooterVis}) {
     const navigate = useNavigate();
     function tryCreateUser(event) {
         event.target.disabled=true;

@@ -30,6 +30,7 @@ import {
 import { setupWebsockets } from './wsockets/websocket.js';
 import cookieParser from 'cookie-parser';
 import express from 'express';
+import * as path from 'path';
 const app = express();
 
 setupExpress();
@@ -51,6 +52,7 @@ function setupRoutes() {
     const dlt = app.delete.bind(app);
     const patch = app.patch.bind(app);
 
+    
     pluginService(post, '/users/create/', parseCreateUser, createUser, 201);
     pluginService(post, '/users/login/', parseLogin, loginUser, 201);
     pluginService(dlt, '/users/logout/', parseLogout, logoutUser, 204);
@@ -61,6 +63,8 @@ function setupRoutes() {
     pluginService(get, '/rooms/:roomID/', parseGetRoom, getRoomInfo);
     pluginService(post, '/rooms/create/', parseCreateRoom, createRoom, 201);
     pluginService(get, '/chat/:chatThreadID/', parseChatHistory, getChatHistory);
+    const __dirname = import.meta.dirname;
+    app.get("/*", (_, res)=>res.sendFile('index.html', { root: path.join(__dirname, '../public') }));
 }
 
 
