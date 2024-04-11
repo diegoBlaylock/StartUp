@@ -16,30 +16,38 @@ export function ViewRoomPage() {
     const {user} = useContext(UserContext)
 
     const [room, updateRoom] = useState(null);
+    const [wsReady, setWSReady] = useState(false);
     const chatSocket = useRef();
     const musicSocket = useRef();
+
+    const roomID = new URL(document.location).searchParams.get("roomID");
 
     useEffect(()=>{
         setFrame(HeaderActionType.PROFILE, false, {"className": "room-comp"});
 
-        async function onLoad() {
-            const roomID = new URL(document.location).searchParams.get("roomID");
+        async function startWebsocket() {
+            const socket = openWebsocket();
+            const cchatSocket = new ChatSocket(socket);
+            const mmusicSocket = new MusicSocket(socket);
+    
+            cchatSocket.addOpenListener(()=>cchatSocket.sendJoinRoomEvent(roomID));
+            cchatSocket.addErrorListener((_, error) => console.log(error));
+            
+            chatSocket.current = cchatSocket;
+            musicSocket.current = mmusicSocket;
+            setWSReady(()=>true);
+        }
+
+        async function loadRoom() {
             const room = await getRoomStats(roomID);
             if(room) {
-                const socket = openWebsocket();
-                const cchatSocket = new ChatSocket(socket);
-                const mmusicSocket = new MusicSocket(socket);
-        
-                cchatSocket.addOpenListener(()=>cchatSocket.sendJoinRoomEvent(roomID));
-                cchatSocket.addErrorListener((_, error) => console.log(error));
                 
-                chatSocket.current = cchatSocket;
-                musicSocket.current = mmusicSocket;
             }
             updateRoom(()=>((!room)?false:room));
         }        
         
-        onLoad();
+        loadRoom();
+        startWebsocket();
         
         return ()=>{
             chatSocket?.current?.close();
@@ -47,15 +55,12 @@ export function ViewRoomPage() {
         }
     }, [])
 
-    if (room == null) {
-        return (null);
-    } else if(!room) {
+    if(room===false) {
         return <NotFoundPage/>
     } else {
-        const playable = user?._id === room.owner?._id;
+        const playable = room && user?._id === room?.owner?._id;
         return (
             <>
-                {/* Set classname to room-comp */}   
                 <nav id="room_nav">
                     <menu>
                         <li><NavLink to='/discover'>❮ Back</NavLink></li>
@@ -63,23 +68,24 @@ export function ViewRoomPage() {
                 </nav>
                 <main id="room_main">
                     <div id="room_main_content" tabIndex="0">
-                        <h3 id="room_title">{room.title}</h3>
-                        <Keyboard playable={playable} musicSocket={musicSocket}/>
-                        <RoomStats room={room} chatSocket={chatSocket}/>
+                        <h3 id="room_title">{room?.title}</h3>
+                        <Keyboard playable={playable} musicSocket={musicSocket} wsReady={wsReady} />
+                        <RoomStats room={room} chatSocket={chatSocket} wsReady={wsReady}/>
                     </div>
-                    <ChatBox chatSocket={chatSocket}/>
+                    <ChatBox chatSocket={chatSocket} wsReady={wsReady}/>
                 </main>
             </>
         );  
     }
 }
 
-function RoomStats({room, chatSocket}) {
+function RoomStats({room, chatSocket, wsReady}) {
     const [count, updateCount] = useState();
 
     useEffect(()=>{
-        chatSocket.current.addViewerCountListener((_, {count})=>updateCount(count));
-    },[]);
+        if(wsReady)
+            chatSocket.current.addViewerCountListener((_, {count})=>updateCount(count));
+    },[wsReady]);
 
     function getStringTime(timeStamp) {
         const date = new Date(timeStamp);
@@ -94,11 +100,12 @@ function RoomStats({room, chatSocket}) {
         }
     }
 
+    if(room == null) return (null);
     return (
         <div id="room_info">
             <div id="player_profile">
-                <img className="profile-pic profile-inv" src={room.owner.profile} draggable="false"/>
-                <label>{room.owner.username}</label>
+                <img className="profile-pic profile-inv" src={room?.owner.profile} draggable="false"/>
+                <label>{room?.owner.username}</label>
             </div>
             <p><span id="view_count">{count??'--'}</span> Viewers</p>
             <p>Playing since <span id="time_stamp">{getStringTime(room.timeStamp)}</span></p>

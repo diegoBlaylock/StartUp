@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { getChatHistory } from "../../endpoints/api";
 
-export default function ChatBox({chatSocket}){
+export default function ChatBox({chatSocket, wsReady}){
     const [messages, updateMessages] = useState();
     const [scrollInfo, updateScrollInfo] = useState({locked: true});
 
@@ -9,11 +9,15 @@ export default function ChatBox({chatSocket}){
         const roomID = new URL(document.location).searchParams.get("roomID");
         const messageHistory = await getChatHistory(roomID);
         updateMessages(messageHistory);
-        chatSocket.current.addMessageListener((_, message) => {
-            updateMessages(ls=>{
-                return [...ls, message];
+    }
+
+    async function setUpChatSocket() {
+        if(wsReady)
+            chatSocket.current.addMessageListener((_, message) => {
+                updateMessages(ls=>{
+                    return [...ls, message];
+                });
             });
-        });
     }
 
     function handleMessagesChanged() {
@@ -22,36 +26,35 @@ export default function ChatBox({chatSocket}){
     }
 
     useEffect(()=>{onLoad()},[]);
+    useEffect(()=>{setUpChatSocket()}, [wsReady])
     useEffect(()=>handleMessagesChanged, [messages]);
 
-    if(messages == null) {
 
-    } else {
-
-        function sendMessage(text) {
-            chatSocket.current.sendChatEvent({message: text});
-            scrollInfo.locked = true;
-            updateScrollInfo(()=>scrollInfo);
-        }
-
-        function handleScroll(ev) {
-            if(ev.target.scrollTop >= (ev.target.scrollHeight - ev.target.offsetHeight)-10) {
-                scrollInfo.locked = true
-            } else {
-                scrollInfo.locked = false;
-            }
-            updateScrollInfo(scrollInfo);
-        }
-
-        return (
-            <div id="chat_content">
-                <div id="chat_messages" onScroll={ev=>handleScroll(ev)}>
-                    {messages.map(message=><Message message={message} key={message._id}/>)}    
-                </div>
-                <Messenger sendMessage={sendMessage}/>
-            </div>
-        );
+    function sendMessage(text) {
+        if(messages == null) return;
+        chatSocket.current.sendChatEvent({message: text});
+        scrollInfo.locked = true;
+        updateScrollInfo(()=>scrollInfo);
     }
+
+    function handleScroll(ev) {
+        if(messages == null) return;
+        if(ev.target.scrollTop >= (ev.target.scrollHeight - ev.target.offsetHeight)-10) {
+            scrollInfo.locked = true
+        } else {
+            scrollInfo.locked = false;
+        }
+        updateScrollInfo(scrollInfo);
+    }
+
+    return (
+        <div id="chat_content">
+            <div id="chat_messages" onScroll={ev=>handleScroll(ev)}>
+                {messages?.map(message=><Message message={message} key={message._id}/>)}    
+            </div>
+            <Messenger sendMessage={sendMessage}/>
+        </div>
+    );
 }
 
 function Messenger({sendMessage}) {

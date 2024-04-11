@@ -4,6 +4,8 @@ import {useNavigate} from 'react-router-dom'
 import './create-user.css'
 import { FrameContext, UserContext } from '../app';
 import { HeaderActionType } from './frame/header';
+import { createUser } from '../endpoints/api';
+import { CreateUserRequest } from '../endpoints/request';
 
 export function CreateUserPage() {
     const setFrame = useContext(FrameContext);

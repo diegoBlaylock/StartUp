@@ -6,8 +6,7 @@ import { addRoom } from "../wsockets/socket-pool.js";
 
 
 export async function getRoomInfo(req) {
-    const token = await checkToken(req.auth);
-    const room = await findRoomByID(req.roomID);
+    const [token, room] = await Promise.all([checkToken(req.auth), findRoomByID(req.roomID)]);
     if(room == null) throw new ResourceNotFoundError("Couldn't find room!")
     const inflated = await inflateWithOwner(room);
     if (inflated.owner._id !== token.userID) delete inflated.owner._id;
@@ -23,15 +22,12 @@ export async function createRoom(req) {
         req.description,
     );
     
-    await database.addRoom(room);
+    database.addRoom(room);
     addRoom(room._id);
-
     return room._id;
 }
 
-export async function dicoverRooms(req) {
-    await checkToken(req.auth);
-
+async function getPagesFromReq(req) {
     const filterType = req.filterType;
     const filterVal = req.filterVal;
     const sortType = req.sortType;
@@ -45,13 +41,19 @@ export async function dicoverRooms(req) {
     if (!Object.values(Sort).includes(sortType)) {
         throw new BadParameterError("Couldn't understand sortType " + sortType);
     }
-    const pageObj = await database.getPage(page, sortType, filterType, filterVal);
+    return await database.getPage(page, sortType, filterType, filterVal);
+}
+
+export async function dicoverRooms(req) {
+    const[pageObj, _token] = await Promise.all([getPagesFromReq(req), checkToken(req.auth)]);
     return pageObj;
 }
 
 export async function getChatHistory(req) {
-    await checkToken(req.auth);
-    const messageTable = await database.getMessageThreadByRoomID(req.threadID);
+    const [_token, messageTable] = await Promise.all([
+        checkToken(req.auth), 
+        database.getMessageThreadByRoomID(req.threadID)
+    ]);
     return messageTable;
 }
 

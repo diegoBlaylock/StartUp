@@ -21,9 +21,8 @@ export async function findUserByID(userID) {
 }
 
 export function filterUserObj(user) {
-    const filtered = {...user}
-    delete filtered.email;
-    return filtered;
+    delete user.email;
+    return user;
 }
 
 export async function findRoomByID(roomID) {
@@ -32,8 +31,8 @@ export async function findRoomByID(roomID) {
 
 export async function inflateWithOwner(obj) {
     const owner = filterUserObj(await findUserByID(obj.ownerID));
-    obj = {...obj};
     if (obj == null) return null;
     if(!obj.owner) obj.owner = owner;
+    delete obj.ownerID;
     return obj;
 }

@@ -26,16 +26,8 @@ export async function addRoom(room) {
 
 export async function getRoomByID(roomID) {
     const query = { _id: roomID };
-    const cursor = roomCollection.find(query);
-    try {
-        if (await cursor.hasNext()) {
-            return await cursor.next();
-        }
-
-        return null;
-    } finally {
-        cursor.close();
-    }
+    const cursor = roomCollection.find(query).limit(1);
+    return await cursor.next();
 }
 
 
@@ -283,55 +275,32 @@ export async function addUser(user) {
 
 export async function getUserByID(userID) {
     const query = { _id: userID };
-    const cursor = userCollection.find(query);
-    try {
-        if (await cursor.hasNext()) {
-            return await cursor.next();
-        }
-
-        return null;
-    } finally {
-        cursor.close();
-    }
+    const cursor = userCollection.find(query).limit(1);
+    return await cursor.next();
 }
 
 export async function getUserByUsername(username) {
     const query = { username: new RegExp("^"+username+"$", "i")};
-    const cursor = userCollection.find(query);
-    try {
-        if (await cursor.hasNext()) {
-            return await cursor.next();
-        }
-
-        return null;
-    } finally {
-        cursor.close();
-    }
+    const cursor = userCollection.find(query).limit(1);
+    
+    return await cursor.next();
 }
 
 export async function doesUserWithUsernameExist(username) {
-    const query = { username: username };
-    const cursor = userCollection.find(query);
+    const query = { username: new RegExp("^"+username+"$", "i") };
+    const cursor = userCollection.find(query).limit(1);
     try {
-        if (await cursor.hasNext()) {
-            return true;
-        }
-
-        return false;
+        return await cursor.hasNext();
     } finally {
         cursor.close();
     }
 }
 
 export async function doesUserWithEmailExist(email) {
-    const query = { email: email };
-    const cursor = userCollection.find(query);
+    const query = { email: new RegExp("^"+email+"$", "i")};
+    const cursor = userCollection.find(query).limit(1);
     try {
-        if (await cursor.hasNext()) {
-            return true;
-        }
-
-        return false;
+        return await cursor.hasNext();
     } finally {
         cursor.close();
     }

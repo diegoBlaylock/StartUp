@@ -3,13 +3,14 @@ import React, { useEffect, useRef, useState } from "react";
 import AudioPlayer from "../../utils/music"
 import { EventType, NoteEvent } from "../../models/music.js";
 
-export default function Keyboard({playable=false, musicSocket}) {
+export default function Keyboard({playable=false, musicSocket, wsReady}) {
     const notesOn = useRef(new Map()); 
     const elementMap = useRef(new Map());
     const audioPlayer = useRef(new AudioPlayer());
     const [sustain, setSustain] = useState(false);
 
     function onNoteEvent(noteEvent) {
+        if(!wsReady) return;
         switch (noteEvent.event_type) {
             case EventType.NOTE_ON:
                 audioPlayer.current.playNote(noteEvent.note);
@@ -22,7 +23,6 @@ export default function Keyboard({playable=false, musicSocket}) {
         }
         musicSocket.current.sendNoteEvent(noteEvent);
         notesOn.current.set(noteEvent.note, (noteEvent.event_type === EventType.NOTE_ON));
-
     }
 
     useEffect(()=>{
@@ -35,9 +35,12 @@ export default function Keyboard({playable=false, musicSocket}) {
             });
         }
         loadAudioPlayer();
-        if (!playable)
-            musicSocket.current.addNoteEventListener((_, note) => onNoteEvent(note));
     }, []);
+
+    useEffect(()=>{
+        if (wsReady && !playable)
+            musicSocket.current.addNoteEventListener((_, note) => onNoteEvent(note));
+    }, [wsReady]);
 
     useEffect(()=>{
         audioPlayer.current.sustain(sustain);

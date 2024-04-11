@@ -29,4 +29,5 @@ html {
 main {
     flex: 1;
     overflow: none;
+    height: 100%;
 }
