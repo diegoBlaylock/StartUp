@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 
 import { LoginPage } from './pages/login';
 import { DiscoverPage } from './pages/discover';
@@ -28,6 +28,14 @@ export default function App() {
   });
 
   const [user, setUser] = useState(null);
+
+  useEffect(()=>{
+    async function preload() {
+        const img = new Image(128, 128);
+        img.src = user?.profile ?? "/resources/default_profile.png";
+    }
+    preload();
+  }, []);
 
   function updateFrame(headType, footVisible=true, headerClassName="", footerClassName="") {
     if(headType !== frame.header || footVisible !== frame.footer || headerClassName !== frame.headerClassName || footerClassName.length !== frame.footerClassName) 

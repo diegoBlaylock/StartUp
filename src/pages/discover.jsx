@@ -29,6 +29,15 @@ export function DiscoverPage () {
     }
 
     useEffect(()=>{
+        if(rooms && rooms.rooms) {
+            rooms.rooms.forEach(async room => {
+                const img = new Image();
+                img.src = room.owner.profile;
+            });
+        }
+    }, [rooms]);
+
+    useEffect(()=>{
         loadRooms(currentPage);
     }, [currentPage, sortType]);
 
