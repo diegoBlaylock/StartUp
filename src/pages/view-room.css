@@ -268,11 +268,11 @@
     cursor: pointer;
 }
 
-.keyboard.playable div[class*="scale-"] div[data-note*="s"]:hover {
+.keyboard.playable div[class*="scale-"] div[data-note*="s"]:not(.on):hover {
     background-color: rgb(60, 60, 60);
 }
 
-.keyboard.playable div[class*="scale-"] div:not([data-note*="s"]):hover {
+.keyboard.playable div[class*="scale-"] div:not([data-note*="s"]):not(.on):hover {
     background-color: #d8d8d8;
     outline: 1px solid #202020;
 }

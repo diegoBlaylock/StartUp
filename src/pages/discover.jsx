@@ -84,7 +84,7 @@ function RoomCard({room}) {
     return (
         <NavLink to={path} className='room-desc' data-id={room._id}>
             <h2 title={room.description}>{room.title}</h2>
-            <img className='profile-pic profile-inv' src={room.owner.profile} draggable="false"/>
+            <img alt="room-pic" className='profile-pic profile-inv' src={room.owner.profile} draggable="false"/>
             <label title={room.owner.description}>by <span className='username'>{room.owner.username}</span></label>
         </NavLink>
     );

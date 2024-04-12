@@ -104,7 +104,7 @@ function RoomStats({room, chatSocket, wsReady}) {
     return (
         <div id="room_info">
             <div id="player_profile">
-                <img className="profile-pic profile-inv" src={room?.owner.profile ?? "--"} draggable="false"/>
+                <img alt="profile" className="profile-pic profile-inv" src={room?.owner.profile ?? "--"} draggable="false"/>
                 <label>{room?.owner.username ?? '--'}</label>
             </div>
             <p><span id="view_count">{count??'--'}</span> Viewers</p>

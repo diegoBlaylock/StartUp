@@ -85,7 +85,7 @@ function Messenger({sendMessage}) {
 function Message({message}) {
     return (
         <div className="message" data-messageid={message._id}>
-            <img src={message.owner.profile} className="profile-pic profile-inv" draggable={false}/>
+            <img alt="owner" src={message.owner.profile} className="profile-pic profile-inv" draggable={false}/>
             <div className="message-content">
                 <label>{message.owner.username}</label>
                 <p>{message.content}</p>

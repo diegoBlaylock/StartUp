@@ -27,7 +27,7 @@ export default function Profile() {
 
     return (
         <div id="header_profile">
-            <img className="profile-pic my-profile" src={user?.profile ?? "/resources/default_profile.png"} draggable="false"/>
+            <img className="profile-pic my-profile" src={user?.profile ?? "/resources/default_profile.png"} alt={user?.username ?? "profile"} draggable="false"/>
             <div className="dropdown-menu">
                 <label>{user?.username}</label>
                 <NavLink to="/my/profile">View/Edit Profile</NavLink>
