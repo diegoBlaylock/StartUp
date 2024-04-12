@@ -67,8 +67,8 @@ export function ViewRoomPage() {
                     </menu>
                 </nav>
                 <main id="room_main">
-                    <div id="room_main_content" tabIndex="0">
-                        <h3 id="room_title">{room?.title}</h3>
+                    <div id="room_main_content" tabIndex={playable?"0":"-1"}>
+                        <h3 id="room_title">{room?.title ?? '--'}</h3>
                         <Keyboard playable={playable} musicSocket={musicSocket} wsReady={wsReady} />
                         <RoomStats room={room} chatSocket={chatSocket} wsReady={wsReady}/>
                     </div>
@@ -88,6 +88,7 @@ function RoomStats({room, chatSocket, wsReady}) {
     },[wsReady]);
 
     function getStringTime(timeStamp) {
+        if(timeStamp == null) return timeStamp;
         const date = new Date(timeStamp);
         const diff_days = new Date().getDate() - date;
         const diff_months = new Date().getMonth() - date.getMonth();
@@ -100,15 +101,14 @@ function RoomStats({room, chatSocket, wsReady}) {
         }
     }
 
-    if(room == null) return (null);
     return (
         <div id="room_info">
             <div id="player_profile">
-                <img className="profile-pic profile-inv" src={room?.owner.profile} draggable="false"/>
-                <label>{room?.owner.username}</label>
+                <img className="profile-pic profile-inv" src={room?.owner.profile ?? "--"} draggable="false"/>
+                <label>{room?.owner.username ?? '--'}</label>
             </div>
             <p><span id="view_count">{count??'--'}</span> Viewers</p>
-            <p>Playing since <span id="time_stamp">{getStringTime(room.timeStamp)}</span></p>
+            <p>Playing since <span id="time_stamp">{getStringTime(room?.timeStamp) ?? "--"}</span></p>
         </div>
     );
 }
