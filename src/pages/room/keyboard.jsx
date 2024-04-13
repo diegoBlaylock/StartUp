@@ -113,12 +113,9 @@ export function Tastatur({selector, onNoteEvent, notesOn}) {
         component.addEventListener('keyup', (event)=> {
             event.preventDefault();
             if(event?.repeat) return
-            console.log(event.keyCode);
             if(keysToNote.has(event.keyCode)) {
                 onNoteEvent(new NoteEvent(keysToNote.get(event.keyCode), EventType.NOTE_OFF));
-            }
-
-            if(event.key === " ") {
+            } else if(event.key === " ") {
                 onNoteEvent(new NoteEvent(false, EventType.SUSTAIN));                
             }
         });
@@ -127,9 +124,7 @@ export function Tastatur({selector, onNoteEvent, notesOn}) {
             if(event?.repeat) return;
             if(keysToNote.has(event.keyCode) && (!notesOn.current.get(keysToNote.get(event.keyCode)))) {
                 onNoteEvent(new NoteEvent(keysToNote.get(event.keyCode), EventType.NOTE_ON));
-            }
-
-            if(event.key === " ") {
+            } else if(event.key === " ") {
                 onNoteEvent(new NoteEvent(true, EventType.SUSTAIN));                
             }
         });
@@ -140,7 +135,7 @@ export function Tastatur({selector, onNoteEvent, notesOn}) {
 function Scale({order, notesOn, elementMap, noteCallback, playable, audioPlayer}) {
 
     function play(note) {
-        if(playable)
+        if(playable && !notesOn.current.get(note))
             noteCallback(new NoteEvent(note, EventType.NOTE_ON));
     }
 
@@ -169,12 +164,22 @@ function Scale({order, notesOn, elementMap, noteCallback, playable, audioPlayer}
                         data-midi={midiNote} 
                         key={midiNote} 
                         data-note={note+strOrder}
-                        onMouseDown={(ev)=>{if(ev.buttons === 1 || ev.buttons === 3) play(midiNote)}}
-                        onTouchStart={()=>play(midiNote)}
-                        onMouseEnter={(ev)=>{if(ev.buttons === 1 || ev.buttons === 3) play(midiNote)}}
+                        onMouseDown={(ev)=>{if(ev.buttons === 1 || ev.buttons === 3) {play(midiNote)} }}
+                        onTouchStart={e=>{
+                            if (!notesOn.current.get(note))
+                                play(midiNote);
+                        }}
+                        onMouseEnter={(ev)=>{
+                            if(ev.buttons === 1 || ev.buttons === 3) {
+                                play(midiNote);
+                            }
+                        }}
                         onMouseUp={()=>stop(midiNote)}
                         onMouseLeave={()=>stop(midiNote)}
-                        onTouchEnd={()=>stop(midiNote)}
+                        onTouchEnd={e=>{
+                            if (notesOn.current.get(note))
+                                stop(midiNote);
+                        }}
                     >{labels[i]}{order}</div>
                     elementMap.set(midiNote, id);
                     return div;
