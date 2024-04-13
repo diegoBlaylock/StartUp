@@ -1,0 +1,151 @@
+:root {
+    --white-key-width: 7vmin;
+    --white-key-height: calc(var(--white-key-width) * 8 / 2);
+    --black-key-width: calc(var(--white-key-width) * 7 / 12);
+    --black-key-height: calc(var(--white-key-width) * 2.47);
+    --padding-diff: calc(var(--white-key-width)/24);
+    --first-padding: calc(var(--black-key-width) + var(--padding-diff));
+    --last-padding: calc(var(--black-key-width) - var(--padding-diff));
+}
+
+.keyboard {
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+    justify-content: center;
+    align-content: center;
+    -webkit-tap-highlight-color: transparent;
+    overflow-x: auto;
+    padding: 1px;
+    min-height: calc( var(--white-key-height) + 2px);
+}
+
+.keys-half {
+    display: flex;
+    flex-direction: row;
+    justify-content: safe center;
+    align-items: safe center;
+}
+
+.keyboard div[class*="scale-"] {
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    width: calc(var(--white-key-width)*7);
+    height: var(--white-key-height);
+    font-size: 0.8em;
+    font-weight: 500;
+}
+
+.keyboard div[class*="scale-"] div[data-note*="s"] {
+    color: wheat;
+    position: absolute;
+    height: var(--black-key-height);
+    width: var(--black-key-width);
+    background-color: #202020;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    padding-bottom: 0.25em;
+}
+
+.keyboard div[class*="scale-"] div:not([data-note*="s"]) {
+    color: #202020;
+    display: flex;
+    width: var(--white-key-width);
+    outline: 1px solid #202020;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    padding-bottom: 0.25em;
+}
+
+.keyboard.playable div[class*="scale-"] div[data-note] {
+    cursor: pointer;
+}
+
+.keyboard.playable div[class*="scale-"] div[data-note*="s"]:not(.on):hover {
+    background-color: rgb(60, 60, 60);
+}
+
+.keyboard.playable div[class*="scale-"] div:not([data-note*="s"]):not(.on):hover {
+    background-color: #d8d8d8;
+    outline: 1px solid #202020;
+}
+
+.keyboard div[class*="scale-"] div[data-note*="s"].on {
+    background-color: rgb(124, 124, 124);
+}
+
+.keyboard div[class*="scale-"] div:not([data-note*="s"]).on {
+    background-color: #c0c0c0;
+}
+
+
+.keyboard div[class*="scale-"] div[data-note*="cs"] {
+    left: var(--first-padding); 
+}
+
+.keyboard div[class*="scale-"] div[data-note*="ds"] {
+    left: calc(var(--first-padding) + 2*var(--black-key-width)); 
+}
+
+.keyboard div[class*="scale-"] div[data-note*="fs"] {
+    right: calc(var(--last-padding) + 4*var(--black-key-width)); 
+}
+
+.keyboard div[class*="scale-"] div[data-note*="gs"] {
+    right: calc(var(--last-padding) + 2*var(--black-key-width)); 
+}
+
+.keyboard div[class*="scale-"] div[data-note*="as"] {
+    right: calc(var(--last-padding)); 
+}
+
+#controls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    column-gap: 5%;
+}
+
+.control-input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    column-gap: 1em;
+}
+
+.control-input #sustain {
+    color: aqua;
+}
+
+@media (height < 720px) {
+    :root {
+        --header-height: 60px;
+        --white-key-width: 8vmin;
+    }
+
+    .keyboard {
+        flex-direction: row;
+        overflow-x: auto;
+        flex: 4;
+    }
+
+}
+
+@media (width < 900px) {
+    :root {
+        --white-key-width: 6vmin;
+    }
+    .keyboard {
+        flex-direction: column;
+        overflow-x: auto;
+        flex: 4;
+    }
+}

@@ -28,9 +28,9 @@ function HeaderAction({headerType}) {
     }
 }
 
-export function Header({headerType}) {
+export function Header({headerType, className=""}) {
     return (
-        <header>
+        <header className={className}>
             <div className="flex-container">
                 <div id="header_title">
                     <h1 id="app_name_label">Cristofori's Café</h1>

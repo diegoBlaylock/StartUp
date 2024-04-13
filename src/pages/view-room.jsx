@@ -23,7 +23,7 @@ export function ViewRoomPage() {
     const roomID = new URL(document.location).searchParams.get("roomID");
 
     useEffect(()=>{
-        setFrame(HeaderActionType.PROFILE, false, {"className": "room-comp"});
+        setFrame(HeaderActionType.PROFILE, false, "room-comp");
 
         async function startWebsocket() {
             const socket = openWebsocket();

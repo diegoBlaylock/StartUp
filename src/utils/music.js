@@ -5,6 +5,8 @@ class StoredBuffer {
     }
 }
 
+export const MAX_VOLUME = 3
+
 export default class AudioPlayer {
     #sustain
     #activeNotes
@@ -14,7 +16,7 @@ export default class AudioPlayer {
         this.oscillators = new Map();
         this.compressor = new DynamicsCompressorNode(this.audioContext, {ratio: 6, threshold: 0, knee: 12});
         this.gain = this.audioContext.createGain();
-        this.gain.gain.value = 3;
+        this.gain.gain.value = MAX_VOLUME;
         this.compressor.connect(this.gain).connect(this.audioContext.destination);
         this.sources = [];
         this.#sustain = false;
@@ -48,6 +50,10 @@ export default class AudioPlayer {
         const source = new StoredBuffer(note, sample);
         const index = this.#findIndex(this.sources, note);
         this.sources.splice(index, 0, source);
+    }
+
+    setVolume(val) {
+        this.gain.gain.value = val;
     }
 
     sustain(val) {

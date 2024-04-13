@@ -1,28 +1,46 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import AudioPlayer from "../../utils/music"
+import AudioPlayer, { MAX_VOLUME } from "../../utils/music"
 import { EventType, NoteEvent } from "../../models/music.js";
+import './keyboard.css'
 
 export default function Keyboard({playable=false, musicSocket, wsReady}) {
     const notesOn = useRef(new Map()); 
     const elementMap = useRef(new Map());
     const audioPlayer = useRef(new AudioPlayer());
     const [sustain, setSustain] = useState(false);
+    const [volume, setVolume] = useState(50);
 
     function onNoteEvent(noteEvent) {
         if(!wsReady) return;
+
+        let notePlayed = false;
         switch (noteEvent.event_type) {
             case EventType.NOTE_ON:
                 audioPlayer.current.playNote(noteEvent.note);
                 document.getElementById(elementMap.current.get(noteEvent.note))?.classList.add("on");
+                notePlayed = true;
                 break;
             case EventType.NOTE_OFF:
                 audioPlayer.current.stopNote(noteEvent.note);
                 document.getElementById(elementMap.current.get(noteEvent.note))?.classList.remove("on");
+                notePlayed = true;
                 break;
+            case EventType.SUSTAIN:
+                setSustain((noteEvent.note)? true:false);
         }
         musicSocket.current.sendNoteEvent(noteEvent);
-        notesOn.current.set(noteEvent.note, (noteEvent.event_type === EventType.NOTE_ON));
+        
+        if (notePlayed)
+            notesOn.current.set(noteEvent.note, (noteEvent.event_type === EventType.NOTE_ON));
+    }
+
+    function onSustainClicked(ev) {
+        setSustain(ev.target.checked);
+    }
+
+    function onVolumeChanged(ev) {
+        setVolume(ev.target.value);
     }
 
     useEffect(()=>{
@@ -42,24 +60,36 @@ export default function Keyboard({playable=false, musicSocket, wsReady}) {
             musicSocket.current.addNoteEventListener((_, note) => onNoteEvent(note));
     }, [wsReady]);
 
-    useEffect(()=>{
-        audioPlayer.current.sustain(sustain);
-    }, [sustain]);
+    useEffect(()=>audioPlayer.current.sustain(sustain), [sustain]);
 
-    const keyComponent = playable? <Tastatur selector="#room_main_content" onNoteEvent={(ev)=>onNoteEvent(ev)} notesOn={notesOn} setSustain={setSustain} /> : (null);
+    useEffect(()=>audioPlayer.current.setVolume(volume/100*MAX_VOLUME), [volume])
+
+    const keyComponent = playable? <Tastatur selector="#room_main_content" onNoteEvent={(ev)=>onNoteEvent(ev)} notesOn={notesOn} /> : (null);
 
     return (
-        <div className={"keyboard" + (playable?" playable":"")}>
-            {keyComponent}
-            <div className="upper-keys keys-half">
-                <Scale order={2} notesOn={notesOn} elementMap={elementMap.current} noteCallback={(ev)=>onNoteEvent(ev)} playable={playable} audioPlayer={audioPlayer}/>
-                <Scale order={3} notesOn={notesOn} elementMap={elementMap.current} noteCallback={(ev)=>onNoteEvent(ev)} playable={playable} audioPlayer={audioPlayer}/>
+        <>
+            <div className={"keyboard" + (playable?" playable":"")}>
+                {keyComponent}
+                <div className="upper-keys keys-half">
+                    <Scale order={2} notesOn={notesOn} elementMap={elementMap.current} noteCallback={(ev)=>onNoteEvent(ev)} playable={playable} audioPlayer={audioPlayer}/>
+                    <Scale order={3} notesOn={notesOn} elementMap={elementMap.current} noteCallback={(ev)=>onNoteEvent(ev)} playable={playable} audioPlayer={audioPlayer}/>
+                </div>
+                <div className="lower-keys keys-half">
+                    <Scale order={4} notesOn={notesOn} elementMap={elementMap.current} noteCallback={(ev)=>onNoteEvent(ev)} playable={playable} audioPlayer={audioPlayer}/>
+                    <Scale order={5} notesOn={notesOn} elementMap={elementMap.current} noteCallback={(ev)=>onNoteEvent(ev)} playable={playable} audioPlayer={audioPlayer}/>
+                </div>
             </div>
-            <div className="lower-keys keys-half">
-                <Scale order={4} notesOn={notesOn} elementMap={elementMap.current} noteCallback={(ev)=>onNoteEvent(ev)} playable={playable} audioPlayer={audioPlayer}/>
-                <Scale order={5} notesOn={notesOn} elementMap={elementMap.current} noteCallback={(ev)=>onNoteEvent(ev)} playable={playable} audioPlayer={audioPlayer}/>
+            <div id="controls">
+                <div className="control-input">
+                    <label htmlFor="volume">Volume:</label>
+                    <input type="range" id="volume" name="volume" tabIndex={-1} min={0} max={100} value={volume} onChange={onVolumeChanged} />
+                </div>
+                <div className="control-input">
+                    <label htmlFor="sustain">Sustain:</label>
+                    <input type="checkbox" id="sustain" name="sustain" checked={sustain} disabled={!playable} tabIndex={-1} onChange={ev=>onSustainClicked(ev)}/>
+                </div>
             </div>
-        </div>
+        </>
     );
 }
 
@@ -77,7 +107,7 @@ export function Tastatur({selector, onNoteEvent, notesOn, setSustain}) {
             }
 
             if(event.key === " ") {
-                setSustain(false);
+                onNoteEvent(new NoteEvent(false, EventType.SUSTAIN));                
             }
         });
         component.addEventListener('keydown', (event)=>{
@@ -88,7 +118,7 @@ export function Tastatur({selector, onNoteEvent, notesOn, setSustain}) {
             }
 
             if(event.key === " ") {
-                setSustain(true);
+                onNoteEvent(new NoteEvent(true, EventType.SUSTAIN));                
             }
         });
         
