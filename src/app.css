@@ -1,0 +1,33 @@
+@font-face {
+    font-family: joanRegular;
+    src: url(/resources/fonts/Joan-Regular.ttf);
+}
+
+* {
+    font-family: sans-serif;
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+body, #body {
+    display: flex;
+    flex-direction: column;
+    height: 100%
+}
+
+#root, #body {
+    display: flex;
+    flex-direction: column;
+    height: 100%
+}
+
+html {
+    height: 100%
+}
+
+main {
+    flex: 1;
+    overflow: none;
+    height: 100%;
+}

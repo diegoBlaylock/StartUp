@@ -1,0 +1,314 @@
+:root {
+    --nav-height: 2.5em;
+}
+
+#room_nav {
+    display: flex;
+    align-content: center;
+    background-color: rgb(197, 197, 197);
+    margin: 0;
+    height: var(--nav-height);
+}
+
+#room_nav menu {
+    display: flex;
+    justify-self: center;
+    width: 100%;
+    height: 100%;
+}
+
+#room_nav menu a {
+    text-decoration: none;
+    color: #202020;
+    font-size: 20px;
+
+}
+
+#room_nav li {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+}
+
+#room_main {
+    /* Set up variables set height to be calc of 100 - these heights */
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: calc(100% - var(--header-height) - var(--nav-height));
+}
+
+#room_main_content {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    height:100%;
+    justify-content: center safe;
+    align-items: center safe;
+}
+
+#room_main_content:focus {
+    outline: none ;
+}
+
+#room_main_content h3{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-family: joanRegular;
+    font-size: 2em;
+    letter-spacing: 0.085em;
+    user-select: none;
+}
+
+#room_info {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    justify-content: start;
+    font-size: 0.95em;
+    user-select: none;
+    padding-right: 10%;
+}
+
+#chat_content {
+    background-color: #e8e8e8;
+    font-size: 1em;
+    max-height: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    width: 20%
+}
+
+#chat_messages{
+    padding: 10px;
+    overflow-y: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.message {
+    display: flex;
+    flex-direction: row;
+    font-size: 0.75em;
+}
+
+.message > .profile-pic {
+    height: 32px;
+    width: 32px;
+    outline-width: 1px;
+}
+
+.message > .message-content {
+    margin-top: 2px;
+    margin-left: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px
+}
+
+.message-content > label {
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+.message-content > p {
+    margin-left: 4px;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+#messenger {
+    width: 100%;
+    display: flex;
+    height: 2em;    
+    border: 1px solid #606060;
+}
+
+#messenger button {
+    height: 100%;
+    aspect-ratio: 1;
+    background-color: #202020;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    user-select: none;
+}
+
+#messenger button:hover {
+    background-color: rgb(62, 62, 62);
+    cursor: pointer;
+}
+
+#messenger button:active {
+    background-color: black;
+    /* outline: 1px solid wheat;
+    outline-offset: -2px; */
+}
+
+#messenger button img{
+    width: 60%;
+    height: 60%;
+}
+
+#messenger textarea{
+    resize: none;
+    border-radius: 0%;
+    border: none;
+    outline: none;
+    flex: 1;
+    font-size: 0.9em;
+    height: 100%;
+}
+
+#player_profile {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.15em;
+    font-weight: bold;
+    user-select: text;
+    flex: 1;
+}
+
+#player_option {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+    user-select: none;
+}
+
+#room_info p {
+    flex: 1;
+    text-align: end;
+}
+
+#player_profile .profile-pic {
+    width: 3em;
+    margin-right: 20px;
+    user-select: none;
+}
+
+
+
+@media (width < 800px) {
+    #room_nav li {
+        margin-left: 10px;
+    }
+
+    .message {
+        font-size: 0.5em;
+    }
+
+    /* .message-content {
+        font-size: 0.5em;
+    } */
+
+    .message > .profile-pic {
+        display: none;
+    }
+}
+
+@media (width < 600px) {
+    #player_profile .profile-pic {
+        width: 1.5em;
+        margin-right: 20px;
+        user-select: none;
+    }
+
+    #room_info {
+        flex-direction: column;
+        margin-top: 10px;
+        padding-right: 0%;
+    }
+    
+    #room_main {
+        flex-direction: column;
+    }
+
+    #room_main_content {
+        width: 100%;
+    }
+
+    #chat_content {
+        margin-top: 20px;
+        width: 100%;
+        height: 200px;
+    }
+}
+
+@media (height < 720px) {
+    :root {
+        --header-height: 60px;
+    }
+
+    header.room-comp {
+        padding: 10px;
+    }
+
+    
+    .room-comp #header_logo {
+        opacity: 0;
+    }
+
+    .room-comp #header_profile .my-profile{
+        outline: 1px solid white;
+        width: 50px;
+    }
+
+    .room-comp .dropdown-menu label {
+        background-color: #202020;
+        color: wheat;
+        padding: 6px;
+        padding-top: 10px;
+        font-size: 1em; 
+    }
+
+    .room-comp .dropdown-menu a {
+        padding: 4px; 
+        font-size: 1em;
+    }
+
+    #room_nav {
+        font-size: 0.5em;
+    }
+    #room_nav menu a {
+        font-size: 1.5em;
+    }
+
+    #room_main_content {
+        font-size: 0.8em;
+        height: 100%;
+    }
+
+    #room_main_content h3 {
+        visibility: hidden;
+        flex: 0;
+    }
+
+    #room_info {
+        flex: 1;
+    }
+
+    #messenger {
+        font-size: 0.65em;
+    }
+
+    .message > .profile-pic {
+        height: 20px;
+        width: 20px;
+        outline-width: 0.5px;
+    }
+}

@@ -1,0 +1,85 @@
+#header_createUser {
+    display: flex;
+    justify-content: right;
+    z-index: 1;
+}
+
+#header_createUser a {
+    color: wheat;
+    font-size: 20px;
+    text-decoration: none;
+    padding: 15px 20px;
+    border-radius: 2px;
+    background-color: black;
+     
+}
+
+#header_createUser a:hover {
+    background-color: white;
+}
+
+#login_main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#login_main h1 {
+    font-size: 3.6em;
+    font-weight: 100;
+    margin-bottom: 0.5%;
+    width: 300px;
+    text-align: start;
+    user-select:none;
+}
+
+#login_form {
+    /* border-top: 3px solid black;
+    border-bottom: 3px solid black; */
+    display: flex;
+    flex-direction: column;
+    padding: 1% 1%;
+}
+
+#login_form label {
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-bottom: 1%;
+    user-select: none;
+}
+
+#login_form input {
+    font-size: 1.4em;
+    font-weight: lighter;
+    padding: 2px;
+    padding-left: 5px;
+    width: 300px;
+    margin-bottom: 5%;
+}
+
+#login_form input[type=submit] {
+    margin-top: 20px;
+    color: wheat;
+    background-color: #202020;
+    border: none;
+    width: 100%;
+    border-radius: 2px;
+    padding: 16px 0px;
+    cursor: pointer;
+}
+
+#login_form input[type=submit]:hover {
+    background-color: rgb(62, 62, 62);
+    
+}
+
+#login_form input[type=submit]:focus {
+    outline: 1.5px solid white;
+    outline-offset: -2px;
+}
+
+#login_form input[type=submit]:active {
+    background-color: rgb(40, 40, 40);
+    outline-style: dotted;
+}

@@ -110,3 +110,11 @@ For this deliverable I built out the structure of my application using HTML.
 - **Frontend makes WebSocket connection** - Done, the frontend uses two different wrappers to handle and send data related to chat or music. 
 - **Data sent over WebSocket connection** - Data passed is either a chat message, a music note, a join room request, or an update for the viewer count.
 - **WebSocket data displayed** - Messages are updated for all clients, the viewer count updates for each person, and notes will be played and highlighted for all listeners. A caveat is that the web audio api forces users to interact with a webpage before it will play audio so try clicking the page.
+
+## React deliverable
+For this deliverable I converted the application over to use Vue. I know it is supposed to use React, but the instructor said I could use Vue because I already have extensive experience with React.
+
+- **Bundled and transpiled** - done!
+- **Components** - Each page is it's own component including the not found page. The header and footer are components, along with the "Header action component" (whatever appear in the top right of the header). In the discover page, each clickable room is its own component, and for the piano page, the room details, each fourth of the keyboard, the chat window, and each chat message are there own components.
+- **Router** - Routing between pages, Login, create/user, my/profile, discover, room?...
+- **Hooks** - Most input fields are done through hooks where the state is updated based on input. User state and also Frame state (Pages need different headers) are done through use context hooks. In the discover page, useState keeps track of the room list when it is loaded in and of the current page number. The keyboard keeps track of sustain and does useRef to keep track of keys pressed. All throughout the code, useEffect is used to load resources at the beginning of page load and update certain things when a variable changes (cf sustain & volume).

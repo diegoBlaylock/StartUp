@@ -1,0 +1,101 @@
+#create_user_main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+#create_user_main h1 {
+    font-size: 3.6em;
+    font-weight: 100;
+    margin-bottom: 0.5%;
+    width: 600px;
+    text-align: start;
+    user-select:none;
+}
+
+#create_user_form {
+    /* border-top: 3px solid black;
+    border-bottom: 3px solid black; */
+    display: flex;
+    flex-direction: column;
+    padding: 1% 1%;
+}
+
+#create_user_form label {
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-bottom: 0.2%;
+    user-select: none;
+}
+
+#create_user_form input{
+    font-size: 1.4em;
+    font-weight: lighter;
+    padding: 2px;
+    padding-left: 5px;
+    width: 500px;
+    margin-bottom: 2%;
+}
+
+
+
+#create_user_form input[type=submit] {
+    margin-top: 20px;
+    color: wheat;
+    background-color: #202020;
+    border: none;
+    width: 100%;
+    border-radius: 2px;
+    padding: 16px 0px;
+    cursor: pointer;
+}
+
+#create_user_form input[type=submit]:hover {
+    background-color: rgb(62, 62, 62);
+    
+}
+
+#create_user_form input[type=submit]:focus {
+    outline: 1.5px solid white;
+    outline-offset: -2px;
+}
+
+#create_user_form input[type=submit]:active {
+    background-color: rgb(40, 40, 40);
+    outline-style: dotted;
+}
+
+@media (width < 600px), (height < 600px) {
+    #create_user_main h1 {
+        font-size: 2em;
+        margin-bottom: 0.5%;
+        width: 10em;
+        text-align: start;
+        user-select:none;
+    }
+
+
+    #create_user_form {
+        /* border-top: 3px solid black;
+        border-bottom: 3px solid black; */
+        padding: 0.1% 0.1%;
+    }
+    
+    #create_user_form label {
+        font-size: 1em;
+        font-weight: bold;
+        margin-bottom: 0.1%;
+        user-select: none;
+    }
+    
+    #create_user_form input {
+        font-size: 1em;
+        font-weight: lighter;
+        padding: 2px;
+        padding-left: 5px;
+        width: 17em;
+        margin-bottom: 0.5%;
+    }
+}
