@@ -67,7 +67,7 @@ export function ViewRoomPage() {
                     </menu>
                 </nav>
                 <main id="room_main">
-                    <div id="room_main_content" tabIndex={playable?"0":"-1"}>
+                    <div id="room_main_content" tabIndex={playable?"0":"-1"} autoFocus={playable} >
                         <h3 id="room_title">{room?.title ?? '--'}</h3>
                         <Keyboard playable={playable} musicSocket={musicSocket} wsReady={wsReady} />
                         <RoomStats room={room} chatSocket={chatSocket} wsReady={wsReady}/>

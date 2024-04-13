@@ -25,8 +25,9 @@ async function onJoinRoomEvent(connection, data) {
 }
   
 async function onNoteEvent(connection, data) {
-    if(connection.player && data.note > 20 && data.note < 90)
-        broadcast(connection.room, buildResponse(SendMessageType.NOTE, data), connection._id);
+    if(connection.player)
+        if (((data.event_type === 0 || data.event_type === 1) && data.note > 20 && data.note < 90) || data.event_type > 1)
+            broadcast(connection.room, buildResponse(SendMessageType.NOTE, data), connection._id);
 }
 
 async function onChatEvent(connection, data) {
