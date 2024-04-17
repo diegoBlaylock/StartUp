@@ -60,7 +60,10 @@ export default function Keyboard({playable=false, musicSocket, wsReady}) {
         return ()=>{
             audioPlayer.current.sustain(false);
             for (const [note, on] of notesOn.current) {
-                if(on) stop(note);
+                if(on) {
+                    stop(note);
+                    audioPlayer.stopNote(note);
+                }
             }
             changeSustain(false);
         };
@@ -107,19 +110,18 @@ export default function Keyboard({playable=false, musicSocket, wsReady}) {
 export function Tastatur({selector, play, stop, sustain}) {
     useEffect(()=>{
         const component = document.querySelector(selector);
-
         const keysToNote = new Map();
-
-        const topScale = 12 * (Layout['top-scale']+1);
-        const bottomScale = 12*(Layout['bottom-scale']+1);
+        const topScale = 12 * (Layout['top-scale'] + 1);
+        const bottomScale = 12 * (Layout['bottom-scale'] + 1);
         
         Layout['top-keys'].forEach((val, i)=>keysToNote.set(val, topScale+i));
         Layout['bottom-keys'].forEach((val, i)=>keysToNote.set(val, bottomScale+i));
 
         component.addEventListener('keyup', (event)=> {
             event.preventDefault();
-            if(event?.repeat) return
-            if(keysToNote.has(event.keyCode)) {
+            if(event?.repeat) { 
+                return;
+            } else if(keysToNote.has(event.keyCode)) {
                 const note = keysToNote.get(event.keyCode);
                 stop(note);
             } else if(event.key === " ") {
@@ -129,15 +131,15 @@ export function Tastatur({selector, play, stop, sustain}) {
 
         component.addEventListener('keydown', (event)=>{
             event.preventDefault();
-            if(event?.repeat) return;
-            if(keysToNote.has(event.keyCode)) {
+            if(event?.repeat) {
+                return; 
+            } else if(keysToNote.has(event.keyCode)) {
                 const note = keysToNote.get(event.keyCode);
                 play(note);
             } else if(event.key === " ") {
                 sustain(true);
             }
         });
-        
     }, []);
 }
 
