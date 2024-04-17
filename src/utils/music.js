@@ -23,10 +23,6 @@ export default class AudioPlayer {
         this.#activeNotes = new Set();
     }
 
-    #midiToFreq(note){
-        return 440 * Math.pow(2, (note-69)/12)
-    }
-
     #calcGain(note) {
         const a=1
         const b=0.99
@@ -105,9 +101,6 @@ export default class AudioPlayer {
 
         note?.gain.gain.cancelAndHoldAtTime(this.audioContext.currentTime);
         note?.gain.gain.linearRampToValueAtTime(0, this.audioContext.currentTime + 0.01);
-        // if(note)
-        //     note.oscillator.buffer = null;
-
         this.createNote(midiNote);
         this.#activeNotes.add(midiNote);
     }
@@ -119,6 +112,14 @@ export default class AudioPlayer {
             note?.gain.gain.linearRampToValueAtTime(0, this.audioContext.currentTime + 0.2);
         }
         this.#activeNotes.delete(midiNote);
+    }
+
+    resume() {
+        this.audioContext.resume();
+    }
+
+    state() {
+        return this.audioContext.state;
     }
 
     destroy() {

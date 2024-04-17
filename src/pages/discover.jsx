@@ -5,7 +5,7 @@ import './discover.css'
 import {Search, Filter, RoomRequest} from "../endpoints/request.js"
 import {discoverRooms} from "../endpoints/api.js"
 import { NavLink} from 'react-router-dom'
-import { FrameContext } from '../app.jsx'
+import { AudioPlayerContext, FrameContext } from '../app.jsx'
 
 export function DiscoverPage () {
     const [rooms, setRooms] = useState();
@@ -89,9 +89,10 @@ function RoomCard({room}) {
     const url = new URL("/room",window.location.origin);
     url.searchParams.append("roomID", room._id);
     const path = url.pathname+url.search;   
+    const audioPlayer = useContext(AudioPlayerContext);
     
     return (
-        <NavLink to={path} className='room-desc' data-id={room._id}>
+        <NavLink to={path} className='room-desc' data-id={room._id} onClick={()=>audioPlayer.current.resume()}>
             <h2 title={room.description}>{room.title}</h2>
             <img alt="room-pic" className='profile-pic profile-inv' src={room.owner.profile} draggable="false"/>
             <label title={room.owner.description}>by <span className='username'>{room.owner.username}</span></label>

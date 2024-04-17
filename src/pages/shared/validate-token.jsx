@@ -34,7 +34,7 @@ export function Authenticator({child}) {
     
     if(!finished) return (
         <main style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-            <img width={100} height={100}  src='https://i.stack.imgur.com/kOnzy.gif'/>
+            <img width={100} height={100}  src='/resources/loading.gif'/>
         </main>
     );
         
