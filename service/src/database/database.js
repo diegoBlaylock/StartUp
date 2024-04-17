@@ -34,6 +34,7 @@ export async function getRoomByID(roomID) {
 const PAGE_SIZE = 9
 import { Sort, Filter } from '../services/room-services.js'
 import { Page } from '../models/models.js';
+import { getRoomCount } from '../wsockets/socket-pool.js';
 export async function getPage(page, sortType, filterType, filterVal) {
 
     const query = {};
@@ -166,16 +167,17 @@ export async function getPage(page, sortType, filterType, filterVal) {
         switch(sortType) {
             case Sort.TIME_STAMP:
                 cursor = cursor.sort({timeStamp:1});
-                break;
-            case Sort.POPULARITY:
-                cursor = cursor.sort({title: 1});
-                break;
-        }
-        cursor = cursor
-            .skip(PAGE_SIZE*page)
-            .limit(PAGE_SIZE);
+                cursor = cursor
+                    .skip(PAGE_SIZE*page)
+                    .limit(PAGE_SIZE);
 
-        return new Page(await cursor.toArray(), page, num_pages);
+                return new Page(await cursor.toArray(), page, num_pages);
+
+            case Sort.POPULARITY:
+                const rooms = await cursor.toArray();
+                rooms.sort((a,b)=>getRoomCount(b._id) - getRoomCount(a._id));
+                return new Page(rooms.slice(PAGE_SIZE*page, PAGE_SIZE*(page+1)), page, num_pages);
+        }
     } catch(e) {
         console.log(e);
     } finally {

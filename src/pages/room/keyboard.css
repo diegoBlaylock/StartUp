@@ -18,7 +18,6 @@
     overflow-x: auto;
     padding: 1px;
     min-height: calc( var(--white-key-height) + 2px);
-    touch-action: none;
 }
 
 .keys-half {

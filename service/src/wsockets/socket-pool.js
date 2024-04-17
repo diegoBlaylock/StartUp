@@ -66,3 +66,7 @@ export function isRoomIDActive(roomID) {
 export function getRoomCount(roomID) {
     return roomIDToWSIDs.get(roomID)?.size ?? 0;
 }
+
+export function getRoomsSortedByPopularity() {
+    const rooms = [...roomIDToWSIDs.keys()].sort((a,b)=>getRoomCount(b) - getRoomCount(a))
+}
